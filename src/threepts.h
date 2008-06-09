@@ -36,7 +36,7 @@
 
 void mdrct3pt(double A[64], double B[64], double res[64]);
 
-double *mkron(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
+void mkron(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
 
 void H11(double g00, double g01, double g10, double g11, double H[64]);
 

@@ -25,7 +25,7 @@
   
   Usage of \pkg{onemap} is completely described in a tutorial
   distributed with the package. You can look for it in directory
-  \code{/inst/doc} of the package distribution.
+  \code{/doc} of the package distribution.
 
   The most important functions are:
   \itemize{
@@ -64,7 +64,7 @@
 }
 \note{
   See the complete tutorial distributed along with this package for
-  complete examples (located in directory /inst/doc of the package
+  complete examples (located in directory /doc of the package
   distribution).
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}

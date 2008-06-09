@@ -31,7 +31,7 @@
   Departamento de Genética - São Paulo, Brazil
   Contact: gramarga@esalq.usp.br
   First version: 02/13/2007
-  Last update: 07/18/2007
+  Last update: 06/08/2008
 */
 
 /* This code was meant to be easily understood and modified, thus the matrix
@@ -64,7 +64,7 @@ void mdrct3pt(double A[64], double B[64], double res[64]) {
 /* mkron is a function used to calculate the KRONECKER product of
      two matrices and/or vectors */
 
-double *mkron(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res) {
+void mkron(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res) {
   int i, j, na, nb;
   na = rowA*colA;
   nb = rowB*colB;
