@@ -1,6 +1,6 @@
 /*
  OneMap: software for genetic mapping in outcrossing species
- Copyright (C) 2006 Gabriel Rodrigues Alves Margarido
+ Copyright (C) 2007-9 Gabriel R A Margarido and Marcelo Mollinari
 
     This file is part of OneMap.
 
@@ -31,7 +31,7 @@
   Departamento de Genética - São Paulo, Brazil
   Contact: gramarga@esalq.usp.br
   First version: 02/13/2007
-  Last update: 06/08/2008
+  Last update: 03/02/2009
 */
 
 /* This code was meant to be easily understood and modified, thus the matrix

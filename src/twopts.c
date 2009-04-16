@@ -1,6 +1,6 @@
 /*
  OneMap: software for genetic mapping in outcrossing species
- Copyright (C) 2006 Gabriel Rodrigues Alves Margarido
+ Copyright (C) 2007-9 Gabriel R A Margarido and Marcelo Mollinari
 
     This file is part of OneMap.
 
@@ -31,7 +31,7 @@
   Departamento de Genética - São Paulo, Brazil
   Contact: gramarga@esalq.usp.br
   First version: 02/13/2007
-  Last update: 06/08/2008
+  Last update: 03/02/2009
 */
 
 /* This code was meant to be easily understood and modified, thus the matrix
@@ -62,7 +62,7 @@ void mdrct2pt(double A[16], double B[16], double res[16]) {
 /* mprod is a function used to calculate the PRODUCT of two matrices
      and/or vectors */
 
-void mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res) {
+double *mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res) {
   char *transA = "N", *transB = "N";
   int i;
   double one = 1.0, zero = 0.0;
@@ -156,7 +156,7 @@ double log_sub(double x, double y) {
 
 /* rf_2pt calculates the recombination fraction and log-likelihood for a given assignment */
 
-void rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot, void (*Hcall)(double, double [16]), double D[16], double *rf_assign, double *log_like_assign) {
+double rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot, void (*Hcall)(double, double [16]), double D[16], double *rf_assign, double *log_like_assign) {
   double diff, rf, sum, *temp, *P, *num, H[16], mid[16], log_Lold, log_Lnew, two_n;
   int i, iter;
   
@@ -198,7 +198,15 @@ void rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot, void (*Hca
       log_Lnew += n[i]*log(P[i]);
     diff = log_sub(log_Lnew,log_Lold) - log_Lnew;
   }
-  
+  if(rf == 0.0) rf = 10E-10;
+  if(rf == 1.0) rf = 1.0 - 10E-10;
+  Hcall(rf,H);
+  mprod(I1,p1,4,(double *)H,4,4,temp);
+  mprod(temp,p1,4,I2,4,p2,P);
+  log_Lnew = 0.0;
+  for (i=0;i<(p1*p2);i++)
+    log_Lnew += n[i]*log(P[i]);
+	    
   *rf_assign = rf;
   *log_like_assign = log_Lnew;
 }

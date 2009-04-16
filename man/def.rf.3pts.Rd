@@ -1,12 +1,13 @@
-\name{est.rf.3pts}
-\alias{est.rf.3pts}
+\name{def.rf.3pts}
+\alias{def.rf.3pts}
 \title{Three-point analysis of genetic markers}
 \description{
+  This function is defunct and kept only for historical reasons.
   Performs the three-point analysis proposed by \cite{Wu et al. (2002)}
   for a triplet of markers in a given order.
 }
 \usage{
-est.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
+def.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
 5, max.rf = 0.35, max.nolink = 0.55)
 }
 \arguments{
@@ -67,16 +68,15 @@ est.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
   349-363.
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
-\seealso{
-  \code{\link[onemap]{cr3pts}}
-}
 \examples{
+\dontrun{
   data(example_out)
 
-  threepts <- est.rf.3pts(example_out,"M1","M2","M14") # correct order
+  threepts <- def.rf.3pts(example_out,"M1","M2","M14") # correct order
   threepts
 
-  threepts <- est.rf.3pts(example_out,"M1","M14","M2") # wrong order
+  threepts <- def.rf.3pts(example_out,"M1","M14","M2") # wrong order
   threepts
+}
 }
 \keyword{utilities}

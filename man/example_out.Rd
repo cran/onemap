@@ -12,13 +12,16 @@
 }
 \details{
   A total of 100 F1 individuals were genotyped for 30 markers.  The data
-  currently contains only genotype information (no phenotypes).
+  currently contains only genotype information (no phenotypes). It is
+  included to be used as a reference in order to understand how a data
+  file needs to be. Also, it is used for the analysis in the tutorial
+  that comes with OneMap.
 }
 \examples{
 data(example_out)
 
 # perform two-point analyses
-twopts <- est.rf.2pts(example_out)
+twopts <- rf.2pts(example_out)
 twopts
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}

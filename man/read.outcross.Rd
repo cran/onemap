@@ -28,7 +28,7 @@ read.outcross(dir, file)
   \code{"B2.6"}, \code{"B3.7"}, \code{"C.8"}, \code{"D1.9"},
   \code{"D1.10"}, \code{"D1.11"}, \code{"D1.12"}, \code{"D1.13"},
   \code{"D2.14"}, \code{"D2.15"}, \code{"D2.16"}, \code{"D2.17"} or
-  \code{"D2.18"} (without quotes) [see \code{\link[onemap]{mrktype}} and
+  \code{"D2.18"} (without quotes) [see \code{\link[onemap]{marker.type}} and
   \cite{Wu et al.} (2002) for details].
 
   Finally, after the segregation type comes the genotype data for the
@@ -47,14 +47,21 @@ read.outcross(dir, file)
 \value{
   An object of class \code{outcross}, i.e., a list with the following
   components:
-  \item{geno}{a matrix with character strings indicating the genotypes
+  \item{geno}{a matrix with integers indicating the genotypes
     read for each marker. Each column contains data for a marker and
     each row represents an individual.}
   \item{n.ind}{number of individuals.}
   \item{n.mar}{number of markers.}
-  \item{segr.type}{a vector with the segregation type of each marker.}
+  \item{segr.type}{a vector with the segregation type of each marker, as
+    \code{strings}.}
+  \item{segr.type.num}{a vector with the segregation type of each marker,
+    represented in a simplified manner as integers.}
+  \item{input}{the name of the input file.}
 }
 \references{
+  Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B. (2008)
+  \emph{qtl: Tools for analyzing QTL experiments} R package version 1.09-43
+  
   Lincoln, S. E., Daly, M. J. and Lander, E. S. (1993) Constructing
   genetic linkage maps with MAPMAKER/EXP Version 3.0: a tutorial and
   reference manual. \emph{A Whitehead Institute for Biomedical Research
@@ -65,7 +72,9 @@ read.outcross(dir, file)
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Adapted from Karl Broman (package \pkg{qtl}) by Gabriel R A
+        Margarido, \email{gramarga@esalq.usp.br}
+}
 \seealso{
   \code{example} directory in the package source.
 }

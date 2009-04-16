@@ -6,12 +6,14 @@
     Delineation} (\cite{Doerge, 1996}).
 }
 \usage{
-rcd(r)
+rcd(w,LOD=0,max.rf=0.5)
 }
 \arguments{
-  \item{r}{A (symmetric) matrix containing the results of
-    two-point analyses, i.e., pairwise recombination fractions between
-    genetic markers.}
+  \item{w}{an object of class \code{sequence}.}
+  \item{LOD}{minimum LOD-Score threshold used when constructing the
+    pairwise recombination fraction matrix.}
+  \item{max.rf}{maximum recombination fraction threshold used as the LOD
+    value above.}
 }
 \details{
   \emph{Rapid Chain Delineation} (\emph{RCD}) is an algorithm for marker
@@ -32,13 +34,26 @@ rcd(r)
   that the recombination fraction is statistically significant at a
   prespecified level. This process is repeated as long as markers can be
   added to the chain.}
+
+  After determining the order with \emph{RCD}, the final mal is constructed
+  using the multipoint approach (function \code{\link[onemap]{map}}).
 }
 \value{
-  A vector with the estimated order of markers on the linkage
-  group. Numbers are based on the position of each marker on the
-  recombination fraction matrix given as input, i.e., on the
-  \code{row}/\code{column} each marker occupies on that
-  matrix. No names are displayed (for portability purposes).
+  An object of class \code{sequence}, which is a list containing the
+  following components:
+  \item{seq.num}{a \code{vector} containing the (ordered) indices of
+    markers in the sequence, according to the input file.}
+  \item{seq.phases}{a \code{vector} with the linkage phases between markers
+    in the sequence, in corresponding positions. \code{-1} means there are
+    no defined linkage phases.}
+  \item{seq.rf}{a \code{vector} with the recombination frequencies between
+    markers in the sequence. \code{-1} means there are no estimated
+    recombination frequencies.}
+  \item{seq.like}{log-likelihood of the corresponding linkage map.}
+  \item{data.name}{name of the object of class \code{outcross} with the
+    raw data.}
+  \item{twopt}{name of the object of class \code{rf.2pts} with the 2-point
+    analyses.}
 }
 \references{
   Basten, C. J., Weir, B. S. and Zeng, Z.-B. (2005) \emph{QTL
@@ -50,17 +65,15 @@ rcd(r)
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
 \seealso{
-  \code{\link[onemap]{map}}, \code{\link[onemap]{print.map}}
+  \code{\link[onemap]{make.seq}}, \code{\link[onemap]{map}}
 }
 \examples{
-  rcmb <- c(NA,0.10,0.05,0.10,NA,0.06,0.05,0.06,NA)
-  rcmb_mat <- matrix(rcmb,nrow=3,ncol=3,byrow=TRUE) # hypothetical recombination fraction matrix
-  colnames(rcmb_mat) <- rownames(rcmb_mat) <- paste("M",1:3,sep="")
-  rcmb_mat # not monotonic
+  data(example_out)
+  twopt <- rf.2pts(example_out)
 
-  order <- rcd(rcmb_mat)
-  order
-  
-  rcmb_mat[order,order] # monotonic
+  all.mark <- make.seq(twopt,"all")
+  groups <- group(all.mark)
+  LG1 <- make.seq(groups,1)
+  LG1.rcd <- rcd(LG1)
 }
 \keyword{utilities}

@@ -1,87 +1,81 @@
 \name{map}
 \alias{map}
-\alias{print.map}
-\title{Estimate the genetic map}
+\title{Construct the linkage map for a sequence of markers}
 \description{
-  Does soma data manipulation and calls \code{\link[onemap]{rcd}} to
-  order genetic markers on a linkage group (object of class5
-  \code{extracted.group}).
+  Estimates the multipoint log-likelihood, linkage phases and recombination
+  frequencies for a sequence of markers in a given order.
 }
 \usage{
-map(w, y, LOD = NULL, max.rf = NULL)
-
-\method{print}{map}(x, cumulative=FALSE, \dots)
+map(w,tol=10E-6)
 }
 \arguments{
-  \item{w}{an object of class \code{extracted group} (the group to be
-    ordered).}
-  \item{y}{the object of class \code{rf.2pts} that was used to generate
-    object \code{w}, i.e., that contains the results of two-point
-    analyses.}
-  \item{LOD}{minimum LOD Score to declare linkage. If \code{NULL}
-    (default) the threshold already present in object \code{y} is used.}
-  \item{max.rf}{maximum recombination fraction to declare linkage. If
-    \code{NULL} (default) the threshold already present in object
-    \code{y} is used.}
-  \item{x}{an object of class \code{map}.}
-  \item{cumulative}{logical. If \code{FALSE} (default), distances
-    between markers are printed independently for each interval. If
-    \code{TRUE}, cumulative distances are displayed (for compatibility
-    purposes with softwares used to draw chromosomes).}
-  \item{\dots}{further arguments, passed to other methods. Currently
-    ignored.}
+  \item{w}{an object of class \code{sequence}.}
+  \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
+    convergence.}
+}
+\details{
+  Markers are mapped in the order defined in the object \code{w}. If this
+  object also contains a user-defined combination of linkage phases,
+  recombination frequencies and log-likelihood are estimated for that
+  particular case. Otherwise, the best linkage phase combination is also
+  estimated. The multipoint likelihood is calculated according to Wu et al. (2002b)(Eqs. 7a to 11), assuming that the recombination fraction is the
+  same in both parents. Hidden Markov chain codes adapted from Broman et
+  al. (2008) were used.
+  
 }
 \value{
-  An object of class \code{map}, which is a list with the following
-  components:
-  \item{order}{a numeric vector with the estimated order of genetic
-    markers.}
-  \item{recomb}{a (symmetric) matrix with two-point estimates of the
-    recombination fraction between markers, for all pairs of markers in
-    the linkage group, under the most probable assignment for each
-    pair.}
-  \item{marnames}{names of markers present in the linkage group,
-    according to the original input file.}
-  \item{number}{number of the linkage group, according to the numeration
-    in the object of class \code{group} from where the linkage group was
-    extracted.}
-  \item{name}{name of the object of class \code{group} from where the
-    linkage group was extracted.}
-  \item{LOD}{minimum LOD Score to declare linkage.}
-  \item{max.rf}{maximum recombination fraction to declare linkage.}
-  \item{phases}{a (symmetric) matrix with the most probable linkage
-    phase (assignment) between markers, for each pair of markers in the
-    linkage group.}
+  An object of class \code{sequence}, which is a list containing the
+  following components:
+  \item{seq.num}{a \code{vector} containing the (ordered) indices of
+    markers in the sequence, according to the input file.}
+  \item{seq.phases}{a \code{vector} with the linkage phases between markers
+    in the sequence, in corresponding positions. \code{-1} means there are
+    no defined linkage phases.}
+  \item{seq.rf}{a \code{vector} with the recombination frequencies between
+    markers in the sequence. \code{-1} means there are no estimated
+    recombination frequencies.}
+  \item{seq.like}{log-likelihood of the corresponding linkage map.}
+  \item{data.name}{name of the object of class \code{outcross} with the
+    raw data.}
+  \item{twopt}{name of the object of class \code{rf.2pts} with the 2-point
+    analyses.}
 }
-\note{
-  Currently only \emph{Rapid Chain Delineation} is available
-  (\cite{Doerge, 1996}). Other ordering algorithms will be made
-  available soon.
-}
-\references{
-  Doerge, R. W. (1996) Constructing genetic maps by rapid chain
-  delineation. \emph{Journal of Quantitative Trait Loci} 2: 121-132.
+\references{ 
+  Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B. (2008)
+  \emph{qtl: Tools for analyzing QTL experiments} R package version 1.09-43
   
-  Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002) Simultaneous
+  Jiang, C. and Zeng, Z.-B. (1997). Mapping quantitative trait loci with
+  dominant and missing markers in various crosses from two inbred lines.
+  \emph{Genetica} 101: 47-58.
+
+  Lander, E. S., Green, P., Abrahamson, J., Barlow, A., Daly, M. J., Lincoln,
+  S. E. and Newburg, L. (1987) MAPMAKER: An interactive computer package for
+  constructing primary genetic linkage maps of experimental and natural
+  populations. \emph{Genomics} 1: 174-181.
+  
+   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
+  
+  Wu, R., Ma, C.-X., Wu, S. S. and Zeng, Z.-B. (2002b). Linkage
+  mapping of sex-specific differences. \emph{Genetical Research}
+  79: 85-96
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+
+\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}
+         and Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
 \seealso{
-  \code{\link[onemap]{group}}, \code{\link[onemap]{extract.group}},
-  \code{\link[onemap]{rcd}}, \code{\link[onemap]{make.map}}
+  \code{\link[onemap]{make.seq}}
 }
 \examples{
   data(example_out)
-  
-  twopts <- est.rf.2pts(example_out)  
-  link_gr <- group(twopts)
-  LG1 <- extract.group(link_gr,1)
+  twopt <- rf.2pts(example_out)
 
-  LG1_map <- map(LG1,twopts) # order makers
-  LG1_map
+  markers <- make.seq(twopt,c(30,12,3,14,2)) # correct phases
+  map(markers)
+
+  markers <- make.seq(twopt,c(30,12,3,14,2),phase=c(4,1,4,3)) # incorrect phases
+  map(markers)
 }
-\keyword{manip}
 \keyword{utilities}
-

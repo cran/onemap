@@ -10,20 +10,20 @@
 # copyright (c) 2000-6, Karl W Broman                                 #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 11/07/2007                                             #
+# Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
-read.outcross <-
+# Function to read data from input file
+read.outcross <- 
 function (dir, file) {
   # create file name
   if (missing(file)) 
     stop("missing file")
-  if (!missing(dir) && dir != "") {
+  if(!missing(dir) && dir != "")
     file <- file.path(dir, file)
-  }
-
+  
   # count lines in rawfile
   n.lines <- length(scan(file, what = character(), skip = 0, 
                          nlines = 0, blank.lines.skip = FALSE,
@@ -42,9 +42,7 @@ function (dir, file) {
       flag <- 1
       n.ind <- as.numeric(a[1])
       n.mar <- as.numeric(a[2])
-      cat(" --Read the following data:\n")
-      cat("\tNumber of individuals: ", n.ind, "\n")
-      cat("\tNumber of markers:     ", n.mar, "\n")
+      cat(" Working...\n\n")
       marnames <- rep("", n.mar)
       geno <- matrix(0, ncol = n.mar, nrow = n.ind)
       segr.type <- character(n.mar)
@@ -86,10 +84,19 @@ function (dir, file) {
   colnames(geno) <- marnames
   # changes -'s (missing data) to NA's
   geno[!is.na(geno) & geno == "-"] <- NA
-  outcross <- list(geno = geno, n.ind = n.ind, n.mar = n.mar,
-                   segr.type = segr.type)
-  class(outcross) <- "outcross"
-  outcross
+  
+  # recoding data
+  temp.data <- codif.data(geno,segr.type)
+  geno <- temp.data[[1]]
+  segr.type.num <- temp.data[[2]]
+  rm(temp.data)
+  
+  cat(" --Read the following data:\n")
+  cat("\tNumber of individuals: ", n.ind, "\n")
+  cat("\tNumber of markers:     ", n.mar, "\n")
+  
+  structure(list(geno = geno, n.ind = n.ind, n.mar = n.mar,segr.type = segr.type,
+                 segr.type.num=segr.type.num, input=file), class = "outcross")
 }
 
 
@@ -116,4 +123,4 @@ function(x,...) {
   }
 }
 
-
+# end of file

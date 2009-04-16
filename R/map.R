@@ -3,168 +3,98 @@
 # Package: onemap                                                     #
 #                                                                     #
 # File: map.R                                                         #
-# Contains: map, print.map                                            #
+# Contains: map                                                       #
 #                                                                     #
 # Written by Gabriel Rodrigues Alves Margarido                        #
-# copyright (c) 2007, Gabriel R A Margarido                           #
+# copyright (c) 2009, Gabriel R A Margarido                           #
 #                                                                     #
-# First version: 11/07/2007                                           #
-# Last update: 11/07/2007                                             #
+# First version: 02/27/2009                                           #
+# Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
+# This function constructs the linkage map for a set of markers in a given order
 map <-
-function(w, y, LOD=NULL, max.rf=NULL) {
-  # checking for correct objects
-  if (any(is.na(match(c("marnames", "number", "oriname", "name"),
-                      names(w))))) 
-    stop("'w' is not an object of class 'extracted.group'")
-  if (any(is.na(match(c("n.mar", "LOD", "max.rf", "recomb", "phases",
-                        "analysis", "flags", "arbitr", "segr.type"),
-                      names(y))))) 
-    stop("'y' is not an object of class 'rf.2pts'")
-  if (w$oriname != as.character(sys.call())[3])
-    stop("this group ('w' argument) was not originally generated from object \"",
-         as.character(sys.call())[3], "\"")
-  
-  # getting marker names and checking if they exist
-  markers <- match(w$marnames,colnames(y$recomb))
-  if (any(is.na(markers)))
-    stop("marker ", w$marnames[which(is.na(markers))][1],
-         " not found in object 'y'")
-  
-  # update two-point analysis with new criteria
-  recomb <- matrix(NA,length(markers),length(markers))
-  phases <- matrix(NA,length(markers),length(markers))
-  if (is.null(LOD) && is.null(max.rf)) {
-    LOD <- y$LOD
-    max.rf <- y$max.rf
-    # extracting linkage phase and recombination fraction values
-    for (i in 1:(length(markers)-1))
-      for (j in (i+1):length(markers)) {
-        recomb[i,j] <- recomb[j,i] <- y$recomb[markers[i],markers[j]]
-        phases[i,j] <- phases[j,i] <- y$phases[markers[i],markers[j]]
-      }
-  }
-  else {
-    if(is.null(LOD)) LOD <- y$LOD
-    if(is.null(max.rf)) max.rf <- y$max.rf
-    n.mar <- length(markers)
-    goodness <- character(4)
-    
-    for (i in 2:n.mar) {
-      for (j in 1:(i-1)) {
-        phase <- NA
-        
-        # getting previous results
-        current <- y$analysis[acum(markers[i]-2)+markers[j],,]
-        
-        # choosing most probable assignments
-        probab <- which(current[,4]>(max(current[,4]-0.005)) &
-                        current[,4]<=max(current[,4]))
-        for (a in probab) {
-          if (current[a,1] <= max.rf) goodness[a] <- "**"
-          else goodness[a] <- "-"
-        }
-        goodness[-probab] <- "-"
-        phase <- which(goodness=="**")
-        
-        # no assignment meets 'max.rf' criterion
-        if (length(phase)==0) {
-          phases[i,j] <- phases[j,i] <- "ns"
-          recomb[i,j] <- recomb[j,i] <- 0.5
-        }
-        else {  # one or more assignments meet 'max.rf' criterion
-          
-          # if more than one probable phase, choose the first one
-          if (length(phase)>1) phase <- phase[1]
-          
-          # checking if phase meets 'LOD' criterion
-          if (current[phase,4] >= LOD) {
-            recomb[i,j] <- recomb[j,i] <- current[phase,1]
-            if (phase==1) phases[i,j] <- phases[j,i] <- "C/C"
-            else if (phase==2) phases[i,j] <- phases[j,i] <- "C/R"
-            else if (phase==3) phases[i,j] <- phases[j,i] <- "R/C"
-            else if (phase==4) phases[i,j] <- phases[j,i] <- "R/R"
-          }
-          else {  # 'LOD' criterion not met
-            phases[i,j] <- phases[j,i] <- "ns"
-            recomb[i,j] <- recomb[j,i] <- 0.5
-          }
-        }
-      }
-    }
-  }
-  
-  # ordering markers in linkage group with Rapid Chain Delineation
-  order <- rcd(recomb)
-
-  # results
-  final.map <- list(order=order, recomb=recomb, marnames=w$marnames,
-                    number=w$number, name=w$name, LOD=LOD,
-                    max.rf=max.rf, phases=phases)
-  class(final.map) <- "map"
-  final.map
-}
-
-
-
-# print method for object class 'map'
-print.map <-
-function(x,cumulative=FALSE,...) {
+function(w,tol=10E-6) {
   # checking for correct object
-  if (any(is.na(match(c("order", "recomb", "marnames", "number",
-                        "name", "LOD", "max.rf", "phases"),
-                      names(x))))) 
-        stop("this is not an object of class 'map'")
-  
-  if (x$number==-1) {  # arbitrary map
-    cat("  This is an arbitrary map given by the user.\n\n")
-  }
-  else {  # "regular" map
-    cat(paste("  Group ", x$number, " extracted from object \"",
-              x$name, "\"\n",sep=""))
-    # criteria
-    cat("  Criteria used to order markers in this group:\n")
-    cat("    LOD =", x$LOD, ", Maximum recombination fraction =",
-        x$max.rf, "\n\n")
-  }
+  if(!any(class(w)=="sequence")) stop(deparse(substitute(w))," is not an object of class 'sequnece'")
+  if(length(w$seq.num) < 2) stop("The sequence must have at least 2 markers")
 
-  # starting to print map
-  cat("  Linkage map:\n\n")
-
-  dist <- numeric(length(x$marnames))
-  phases <- character(length(x$marnames))
-  # obtaining values
-  for (i in 1:(length(dist)-1)) {
-    dist[i] <- x$recomb[x$order[i],x$order[i+1]]
-    phases[i] <- x$phases[x$order[i],x$order[i+1]]
+  if((w$seq.phases != -1) && (w$seq.rf != -1)  && !is.null(w$seq.like)) {
+    # if the linkage phases and recombination fractions have already been
+    # estimated, nothings needs to be done
+    cat("\nNo action required.\n")
+    cat("Returning sequence.\n\n")
+    w
   }
-  
-  phases[which(phases=="C/C")]<-"coupling/coupling"
-  phases[which(phases=="C/R")]<-"coupling/repulsion"
-  phases[which(phases=="R/C")]<-"repulsion/coupling"
-  phases[which(phases=="R/R")]<-"repulsion/repulsion"
-  phases[which(phases=="ns")]<-"non-significant"
-  if (cumulative==TRUE) {
-    # cumulative distances (required by other softwares)
-    dist <- head(dist,n=-1)
-    results <- cbind(x$marnames[x$order],
-                     round(c(0,cumsum(kosambi(dist))),3),
-                     round(c(0,cumsum(haldane(dist))),3),phases)
-  } else {
-    # interval distances
-    results <- cbind(x$marnames[x$order],
-                     round(kosambi(dist),3),
-                     round(haldane(dist),3),phases)
-    results[length(dist),2:3] <- ""
+  else if((w$seq.phases != -1) && (w$seq.rf == -1) && is.null(w$seq.like)) {
+    # if the linkage phases are provided but the recombination fractions have
+    # not yet been estimated, this is done here
+	
+	# gather two-point information
+    rf.init <- numeric(length(w$seq.num)-1)
+    for(i in 1:(length(w$seq.num)-1)) {
+      if(w$seq.num[i] > w$seq.num[i+1])
+        rf.init[i] <- get(w$twopt)$analysis[acum(w$seq.num[i]-2)+w$seq.num[i+1],w$seq.phases[i],1]
+      else
+        rf.init[i] <- get(w$twopt)$analysis[acum(w$seq.num[i+1]-2)+w$seq.num[i],w$seq.phases[i],1]
+    }
+	# estimate parameters
+    final.map <- est.map.c(geno=get(w$data.name)$geno[,w$seq.num],
+                           type=get(w$data.name)$segr.type.num[w$seq.num],
+                           phase=w$seq.phases,
+                           rec=rf.init,
+                           verbose=FALSE,
+                           tol=tol)
+    structure(list(seq.num=w$seq.num, seq.phases=w$seq.phases, seq.rf=final.map$rf,
+                   seq.like=final.map$loglike, data.name=w$data.name, twopt=w$twopt), class = "sequence")
   }
-  
-  # displaying results
-  results <- as.data.frame(results)
-  colnames(results) <- c("Markers", "cM Kosambi", "cM Haldane",
-                         "Linkage Phases")
-  print(results)
+  else if((w$seq.phases == -1) && (w$seq.rf == -1) && is.null(w$seq.like)) {
+    # if only the marker order is provided, without predefined linkage phases,
+	# a search for the best combination of phases is performed and recombination
+	# fractions are estimated
+    seq.phase <- numeric(length(w$seq.num)-1)
+    results <- list(rep(NA,4),rep(-Inf,4))
+    
+	# linkage map is started with the first two markers in the sequence
+	# gather two-point information for this pair
+    phase.init <- vector("list",1)
+	list.init <- phases(make.seq(get(w$twopt),c(w$seq.num[1],w$seq.num[2]),twopt=w$twopt))
+    phase.init[[1]] <- list.init$phase.init[[1]]
+	Ph.Init <- comb.ger(phase.init)
+    for(j in 1:nrow(Ph.Init)) {
+	  # call to 'map' function with predefined linkage phase
+	  temp <- map(make.seq(get(w$twopt),w$seq.num[1:2],phase=Ph.Init[j],twopt=w$twopt))
+      results[[1]][j] <- temp$seq.phases
+      results[[2]][j] <- temp$seq.like
+    }
+	seq.phase[1] <- results[[1]][which.max(results[[2]])] # best linkage phase is chosen
+    
+	if(length(w$seq.num) > 2) {
+	  # for sequences with three or more markers, these are added sequentially
+	  for(mrk in 2:(length(w$seq.num)-1)) {
+	    results <- list(rep(NA,4),rep(-Inf,4))
+		
+		# gather two-point information
+	    phase.init <- vector("list",mrk)
+        list.init <- phases(make.seq(get(w$twopt),c(w$seq.num[mrk],w$seq.num[mrk+1]),twopt=w$twopt))
+            phase.init[[mrk]] <- list.init$phase.init[[1]]
+            for(j in 1:(mrk-1)) phase.init[[j]] <- seq.phase[j]
+            Ph.Init <- comb.ger(phase.init)
+            for(j in 1:nrow(Ph.Init)) {
+		  # call to 'map' function with predefined linkage phases
+	      temp <- map(make.seq(get(w$twopt),w$seq.num[1:(mrk+1)],phase=Ph.Init[j,],twopt=w$twopt))
+              results[[1]][j] <- temp$seq.phases[mrk]
+              results[[2]][j] <- temp$seq.like
+            }
+	    seq.phase[mrk] <- results[[1]][which.max(results[[2]])] # best combination of phases is chosen
+	  }
+	}
+	# one last call to map function, with the final map
+    map(make.seq(get(w$twopt),w$seq.num,phase=seq.phase,twopt=w$twopt))
+  }
+  #else SHOULD NOT GET HERE
 }
 
+# end of file

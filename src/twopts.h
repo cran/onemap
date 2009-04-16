@@ -1,6 +1,6 @@
 /*
  OneMap: software for genetic mapping in outcrossing species
- Copyright (C) 2006 Gabriel Rodrigues Alves Margarido
+ Copyright (C) 2007-9 Gabriel R A Margarido and Marcelo Mollinari
 
     This file is part of OneMap.
 
@@ -28,15 +28,15 @@
                Theoretical Population Biology 61, 349-363
   Author: Gabriel Rodrigues Alves Margarido
   Escola Superior de Agricultura "Luiz de Queiroz"
-  Departamento de Genética - São Paulo, Brazil
+  Departamento de GenÃ©tica - SÃ£o Paulo, Brazil
   Contact: gramarga@esalq.usp.br
   First version: 02/13/2007
-  Last update: 07/18/2007
+  Last update: 03/02/2009
 */
 
 void mdrct2pt(double A[16], double B[16], double res[16]);
 
-void mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
+double *mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
 
 void H1(double r, double H[16]);
 
@@ -50,8 +50,9 @@ double log_add(double x, double y);
 
 double log_sub(double x, double y);
 
-void rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot, void (*Hcall)(double, double [16]), double D[16], double *rf_assign, double *log_like_assign);
+double rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot,
+              void (*Hcall)(double, double [16]),
+			  double D[16], double *rf_assign, double *log_like_assign);
 
-void r2pts(double *I1, int *p1, double *I2, int *p2, int *n, int *ntot, double *r, double *log_like, double *posterior, double *LOD);
-
-
+void r2pts(double *I1, int *p1, double *I2, int *p2, int *n, int *ntot,
+           double *r, double *log_like, double *posterior, double *LOD);

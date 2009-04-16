@@ -2,23 +2,23 @@
 #                                                                     #
 # Package: onemap                                                     #
 #                                                                     #
-# File: acum.R                                                        #
-# Contains: acum                                                      #
+# File: codif.data.R                                                  #
+# Contains: codif.data                                                #
 #                                                                     #
-# Written by Gabriel Rodrigues Alves Margarido                        #
-# copyright (c) 2007-9, Gabriel R A Margarido                         #
+# Written by Marcelo Mollinari                                        #
+# copyright (c) 2009, Marcelo Mollinari                               #
 #                                                                     #
-# First version: 11/07/2007                                           #
+# First version: 02/27/2009                                           #
 # Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
-acum <- function(w) {
-  if (w<0) stop("'w' should be equal to or higher than zero")
-
-  # the famous gaussian sum from 1 to w
-  w*(w+1)/2
-}
-
-# end of file
+# This function add markers to a sequence
+add.marker<-function(w, mrks)
+  {
+    if (!any(class(w) == "sequence")) 
+      stop(sQuote(deparse(substitute(w))), " is not an object of class 'sequence'")
+    seq.num<-c(w$seq.num,mrks)
+    return(make.seq(get(w$twopt),seq.num, twopt=w$twopt))
+  }

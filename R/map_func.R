@@ -3,16 +3,18 @@
 # Package: onemap                                                     #
 #                                                                     #
 # File: map_func.R                                                    #
-# Contains: haldane, kosambi                                          #
+# Contains: haldane, kosambi, set.map.fun                             #
 #                                                                     #
-# Written by Gabriel Rodrigues Alves Margarido                        #
-# copyright (c) 2007, Gabriel R A Margarido                           #
+# Written by Gabriel Rodrigues Alves Margarido and Marcelo Mollinari  #
+# copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
 # Last update: 11/07/2007                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
+
+.map.fun<-"kosambi"
 
 haldane <-
 function(rcmb) {
@@ -39,3 +41,11 @@ function(rcmb) {
             dQuote("numeric"))
 }
 
+set.map.fun<-
+  function(type=c("kosambi", "haldane")){
+    type<-match.arg(type,c("kosambi", "haldane"))
+    if(type=="haldane") .map.fun<<-"haldane"
+    else .map.fun<<-"kosambi"
+  }
+
+# end of file

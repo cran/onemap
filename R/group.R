@@ -6,52 +6,85 @@
 # Contains: group, print.group                                        #
 #                                                                     #
 # Written by Gabriel Rodrigues Alves Margarido                        #
-# copyright (c) 2007, Gabriel R A Margarido                           #
+# copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 11/07/2007                                             #
+# Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
+# Function to assign markers to linkage groups
 group <-
-function(w) {
+function(w, LOD=NULL, max.rf=NULL) {
   # checking for correct object
-  if (any(is.na(match(c("n.mar", "LOD", "max.rf", "recomb", "phases",
-                        "analysis", "flags", "arbitr", "segr.type"),
-                      names(w))))) 
-    stop("this is not an object of class 'rf.2pts'")
+  if(!any(class(w)=="sequence")) stop(deparse(substitute(w))," is not an object of class 'sequence'")
   
+  n.mar <- length(w$seq.num)
   # 'groups' indicates the linkage group to which each marker is associated
-  groups <- rep(NA,w$n.mar)
+  groups <- rep(NA,n.mar)
+  
+  # determining thresholds
+  if (is.null(LOD)) 
+    LOD <- get(w$twopt)$LOD
+  if (is.null(max.rf)) 
+    max.rf <- get(w$twopt)$max.rf
   
   # 'group.count' is the current linkage group
   group.count <- 1
+  significant <- rep(NA,n.mar)
+  temp <- matrix(NA,4,2)
   
-  for (m in 1:w$n.mar) {
-    if (is.na(groups[m])) {  # marker 'm' is not associated to any group
+  for (m in 1:n.mar) {
+    if (is.na(groups[m])) {  # marker with index 'm' is not associated to any group
+      
+      for (k in (1:n.mar)[-m]) {
+        # recover values from two-point analyses
+        big <- pmax.int(w$seq.num[m],w$seq.num[k])
+        small <- pmin.int(w$seq.num[m],w$seq.num[k])
+        temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
+
+        # check if any assignment meets the criteria
+        if (any(temp[,1] <= max.rf & temp[,2] >= LOD)) significant[k] <- "*"
+        else significant[k] <- "ns"
+      }
+      significant[m] <- NA
       
       # check which markers are linked with 'm'
-      grouping <- c(m,which(w$phases[m,]=="C/C" | w$phases[m,]=="C/R" |
-                            w$phases[m,]=="R/C" | w$phases[m,]=="R/R"))
+      grouping <- c(m,which(significant=="*"))
       
       if (length(grouping) > 1) {  # 'm' is linked with at least one marker
-        flag <- 1  # 'flag' indicates if a new marker has been added to the group
+        begin <- 1 # 'begin' is the index of the last marker added
+        flag <- 1 # 'flag' indicates if a new marker has been added to the group
         while (flag) {
           flag <- 0
+          next.begin <- length(grouping) # 'next.begin' holds the future value of 'begin'
           
-          for (i in grouping) {
+          for (i in tail(grouping,-begin)) {
             # detect all markers linked to those already in group
-            group_parc <- which(w$phases[i,]=="C/C" | w$phases[i,]=="C/R" |
-                                w$phases[i,]=="R/C" | w$phases[i,]=="R/R")
+            significant <- rep(NA,n.mar)
             
+			for (k in (1:n.mar)[-i]) {
+			  # recover values from two-point analyses
+              big <- pmax.int(w$seq.num[i],w$seq.num[k])
+              small <- pmin.int(w$seq.num[i],w$seq.num[k])
+              temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
+              
+              # check if any assignment meets the criteria
+              if (any(temp[,1] <= max.rf & temp[,2] >= LOD)) significant[k] <- "*"
+              else significant[k] <- "ns"
+            }
+            significant[i] <- NA
+            
+            group_parc <- which(significant=="*")
+
             # check if markers in 'group_parc' are already in the current group
-            for (j in group_parc)
-              if (all(grouping != j)) {
-                grouping <- c(grouping,j)
-                flag <- 1
-              }
+            if (any(is.na(match(group_parc,grouping)))) {
+              grouping <- c(grouping,group_parc[is.na(match(group_parc,grouping))])
+              flag <- 1
+            }
           }
+          begin <- next.begin
         }
         
         # finishing the current linkage group
@@ -61,13 +94,12 @@ function(w) {
     }
   }
   
+  ifelse(all(is.na(groups)), n.groups <- 0, n.groups <- max(groups,na.rm=TRUE))
+  
   # results
-  marnames <- colnames(w$recomb)
-  final.groups <- list(marnames=marnames, n.mar=w$n.mar, LOD=w$LOD,
-                       max.rf=w$max.rf, n.groups=max(groups,na.rm=TRUE),
-                       groups=groups, name=as.character(sys.call())[2])
-  class(final.groups) <- "group"
-  final.groups
+  structure(list(data.name=get(w$twopt)$data.name, twopt=w$twopt, marnames=get(w$twopt)$marnames,
+                 n.mar=n.mar, LOD=LOD, max.rf=max.rf,
+                 n.groups=n.groups, groups=groups), class = "group")
 }
 
 
@@ -76,13 +108,10 @@ function(w) {
 print.group <-
 function(x, detailed=TRUE,...) {
   # checking for correct object
-  if (any(is.na(match(c("marnames", "n.mar", "LOD", "max.rf",
-                        "n.groups", "groups", "name"),
-                      names(x))))) 
-    stop("this is not an object of class 'group'")
+  if(!any(class(x)=="group")) stop(deparse(substitute(x))," is not an object of class 'group'")
   
   cat("  This is an object of class 'group'\n")
-  cat(paste("  It was generated from the object \"", x$name,
+  cat(paste("  It was generated from the object \"", x$data.name,
             "\"\n\n",sep=""))
   
   # criteria

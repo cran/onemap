@@ -6,25 +6,37 @@
 # Contains: rcd                                                       #
 #                                                                     #
 # Written by Gabriel Rodrigues Alves Margarido                        #
-# copyright (c) 2007, Gabriel R A Margarido                           #
+# copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 11/07/2007                                             #
+# Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
 rcd <-
-function(r) {
+function(w,LOD=0,max.rf=0.5) {
   # checking for correct object
-  if (!is.matrix(r))
-    stop ("'r' must be a matrix")
-  if (dim(r)[1]!=dim(r)[2])
-    stop ("'r' must be a square matrix")
-  if (!all(is.na(diag(r))))
-    stop ("the diagonal of the matrix must be filled with NA's")
+  if(!any(class(w)=="sequence")) stop(deparse(substitute(w))," is
+    not an object of class 'sequence'")
   
-  markers <- dim(r)[1]
+  markers <- length(w$seq.num)
+  
+  r <- matrix(NA,markers,markers)
+  for(i in 1:(markers-1)) {
+    for(j in (i+1):markers) {
+      big <- pmax.int(w$seq.num[i],w$seq.num[j])
+      small <- pmin.int(w$seq.num[i],w$seq.num[j])
+      temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
+
+      # check if any assignment meets the criteria
+	  relevant <- which(temp[,2] > (max(temp[,2])-0.005)) # maximum LOD scores
+      phases <- relevant[which((temp[relevant,1] <= max.rf & temp[relevant,2] >= LOD))]
+	  if(length(phases) == 0) r[i,j] <- r[j,i] <- 0.5
+	  else r[i,j] <- r[j,i] <- temp[phases[1],1]
+    }
+  }
+  
   
   # x defines the non-positioned markers
   x <- 1:markers
@@ -73,24 +85,7 @@ function(r) {
   }
   # end of chain
 
-  names(order) <- NULL
-
-  # return 'order' or 'reversed order' according to the following
-  # criterion: markers on the start of the input file are placed on
-  # "top" of the group 
-  corr1 <- cor.test(order,1:markers,method="spearman",
-                    alternative="two.sided")$estimate
-  corr2 <- cor.test(rev(order),1:markers,method="spearman",
-                    alternative="two.sided")$estimate
-  if (corr1 > corr2) order
-  else if (corr1 < corr2) rev(order)
-  else {
-    if (which(order==1) < which(rev(order)==1)) order
-    else if (which(order==1) > which(rev(order)==1)) rev(order)
-    else {
-      if (which(order==2) < which(rev(order)==2)) order
-      else rev(order)
-    }
-  }
+  map(make.seq(get(w$twopt),w$seq.num[order],twopt=w$twopt))
 }
 
+# end of file

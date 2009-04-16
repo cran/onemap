@@ -6,20 +6,22 @@
   Software for constructing genetic maps in outcrossing species
 }
 \description{
-  Implements the methodology proposed by \cite{Wu et al.} (2002), which
+  Implements the methodology proposed by \cite{Wu et al.} (2002a), which
   uses the maximum likelihood approach to estimate linkage and linkage
   phases for a mixed set of different marker types containing various
-  segregation patterns. The software was developed to construct genetic
-  maps using full-sib families derived from two outbred parent plants,
-  such as done for example by \cite{Garcia et al.} (2006) and
-  \cite{Oliveira et al.} (2007).
+  segregation patterns. Furthermore, implements the Hidden Markov Model-
+  based approach for constructing multipoint maximum likelihood linkage
+  maps (\cite{Wu et al.} 2002b). The software was developed to
+  construct genetic maps using  full-sib families derived from two
+  outbred parent plants, such as done for example by \cite{Garcia et al.} (2006), \cite{Oliveira et al.}
+  (2007) and \cite{Oliveira et al.} (2008).
 }
 \details{
   \tabular{ll}{
     Package: \tab onemap\cr
     Type: \tab Package\cr
-    Version: \tab 0.1-0\cr
-    Date: \tab 2007-09-25\cr
+    Version: \tab 1.0-0\cr
+    Date: \tab 2009-03-09\cr
     License: \tab GNU GENERAL PUBLIC LICENSE (Version 2 or higher)\cr
   }
   
@@ -31,35 +33,32 @@
   \itemize{
     \item \code{\link[onemap]{read.outcross}} for data importing.
 
-    \item \code{\link[onemap]{est.rf.2pts}} to perform two-point
+    \item \code{\link[onemap]{rf.2pts}} to perform two-point
     analyses between all pairs of markers.
 
-    \item \code{\link[onemap]{modify.rf.2pts}} to update two-point
-    analyses with different criteria.
-
-    \item \code{\link[onemap]{arbitr.rf.2pts}} to arbitrarily (\emph{ad
-      hoc}) define the most probable linkage phase between two markers.
-    
-    \item \code{\link[onemap]{mrktype}} to check the segregation type of
+    \item \code{\link[onemap]{marker.type}} to check the segregation type of
     a marker.
+
+    \item \code{\link[onemap]{make.seq}} to define a sequence of markers,
+    which are the input of most mapping functions.
      
     \item \code{\link[onemap]{group}} to assign markers to linkage
     groups.
 
-    \item \code{\link[onemap]{extract.group}} to \sQuote{extract} a
-    linkage group for further analysis.
+    \item \code{\link[onemap]{compare}} to compare all possible orders
+    of markers in a sequence.
 
-    \item \code{\link[onemap]{remove.marker}} to drop a marker from a
-    linkage group.
+    \item \code{\link[onemap]{try.seq}} to try a given marker in every
+    position of a framework of mapped markers.
 
-    \item \code{\link[onemap]{map}} to estimate the genetic map (marker
-    order and distances) for a given linkage group.
+    \item \code{\link[onemap]{order.seq}} to automate the process of mapping
+    a sequence of markers, combining compare and try.seq functions.
 
-    \item \code{\link[onemap]{make.map}} to arbitrarily define a genetic
-    map.
+    \item \code{\link[onemap]{ripple}} to check a set of mapped markers,
+    looking for (plausible) alternative orders.
 
-    \item \code{\link[onemap]{est.rf.3pts}} to refine a genetic map
-    using three-point analyses for a triplet of markers.
+    \item \code{\link[onemap]{map}} to construct a map for a sequence
+    in a given order.
   }
 }
 \note{
@@ -67,11 +66,16 @@
   complete examples (located in directory /doc of the package
   distribution).
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br},
+  Marcelo Mollinari, \email{mmollina@esalq.usp.br} and
+  Antonio A F Garcia, \email{aafgarci@esalq.usp.br}}
 \references{
   Basten, C. J., Weir, B. S. and Zeng, Z.-B. (2005) \emph{QTL
     Cartographer Version 1.17: A Reference Manual and Tutorial for QTL
     Mapping}.
+  
+  Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B. (2008)
+  \emph{qtl: Tools for analyzing QTL experiments} R package version 1.09-43
   
   Doerge, R. W. (1996) Constructing genetic maps by rapid chain
   delineation. \emph{Journal of Quantitative Trait Loci} 2: 121-132.
@@ -87,9 +91,21 @@
   calculation of distance between the loci of linked
   factors. \emph{Journal of Genetics} 8: 299-309.
   
+  Jiang, C. and Zeng, Z.-B. (1997). Mapping quantitative trait loci with
+  dominant and missing markers in various crosses from two inbred lines.
+  \emph{Genetica} 101: 47-58.
+
   Kosambi, D. D. (1944) The estimation of map distance from
   recombination values. \emph{Annuaire of Eugenetics} 12: 172-175.
   
+  Lander, E. S. and Green, P. (1987). Construction of multilocus genetic
+  linkage maps in humans. \emph{Proc. Natl. Acad. Sci. USA} 84: 2363-2367.
+
+  Lander, E. S., Green, P., Abrahamson, J., Barlow, A., Daly, M. J., Lincoln,
+  S. E. and Newburg, L. (1987) MAPMAKER: An interactive computer package for
+  constructing primary genetic linkage maps of experimental and natural
+  populations. \emph{Genomics} 1: 174-181.
+
   Lincoln, S. E., Daly, M. J. and Lander, E. S. (1993) Constructing
   genetic linkage maps with MAPMAKER/EXP Version 3.0: a tutorial and
   reference manual. \emph{A Whitehead Institute for Biomedical Research
@@ -104,11 +120,22 @@
   Garcia, A. A. F. and Souza, A. P. (2007) Functional genetic linkage map
   based on EST-markers for a sugarcane (\emph{Saccharum} spp.)
   commercial cross. \emph{Molecular Breeding} 20: 189-208.
+
+  Oliveira, E. J., Vieira, M. L. C., Garcia, A. A. F., Munhoz,
+  C. F.,Margarido, G. R.A., Consoli, L., Matta, F. P., Moraes, M. C.,
+  Zucchi, M. I., and Fungaro,M. H. P. (2008) An Integrated Molecular Map
+  of Yellow Passion Fruit Based on Simultaneous Maximum-likelihood
+  Estimation of Linkage and Linkage Phases
+  \emph{J. Amer. Soc. Hort. Sci.} 133: 35-41. 
   
-  Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002) Simultaneous
+  Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
+
+  Wu, R., Ma, C.-X., Wu, S. S. and Zeng, Z.-B. (2002b). Linkage
+  mapping of sex-specific differences. \emph{Genetical Research}
+  79: 85-96
 }
 \keyword{package}
 

@@ -1,5 +1,10 @@
 Package: onemap
 TODO list
-
-- add estimates of variances of recombination frequencies for the three-point analysis
+- est.rf.3pts as DEFUNCT
+- memmory use (rf.2pts & group)
+- initial markers for compare (D1, D2 & C). Check also missing data and distribution along the linkage group
+- check information content between markers before two-point analyses - try should allow more than one marker at a time
+- preliminary function
+- automator function
+- use points for graphical function (fixed color scale; distance proportional to map)
 

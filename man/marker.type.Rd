@@ -1,17 +1,15 @@
-\name{mrktype}
-\alias{mrktype}
-\title{Type of segregation of a marker}
+\name{marker.type}
+\alias{marker.type}
+\title{Type of segregation of markers}
 \description{
-  Informs the type of segregation of a marker from an object of class
-  \code{rf.2pts}, according to the notation by \cite{Wu et al., 2002}.
+  Informs the type of segregation of all markers from an object of class
+  \code{sequence}, according to the notation by \cite{Wu et al., 2002}.
 }
 \usage{
-mrktype(w, mrkname = NULL)
+marker.type(w)
 }
 \arguments{
-  \item{w}{an object of class \code{rf.2pts}.}
-  \item{mrkname}{the name of a marker, corresponding to any marker in the
-    input file used for the two-point analyses stored in object \code{w}.}
+  \item{w}{an object of class \code{sequence}.}
 }
 \details{
   The segregation types are (\cite{Wu et al., 2002}):
@@ -38,8 +36,8 @@ mrktype(w, mrkname = NULL)
   }
 }
 \value{
-  A character string giving the type of segregation of marker
-  \code{mrkname}, according the above table.
+  Nothing is returned. Segregation types of all markers in the
+  sequence are displayed on the screen, according the above table.
 }
 \references{
   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002) Simultaneous
@@ -47,12 +45,13 @@ mrktype(w, mrkname = NULL)
   outcrossing species. \emph{Theoretical Population Biology} 61: 349-363.
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
-\seealso{\code{\link[onemap]{est.rf.2pts}}}
+\seealso{\code{\link[onemap]{make.seq}}}
 \examples{
   data(example_out)
-  twopts <- est.rf.2pts(example_out)
+  twopts <- rf.2pts(example_out)
 
-  mrktype(twopts,"M1") # segregation type for marker 1
+  markers.ex <- make.seq(twopts,c(3,6,8,12,16,25))
+  marker.type(markers.ex) # segregation type for some markers
 }
 \keyword{manip}
 \keyword{utilities}
