@@ -36,7 +36,7 @@
 
 void mdrct2pt(double A[16], double B[16], double res[16]);
 
-double *mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
+void mprod(double *A, int rowA, int colA, double *B, int rowB, int colB, double *res);
 
 void H1(double r, double H[16]);
 
@@ -50,7 +50,7 @@ double log_add(double x, double y);
 
 double log_sub(double x, double y);
 
-double rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot,
+void rf_2pt(double *I1, int p1, double *I2, int p2, int *n, int ntot,
               void (*Hcall)(double, double [16]),
 			  double D[16], double *rf_assign, double *log_like_assign);
 

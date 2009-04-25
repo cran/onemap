@@ -1,8 +1,8 @@
 Package: onemap
 Type: Package
 Title: Software for constructing genetic maps in outcrossing species
-Version: 1.0-0
-Date: 2009-04-16
+Version: 1.0-1
+Date: 2009-04-25
 Author: Gabriel Rodrigues Alves Margarido <gramarga@esalq.usp.br> and
         Marcelo Mollinari <mmollina@esalq.usp.br>, with contributions
         from Antonio Augusto Franco Garcia <aafgarci@esalq.usp.br>.
@@ -13,6 +13,6 @@ Description: Analysis of molecular marker data from non-model systems
         map construction)
 License: GPL (>= 2)
 URL: http://www.r-project.org
-Packaged: Thu Apr 16 18:12:24 2009; mmollina
+Packaged: 2009-04-28 13:53:46 UTC; mmollina
 Repository: CRAN
-Date/Publication: 2009-04-17 07:30:32
+Date/Publication: 2009-04-28 18:31:29

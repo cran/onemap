@@ -5,6 +5,7 @@
 \alias{codif.data}
 \alias{comb.ger}
 \alias{comb}
+\alias{diplo}
 \alias{est.map.c}
 \alias{draw.rf.inter} 
 \alias{plotFunction.out}
@@ -12,6 +13,7 @@
 \alias{perm.pars}
 \alias{phases}
 \alias{return.geno}
+\alias{rem.amb.ph}
 \alias{print.compare}
 \alias{print.order}
 \alias{print.outcross}
@@ -28,6 +30,7 @@ cr3pts(mrk1, mrk2, mrk3, segr.type1, segr.type2, segr.type3)
 codif.data(geno.in,segr.type.in)
 comb.ger(f)
 comb(x,y)
+diplo(w, seq.num, seq.phases)
 est.map.c(geno,type,phase,rec,verbose,tol=1e-6)
 perm.tot(v)
 perm.pars(v)
@@ -35,6 +38,7 @@ draw.rf.inter(info.graph, scale, cex)
 plotFunction.out(info.graph, cex)
 phases(w, LOD=0, max.rf=0.50)
 return.geno(segr.type, link.phases)
+rem.amb.ph(M,w,seq.num)
 \method{print}{compare}(x, \dots)
 \method{print}{order}(x, \dots)
 \method{print}{outcross}(x, \dots)

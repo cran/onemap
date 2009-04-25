@@ -415,7 +415,9 @@ double emit_outbred(int obs_gen, int true_gen, double error_prob, int mark_type)
 	else return(log(error_prob)-LN_2);
       }
       return(0.0);/* shouldn't get here */
+
   }
+  return(0.0);/* shouldn't get here */
 }
 
 double step_outbred(int gen1, int gen2, int phase, double rf)
@@ -691,6 +693,7 @@ double nrec_outbred(int gen1, int gen2, int phase){
     }
     return(log(-1.0)); /* shouldn't get here */
   }
+  else return(log(-1.0)); /* shouldn't get here */
 }
 
 
@@ -855,7 +858,7 @@ void est_map(int n_ind, int n_mar, int *type, int *phase, int n_gen, int *geno, 
 
   } /* end EM algorithm */
   
-  if(flag) warning("Didn't converge!\n");
+  /*if(flag) warning("Didn't converge!\n");*/
 
   /* calculate log likelihood */
   *loglik = 0.0;

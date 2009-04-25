@@ -35,7 +35,7 @@ rcd(w,LOD=0,max.rf=0.5)
   prespecified level. This process is repeated as long as markers can be
   added to the chain.}
 
-  After determining the order with \emph{RCD}, the final mal is constructed
+  After determining the order with \emph{RCD}, the final map is constructed
   using the multipoint approach (function \code{\link[onemap]{map}}).
 }
 \value{

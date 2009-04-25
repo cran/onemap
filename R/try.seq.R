@@ -42,7 +42,6 @@ function(w,mrk,tol=10E-5,verbose=FALSE) {
   for(j in 1:(length(w$seq.num)-1)) phase.init[[j+1]] <- w$seq.phases[j]
   Ph.Init <- comb.ger(phase.init)
   Rf.Init <- comb.ger(rf.init)
-
   mark.max<-max(nchar(colnames(get(w$data.name)$geno)))
   num.max<-nchar(ncol(get(w$data.name)$geno))
   
@@ -52,6 +51,16 @@ function(w,mrk,tol=10E-5,verbose=FALSE) {
   else cat(format(mrk,width=num.max) , "-->", format(colnames(get(w$data.name)$geno)[mrk], width=mark.max), ": .")
   flush.console()
   
+  if(nrow(Ph.Init)>1){
+    ##Removing ambigous phases
+    rm.ab<-rem.amb.ph(M=Ph.Init, w=w, seq.num=c(mrk,w$seq.num))
+    Ph.Init <- Ph.Init[rm.ab,]
+    Rf.Init <- Rf.Init[rm.ab,]
+    if(class(Ph.Init)=="integer"){
+      Ph.Init<-matrix(Ph.Init,nrow=1)
+      Rf.Init<-matrix(Rf.Init,nrow=1)
+    }
+  }
   # estimate parameters for all possible linkage phases for this order
   for(j in 1:nrow(Ph.Init)) {
     final.map <- est.map.c(geno=get(w$data.name)$geno[,c(mrk,w$seq.num)],
@@ -93,14 +102,24 @@ function(w,mrk,tol=10E-5,verbose=FALSE) {
     }   
     Ph.Init <- comb.ger(phase.init)
     Rf.Init <- comb.ger(rf.init)
-	
+ 
 	# create intermediate orders
     try.ord <- rbind(try.ord,c(w$seq.num[1:i], mrk, w$seq.num[(i+1):length(w$seq.num)]))
     if(verbose) cat("TRY", i+1,": ",c(w$seq.num[1:i], mrk, w$seq.num[(i+1):length(w$seq.num)]) ,"\n")
     else cat(".")
     flush.console()
-	
-	# estimate parameters for all possible linkage phases for the current order
+    
+    if(nrow(Ph.Init)>1){
+      ##Removing ambigous phases
+      rm.ab<-rem.amb.ph(M=Ph.Init, w=w, seq.num=c(w$seq.num[1:i], mrk, w$seq.num[(i+1):length(w$seq.num)]))
+      Ph.Init <- Ph.Init[rm.ab,]
+      Rf.Init <- Rf.Init[rm.ab,]
+      if(class(Ph.Init)=="integer"){
+        Ph.Init<-matrix(Ph.Init,nrow=1)
+        Rf.Init<-matrix(Rf.Init,nrow=1)
+      }
+    }
+    ## estimate parameters for all possible linkage phases for the current order
     for(j in 1:nrow(Ph.Init)) {
       final.map <- est.map.c(geno=get(w$data.name)$geno[,c(w$seq.num[1:i], mrk, w$seq.num[(i+1):length(w$seq.num)])],
 							 type=get(w$data.name)$segr.type.num[c(w$seq.num[1:i], mrk, w$seq.num[(i+1):length(w$seq.num)])],
@@ -135,7 +154,16 @@ function(w,mrk,tol=10E-5,verbose=FALSE) {
   if(verbose) cat("TRY",length(w$seq.num)+1,": ", c(w$seq.num,mrk) ,"\n")
   else cat(".\n")
   flush.console()
-  
+  if(nrow(Ph.Init)>1){
+    ##Removing ambigous phases
+    rm.ab<-rem.amb.ph(M=Ph.Init, w=w, seq.num=c(w$seq.num,mrk))
+    Ph.Init <- Ph.Init[rm.ab,]
+    Rf.Init <- Rf.Init[rm.ab,]
+    if(class(Ph.Init)=="integer"){
+      Ph.Init<-matrix(Ph.Init,nrow=1)
+      Rf.Init<-matrix(Rf.Init,nrow=1)
+    }
+  }
   # estimate parameters for all possible linkage phases for this order
   for(j in 1:nrow(Ph.Init)) {
     final.map <- est.map.c(geno=get(w$data.name)$geno[,c(w$seq.num,mrk)],

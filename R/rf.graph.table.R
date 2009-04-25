@@ -107,7 +107,7 @@ draw.rf.inter<-function(info.graph, scale, cex){
   
   ## Getting the mouse coords with TclTk
   OnLeftClick <- function(x,y)  {
-    parPlotSize<-c(0.10, 0.95/1.2, 0.10, 0.90)
+    parPlotSize<-c(0.10/1.2, 0.95/1.2, 0.10, 0.90)
     usrCoords<-rep(c(-1/(-2+info.graph$n*2), 1+1/(-2+info.graph$n*2)),2)
     xClick <- x
     yClick <- y
@@ -138,7 +138,7 @@ draw.rf.inter<-function(info.graph, scale, cex){
       msg <- paste("Marker name: \n    ", info.graph$names[x.n],
                    "\n\nMarker number:\n    ", mkx.n,
                    "\n\nMarker type: \n    ", info.graph$types[x.n],
-                   "\n\n", info.graph$missing[x.n], "% of missing data for this marker",
+                   "\n\n", format(info.graph$missing[x.n], digits=2), "% of missing data for this marker",
                    sep="")
       mbval<- tkmessageBox(title="Labeling Marker",message=msg,type="ok",icon="question")
     }
