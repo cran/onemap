@@ -6,10 +6,10 @@
     Delineation} (\cite{Doerge, 1996}).
 }
 \usage{
-rcd(w,LOD=0,max.rf=0.5)
+rcd(input.seq,LOD=0,max.rf=0.5)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence}.}
+  \item{input.seq}{an object of class \code{sequence}.}
   \item{LOD}{minimum LOD-Score threshold used when constructing the
     pairwise recombination fraction matrix.}
   \item{max.rf}{maximum recombination fraction threshold used as the LOD
@@ -22,7 +22,7 @@ rcd(w,LOD=0,max.rf=0.5)
   guarantee that the best order is always found. The only requirement is
   a matrix with recombination fractions between markers.
   Next is an excerpt from QTL Cartographer Version 1.17 Manual
-  describring the \emph{RCD} algorithm (\cite{Basten et al., 2005}):
+  describing the \emph{RCD} algorithm (\cite{Basten et al., 2005}):
   
   \emph{The linkage group is initiated with the pair of markers having the
   smallest recombination fraction. The remaining markers are placed in a
@@ -44,10 +44,10 @@ rcd(w,LOD=0,max.rf=0.5)
   \item{seq.num}{a \code{vector} containing the (ordered) indices of
     markers in the sequence, according to the input file.}
   \item{seq.phases}{a \code{vector} with the linkage phases between markers
-    in the sequence, in corresponding positions. \code{-1} means there are
+    in the sequence, in corresponding positions. \code{-1} means that there are
     no defined linkage phases.}
   \item{seq.rf}{a \code{vector} with the recombination frequencies between
-    markers in the sequence. \code{-1} means there are no estimated
+    markers in the sequence. \code{-1} means that there are no estimated
     recombination frequencies.}
   \item{seq.like}{log-likelihood of the corresponding linkage map.}
   \item{data.name}{name of the object of class \code{outcross} with the
@@ -62,18 +62,31 @@ rcd(w,LOD=0,max.rf=0.5)
   
   Doerge, R. W. (1996) Constructing genetic maps by rapid chain
   delineation. \emph{Journal of Quantitative Trait Loci} 2: 121-132.
+
+   Mollinari, M., Margarido, G. R. A., Vencovsky, R. and Garcia,
+  A. A. F. (2009) Evaluation of algorithms used to order markers on
+  genetics maps. \emph{Heredity} 103: 494-502.
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}}, \code{\link[onemap]{map}}
 }
 \examples{
-  data(example_out)
-  twopt <- rf.2pts(example_out)
-
+  #outcross example
+  data(example.out)
+  twopt <- rf.2pts(example.out)
   all.mark <- make.seq(twopt,"all")
   groups <- group(all.mark)
   LG1 <- make.seq(groups,1)
   LG1.rcd <- rcd(LG1)
+
+  #F2 example
+  data(fake.f2.onemap)
+  twopt <- rf.2pts(fake.f2.onemap)
+  all.mark <- make.seq(twopt,"all")
+  groups <- group(all.mark)
+  LG1 <- make.seq(groups,1)
+  LG1.rcd <- rcd(LG1)
+  LG1.rcd
 }
 \keyword{utilities}

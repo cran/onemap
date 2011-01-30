@@ -1,15 +1,16 @@
 \name{compare}
 \alias{compare}
-\title{Compare all possible orders for a given sequence}
+\title{Compare all possible orders (exhaustive search) for a given
+  sequence of markers}
 \description{
   For a given sequence with \eqn{n}{n} markers, computes the multipoint likelihood of all
   \eqn{\frac{n!}{2}}{n!/2} orders.
 }
 \usage{
-compare(w,n.best=50,tol=10E-6,verbose=FALSE)
+compare(input.seq,n.best=50,tol=10E-4,verbose=FALSE)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence}.}
+  \item{input.seq}{an object of class \code{sequence}.}
   \item{n.best}{the number of best orders to store in object (defaults to 50).}
   \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
     convergence.}
@@ -26,6 +27,8 @@ compare(w,n.best=50,tol=10E-6,verbose=FALSE)
   (Eqs. 7a to 11), assuming that the recombination fraction is the
   same in both parents. Hidden Markov chain codes adapted from Broman et
   al. (2008) were used.
+  For backcross, \eqn{F_2}{F_2} and RIL populations the linkage phases
+  are known \emph{a priori} and are not calculated.
 }
 \value{
   An object of class \code{compare}, which is a list containing the
@@ -57,7 +60,11 @@ compare(w,n.best=50,tol=10E-6,verbose=FALSE)
   constructing primary genetic linkage maps of experimental and natural
   populations. \emph{Genomics} 1: 174-181.
 
-   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
+  Mollinari, M., Margarido, G. R. A., Vencovsky, R. and Garcia, A.
+  A. F. (2009) Evaluation of algorithms used to order markers on
+  genetics maps. _Heredity_ 103: 494-502.
+
+  Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
@@ -73,12 +80,20 @@ compare(w,n.best=50,tol=10E-6,verbose=FALSE)
 }
 \examples{
 \dontrun{
-  data(example_out)
-  twopt <- rf.2pts(example_out)
+  #outcrossing example
+  data(example.out)
+  twopt <- rf.2pts(example.out)
   markers <- make.seq(twopt,c(12,14,15,26,28))
-  markers.comp <- compare(markers)
-  markers.comp <- compare(markers,verbose=TRUE)
-  markers.comp
+  (markers.comp <- compare(markers))
+  (markers.comp <- compare(markers,verbose=TRUE))
+
+  #F2 example
+  data(fake.f2.onemap)
+  twopt <- rf.2pts(fake.f2.onemap)
+  markers <- make.seq(twopt,c(17,26,29,30,44,46,55)) 
+  (markers.comp <- compare(markers))
+  (markers.comp <- compare(markers,verbose=TRUE))
+
 }
 }
 \keyword{utilities}

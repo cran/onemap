@@ -49,7 +49,7 @@
 #include <R_ext/Applic.h>
 
 #define MAXITER 1000
-#define THRESH log(1E-6)
+#define THRESH log(1E-4)
 
 /* mdrct2pt is a function used to calculate the ELEMENTWISE product of
      two matrices with dimensions 4x4 */

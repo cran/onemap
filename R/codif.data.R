@@ -20,7 +20,7 @@ function(geno.in, segr.type.in) {
   geno.out <- matrix(NA,nrow(geno.in),ncol(geno.in))
   segr.type.out <- rep(NA,length(segr.type.in))
 
-  # missing data is represented by '0'
+  # missing data are represented by '0'
   geno.out[is.na(geno.in)] <- 0
 
   for(i in 1:length(segr.type.in)) {
@@ -128,6 +128,8 @@ function(geno.in, segr.type.in) {
              segr.type.out[i] <- 7
            }
            )
+    if(any(is.na(geno.out[,i])))
+      stop(paste("Invalid marker codification. Please check data for marker", colnames(geno.in)[i]), ".", sep="")
   }
   dimnames(geno.out) <- dimnames(geno.in)
   return(list(geno.out,segr.type.out))

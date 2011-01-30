@@ -3,26 +3,33 @@
 \alias{onemap}
 \docType{package}
 \title{
-  Software for constructing genetic maps in outcrossing species
+  Software for constructing genetic maps
 }
 \description{
-  Implements the methodology proposed by \cite{Wu et al.} (2002a), which
+  In its earlier version, the software implemented the methodology
+  proposed by \cite{Wu et al.} (2002a), which
   uses the maximum likelihood approach to estimate linkage and linkage
-  phases for a mixed set of different marker types containing various
-  segregation patterns. Furthermore, implements the Hidden Markov Model-
-  based approach for constructing multipoint maximum likelihood linkage
-  maps (\cite{Wu et al.} 2002b). The software was developed to
-  construct genetic maps using  full-sib families derived from two
-  outbred parent plants, such as done for example by \cite{Garcia et al.} (2006), \cite{Oliveira et al.}
-  (2007) and \cite{Oliveira et al.} (2008).
+  phases for a mixed set of different marker types, to building genetic
+  maps in outcrossing species.
+  After, it was modified to also using a Hidden Markov Model  approach
+  for constructing multipoint maximum likelihood linkage maps (Wu et
+  al. 2002b). It was then applied in several studies, such as Garcia et
+  al. (2006), Oliveira et al. (2007) and Oliveira et
+  al. (2008). Nowadays, the latest versions (2.0-0) was  fully modified
+  to also handle with backcrosses, F_2 and recombinant inbred lines
+  (RIL) populations, allowing fully integration with software for QTL
+  mapping, such as R/qtl and QTL Cartographer. OneMap can read and
+  export files to this packages, and also from the widely used software
+  MAPMAKER.
 }
+
 \details{
   \tabular{ll}{
     Package: \tab onemap\cr
     Type: \tab Package\cr
-    Version: \tab 1.0-0\cr
-    Date: \tab 2009-03-09\cr
-    License: \tab GNU GENERAL PUBLIC LICENSE (Version 2 or higher)\cr
+    Version: \tab 2.0-0\cr
+    Date: \tab 2011-01-04\cr
+    License: \tab GNU GENERAL PUBLIC LICENSE (Version 3)\cr
   }
   
   Usage of \pkg{onemap} is completely described in a tutorial
@@ -32,6 +39,9 @@
   The most important functions are:
   \itemize{
     \item \code{\link[onemap]{read.outcross}} for data importing.
+
+    \item \code{\link[onemap]{read.mapmaker}} for importing data from a
+    MAPMAKER raw file.
 
     \item \code{\link[onemap]{rf.2pts}} to perform two-point
     analyses between all pairs of markers.
@@ -54,7 +64,7 @@
     \item \code{\link[onemap]{order.seq}} to automate the process of mapping
     a sequence of markers, combining compare and try.seq functions.
 
-    \item \code{\link[onemap]{ripple}} to check a set of mapped markers,
+    \item \code{\link[onemap]{ripple.seq}} to check a set of mapped markers,
     looking for (plausible) alternative orders.
 
     \item \code{\link[onemap]{map}} to construct a map for a sequence
@@ -68,14 +78,18 @@
 }
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br},
   Marcelo Mollinari, \email{mmollina@esalq.usp.br} and
-  Antonio A F Garcia, \email{aafgarci@esalq.usp.br}}
+  Antonio Augusto F Garcia, \email{aafgarci@esalq.usp.br}}
 \references{
   Basten, C. J., Weir, B. S. and Zeng, Z.-B. (2005) \emph{QTL
-    Cartographer Version 1.17: A Reference Manual and Tutorial for QTL
-    Mapping}.
+  Cartographer Version 1.17: A Reference Manual and Tutorial for QTL
+  Mapping}.
   
   Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B. (2008)
-  \emph{qtl: Tools for analyzing QTL experiments} R package version 1.09-43
+  \emph{qtl: Tools for analyzing QTL experiments} R package version
+  1.09-43
+
+  Buetow KH, Chakravarti A (1987). Multipoint gene mapping using
+  seriation. I. General methods. \emph{Am J Hum} Genet 41: 180-188. 
   
   Doerge, R. W. (1996) Constructing genetic maps by rapid chain
   delineation. \emph{Journal of Quantitative Trait Loci} 2: 121-132.
@@ -114,6 +128,10 @@
   Margarido, G. R. A., Souza, A.P. and Garcia, A. A. F. (2007) OneMap:
   software for genetic mapping in outcrossing species. \emph{Hereditas}
   144: 78-79.
+
+  Mollinari, M., Margarido, G. R. A., Vencovsky, R. and Garcia,
+  A. A. F. (2009) Evaluation of algorithms used to order markers on
+  genetic maps. \emph{Heredity} 103: 494-502
   
   Oliveira, K. M., Pinto, L. R., Marconi, T. G., Margarido, G. R. A.,
   Pastina, M. M., Teixeira, L. H. M., Figueira, A. V. O., Ulian, E. C.,
@@ -126,7 +144,14 @@
   Zucchi, M. I., and Fungaro,M. H. P. (2008) An Integrated Molecular Map
   of Yellow Passion Fruit Based on Simultaneous Maximum-likelihood
   Estimation of Linkage and Linkage Phases
-  \emph{J. Amer. Soc. Hort. Sci.} 133: 35-41. 
+  \emph{J. Amer. Soc. Hort. Sci.} 133: 35-41.
+
+  Tan, Y., Fu, Y. (2006). A novel method for estimating linkage
+  maps. \emph{Genetics} 173: 2383-2390.
+
+  Van Os H, Stam P, Visser RGF, Van Eck HJ (2005). RECORD: a novel
+  method for ordering loci on a genetic linkage map. \emph{Theor Appl Genet}
+  112: 30-40.
   
   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in

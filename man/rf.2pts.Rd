@@ -7,12 +7,13 @@
     (2002)} between all pairs of markers.
 }
 \usage{
-rf.2pts(w, LOD = 3, max.rf = 0.50, verbose = TRUE)
+rf.2pts(input.obj, LOD = 3, max.rf = 0.50, verbose = TRUE)
 
 \method{print}{rf.2pts}(x, mrk1 = NULL, mrk2 = NULL, \dots)
 }
 \arguments{
-  \item{w}{an object of class \code{outcross}.}
+  \item{input.obj}{an object of class \code{outcross}, \code{bc.onemap},
+    \code{f2.onemap}, \code{riself.onemap} or \code{risib.onemap}.}
   \item{LOD}{minimum LOD Score to declare linkage (defaults to
     \code{3}).}
   \item{max.rf}{maximum recombination fraction to declare linkage
@@ -35,8 +36,7 @@ rf.2pts(w, LOD = 3, max.rf = 0.50, verbose = TRUE)
 \value{
   An object of class \code{rf.2pts}, which is a list containing the
   following components:
-  \item{data.name}{name of the object of class \code{outcross} with the
-    raw data.}
+  \item{data.name}{name of the object with the raw data.}
   \item{n.mar}{total number of markers.}
   \item{marnames}{marker names, according to the input file.}
   \item{LOD}{minimum LOD Score to declare linkage.}
@@ -59,9 +59,9 @@ rf.2pts(w, LOD = 3, max.rf = 0.50, verbose = TRUE)
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
 %\seealso{}
 \examples{
-  data(example_out)
+  data(example.out)
 
-  twopts <- rf.2pts(example_out,LOD=3,max.rf=0.5) # perform two-point analyses
+  twopts <- rf.2pts(example.out,LOD=3,max.rf=0.5) # perform two-point analyses
   twopts
 
   print(twopts,"M1","M2") # detailed results for markers 1 and 2

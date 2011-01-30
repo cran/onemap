@@ -3,18 +3,18 @@
 # Package: onemap                                                     #
 #                                                                     #
 # File: comb.ger.R                                                    #
-# Contains: comb, comb.ger                                            #
+# Contains: comb, comb.ger, diplo, rem.amb.ph                         #
 #                                                                     #
 # Written by Marcelo Mollinari                                        #
 # copyright (c) 2009, Marcelo Mollinari                               #
 #                                                                     #
 # First version: 02/27/2009                                           #
-# Last update: 02/27/2009                                             #
+# Last update: 04/25/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
-# This function combines two linkage phase vectors 
+## This function combines two linkage phase vectors 
 comb <-
 function(x,y) {
   count <- 0
@@ -29,7 +29,8 @@ function(x,y) {
 }
 
 ##This function creates diplotypes from segregation types and linkage phases
-diplo<-function(w, seq.num, seq.phases){
+diplo <-
+function(w, seq.num, seq.phases) {
     # convert numerical linkage phases to strings
     link.phases <- matrix(NA,length(seq.num),2)
     link.phases[1,] <- rep(1,2)
@@ -41,17 +42,18 @@ diplo<-function(w, seq.num, seq.phases){
              link.phases[i+1,] <- link.phases[i,]*c(-1,-1),
              )
     }
-	# create diplotypes from segregation types and linkage phases
+    ## create diplotypes from segregation types and linkage phases
     link.phases <- apply(link.phases,1,function(x) paste(as.character(x),collapse="."))
     parents <- matrix("",length(seq.num),4)
     for (i in 1:length(seq.num))
-      parents[i,] <- return.geno(get(w$data.name)$segr.type[seq.num[i]],link.phases[i])
+      parents[i,] <- return.geno(get(w$data.name, pos=1)$segr.type[seq.num[i]],link.phases[i])
       return(parents)
- }
+}
 
 
-##This function removes ambigous phases based on identical diplotypes
-rem.amb.ph<-function(M,w,seq.num){
+##This function removes ambiguous phases based on identical diplotypes
+rem.amb.ph <-
+function(M,w,seq.num) {
   M.new<-matrix(NA,nrow(M),length(seq.num)*4)
   for(j in 1:nrow(M)){
     M.new[j,]<-as.vector(diplo(w=w, seq.num=seq.num, M[j,]))

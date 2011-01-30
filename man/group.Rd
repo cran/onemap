@@ -7,14 +7,14 @@
   (pairwise) analysis and the \emph{transitive} property of linkage.
 }
 \usage{
-group(w, LOD=NULL, max.rf=NULL)
+group(input.seq, LOD=NULL, max.rf=NULL)
 
 \method{print}{group}(x, detailed=TRUE, \dots)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence}.}
-  \item{LOD}{a (positive) real number used as minimum LOD score to declare
-    linkage.}
+  \item{input.seq}{an object of class \code{sequence}.}
+  \item{LOD}{a (positive) real number used as minimum LOD score
+    (threshold) to declare linkage.}
   \item{max.rf}{a real number (usually smaller than 0.5) used as maximum
     recombination fraction to declare linkage.}
   \item{x}{an object of class \code{group}.}
@@ -27,8 +27,8 @@ group(w, LOD=NULL, max.rf=NULL)
 \details{
    If the arguments specifying thresholds used to group markers, i.e., minimum
    LOD Score and maximum recombination fraction, are \code{NULL} (default),
-   the values used are those contained in object \code{w}. If not using
-   \code{NULL}, the new values overridden the ones in object \code{w}.
+   the values used are those contained in object \code{input.seq}. If not using
+   \code{NULL}, the new values overridden the ones in object \code{input.seq}.
 }
 \value{
   Returns an object of class \code{group}, which is a list containing
@@ -36,7 +36,7 @@ group(w, LOD=NULL, max.rf=NULL)
   \item{data.name}{name of the object of class \code{outcross} that contains
     the raw data.}
   \item{twopt}{name of the object of class \code{rf.2ts} used as input, i.e.,
-    containign information used to assign markers to linkage groups.}
+    containing information used to assign markers to linkage groups.}
   \item{marnames}{marker names, according to the input file.}
   \item{n.mar}{total number of markers.}
   \item{LOD}{minimum LOD Score to declare linkage.}
@@ -56,8 +56,8 @@ group(w, LOD=NULL, max.rf=NULL)
   \code{\link[onemap]{rf.2pts}} and \code{\link[onemap]{make.seq}}
 }
 \examples{
-  data(example_out)
-  twopts <- rf.2pts(example_out)
+  data(example.out)
+  twopts <- rf.2pts(example.out)
   
   all.data <- make.seq(twopts,"all")
   link_gr <- group(all.data)

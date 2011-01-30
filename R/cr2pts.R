@@ -69,6 +69,15 @@ function (mrk1, mrk2, segr.type1, segr.type2) {
              LOD=as.double(numeric(4)),
              PACKAGE="onemap")
   
+  if ((segr.type1 == 6 && segr.type2 == 7) || (segr.type1 == 7 && segr.type2 == 6))
+    rcmb$r <- rep(0.5, 4)
+  
+  if (all(n == 0)) {
+    rcmb$r <- rep(0.5, 4)
+    rcmb$log_like <- rcmb$LOD <- rep(0.0, 4)
+    rcmb$posterior <- rep(0.25, 4)
+  }
+  
   # results
   final <- cbind(rcmb$r,rcmb$log_like,rcmb$posterior,rcmb$LOD)
   dimnames(final) <- list(c("1","2","3","4"),list("Theta","log-Like","Posterior","LODs"))

@@ -9,35 +9,33 @@
 # copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 02/27/2009                                             #
+# Last update: 11/29/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
-rcd <-
-function(w,LOD=0,max.rf=0.5) {
+rcd <-function(input.seq,LOD=0,max.rf=0.5) {
   # checking for correct object
-  if(!any(class(w)=="sequence")) stop(deparse(substitute(w))," is
+  if(!any(class(input.seq)=="sequence")) stop(deparse(substitute(input.seq))," is
     not an object of class 'sequence'")
   
-  markers <- length(w$seq.num)
-  
+  markers <- length(input.seq$seq.num)
+
+  ## create reconmbination fraction matrix 
   r <- matrix(NA,markers,markers)
   for(i in 1:(markers-1)) {
     for(j in (i+1):markers) {
-      big <- pmax.int(w$seq.num[i],w$seq.num[j])
-      small <- pmin.int(w$seq.num[i],w$seq.num[j])
-      temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
-
-      # check if any assignment meets the criteria
-	  relevant <- which(temp[,2] > (max(temp[,2])-0.005)) # maximum LOD scores
+      big <- pmax.int(input.seq$seq.num[i],input.seq$seq.num[j])
+      small <- pmin.int(input.seq$seq.num[i],input.seq$seq.num[j])
+      temp <- get(input.seq$twopt)$analysis[acum(big-2)+small,,]
+      ## check if any assignment meets the criteria
+      relevant <- which(temp[,2] > (max(temp[,2])-0.005)) # maximum LOD scores
       phases <- relevant[which((temp[relevant,1] <= max.rf & temp[relevant,2] >= LOD))]
-	  if(length(phases) == 0) r[i,j] <- r[j,i] <- 0.5
-	  else r[i,j] <- r[j,i] <- temp[phases[1],1]
+      if(length(phases) == 0) r[i,j] <- r[j,i] <- 0.5
+      else r[i,j] <- r[j,i] <- temp[phases[1],1]
     }
   }
-  
-  
+
   # x defines the non-positioned markers
   x <- 1:markers
 
@@ -84,8 +82,13 @@ function(w,LOD=0,max.rf=0.5) {
     }
   }
   # end of chain
-
-  map(make.seq(get(w$twopt),w$seq.num[order],twopt=w$twopt))
+  cat("\norder obtained using RCD algorithm:\n\n", input.seq$seq.num[avoid.reverse(order)], "\n\ncalculating multipoint map using tol = 10E-5.\n\n")
+  map(make.seq(get(input.seq$twopt),input.seq$seq.num[avoid.reverse(order)],twopt=input.seq$twopt), tol=10E-5)
 }
 
 # end of file
+
+
+
+
+

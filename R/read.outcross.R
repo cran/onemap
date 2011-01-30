@@ -38,7 +38,7 @@ function (dir, file) {
     if (length(a) == 0) next
     if (length(grep("#", a[1])) != 0) next
     if (flag == 0) {
-      # reading first line (basic information about the data)
+      # reading first line (basic informatioxn about the data)
       flag <- 1
       n.ind <- as.numeric(a[1])
       n.mar <- as.numeric(a[2])

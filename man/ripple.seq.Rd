@@ -1,7 +1,7 @@
-\name{ripple}
-\alias{ripple}
-\title{Compares and displays plausible alternative orders for a given linkage
-  map}
+\name{ripple.seq}
+\alias{ripple.seq}
+\title{Compares and displays plausible alternative orders for a given
+  linkage group}
 \description{
   For a given sequence of ordered markers, computes the multipoint likelihood of alternative
   orders, by shuffling subsets (windows) of markers within the sequence. For each
@@ -9,10 +9,10 @@
   compared. 
 }
 \usage{
-ripple(w,ws=4,LOD=3,tol=10E-5)
+ripple.seq(input.seq,ws=4,LOD=3,tol=10E-2)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence} with a predefined order.}
+  \item{input.seq}{an object of class \code{sequence} with a predefined order.}
   \item{ws}{an integer specifying the length of the window size (defaults to 4).}
   \item{LOD}{threshold for the LOD-Score, so that alternative orders with LOD
     less then or equal to this threshold will be displayed.}
@@ -21,7 +21,7 @@ ripple(w,ws=4,LOD=3,tol=10E-5)
 }
 \details{
   Large values for the window size make computations very slow, specially if
-  there are many non-completely informative markers.
+  there are many partially informative markers.
 }
 \value{
   This function does not return any value; it just produces text output
@@ -40,6 +40,10 @@ ripple(w,ws=4,LOD=3,tol=10E-5)
   constructing primary genetic linkage maps of experimental and natural
   populations. \emph{Genomics} 1: 174-181.
 
+   Mollinari, M., Margarido, G. R. A., Vencovsky, R. and Garcia,
+  A. A. F. (2009) Evaluation of algorithms used to order markers on
+  genetics maps. \emph{Heredity} 103: 494-502.
+
   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61:
@@ -56,12 +60,12 @@ ripple(w,ws=4,LOD=3,tol=10E-5)
 }
 \examples{
 \dontrun{
-  data(example_out)
-  twopt <- rf.2pts(example_out)
+  data(example.out)
+  twopt <- rf.2pts(example.out)
   
   markers <- make.seq(twopt,c(27,16,20,4,19,21,23,9,24,29))
   markers.map <- map(markers)
-  ripple(markers.map)
+  ripple.seq(markers.map)
 }
 }
 \keyword{utilities}

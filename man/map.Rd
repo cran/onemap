@@ -6,15 +6,15 @@
   frequencies for a sequence of markers in a given order.
 }
 \usage{
-map(w,tol=10E-6)
+map(input.seq, tol)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence}.}
+  \item{input.seq}{an object of class \code{sequence}.}
   \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
     convergence.}
 }
 \details{
-  Markers are mapped in the order defined in the object \code{w}. If this
+  Markers are mapped in the order defined in the object \code{input.seq}. If this
   object also contains a user-defined combination of linkage phases,
   recombination frequencies and log-likelihood are estimated for that
   particular case. Otherwise, the best linkage phase combination is also
@@ -29,10 +29,10 @@ map(w,tol=10E-6)
   \item{seq.num}{a \code{vector} containing the (ordered) indices of
     markers in the sequence, according to the input file.}
   \item{seq.phases}{a \code{vector} with the linkage phases between markers
-    in the sequence, in corresponding positions. \code{-1} means there are
+    in the sequence, in corresponding positions. \code{-1} means that there are
     no defined linkage phases.}
   \item{seq.rf}{a \code{vector} with the recombination frequencies between
-    markers in the sequence. \code{-1} means there are no estimated
+    markers in the sequence. \code{-1} means that there are no estimated
     recombination frequencies.}
   \item{seq.like}{log-likelihood of the corresponding linkage map.}
   \item{data.name}{name of the object of class \code{outcross} with the
@@ -53,7 +53,7 @@ map(w,tol=10E-6)
   constructing primary genetic linkage maps of experimental and natural
   populations. \emph{Genomics} 1: 174-181.
   
-   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
+  Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002a) Simultaneous
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
@@ -63,14 +63,15 @@ map(w,tol=10E-6)
   79: 85-96
 }
 
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}
-         and Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Adapted from Karl Broman (package 'qtl') by Gabriel R A
+  Margarido, \email{gramarga@esalq.usp.br} and Marcelo Mollinari,
+  \email{mmollina@esalq.usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}}
 }
 \examples{
-  data(example_out)
-  twopt <- rf.2pts(example_out)
+  data(example.out)
+  twopt <- rf.2pts(example.out)
 
   markers <- make.seq(twopt,c(30,12,3,14,2)) # correct phases
   map(markers)

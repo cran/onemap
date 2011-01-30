@@ -9,26 +9,26 @@
 # copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 02/27/2009                                             #
+# Last update: 09/25/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
 # Function to assign markers to linkage groups
 group <-
-function(w, LOD=NULL, max.rf=NULL) {
+function(input.seq, LOD=NULL, max.rf=NULL) {
   # checking for correct object
-  if(!any(class(w)=="sequence")) stop(deparse(substitute(w))," is not an object of class 'sequence'")
+  if(!any(class(input.seq)=="sequence")) stop(deparse(substitute(input.seq))," is not an object of class 'sequence'")
   
-  n.mar <- length(w$seq.num)
+  n.mar <- length(input.seq$seq.num)
   # 'groups' indicates the linkage group to which each marker is associated
   groups <- rep(NA,n.mar)
   
   # determining thresholds
   if (is.null(LOD)) 
-    LOD <- get(w$twopt)$LOD
+    LOD <- get(input.seq$twopt, pos=1)$LOD
   if (is.null(max.rf)) 
-    max.rf <- get(w$twopt)$max.rf
+    max.rf <- get(input.seq$twopt, pos=1)$max.rf
   
   # 'group.count' is the current linkage group
   group.count <- 1
@@ -40,9 +40,9 @@ function(w, LOD=NULL, max.rf=NULL) {
       
       for (k in (1:n.mar)[-m]) {
         # recover values from two-point analyses
-        big <- pmax.int(w$seq.num[m],w$seq.num[k])
-        small <- pmin.int(w$seq.num[m],w$seq.num[k])
-        temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
+        big <- pmax.int(input.seq$seq.num[m],input.seq$seq.num[k])
+        small <- pmin.int(input.seq$seq.num[m],input.seq$seq.num[k])
+        temp <- get(input.seq$twopt, pos=1)$analysis[acum(big-2)+small,,]
 
         # check if any assignment meets the criteria
         if (any(temp[,1] <= max.rf & temp[,2] >= LOD)) significant[k] <- "*"
@@ -66,9 +66,9 @@ function(w, LOD=NULL, max.rf=NULL) {
             
 			for (k in (1:n.mar)[-i]) {
 			  # recover values from two-point analyses
-              big <- pmax.int(w$seq.num[i],w$seq.num[k])
-              small <- pmin.int(w$seq.num[i],w$seq.num[k])
-              temp <- get(w$twopt)$analysis[acum(big-2)+small,,]
+              big <- pmax.int(input.seq$seq.num[i],input.seq$seq.num[k])
+              small <- pmin.int(input.seq$seq.num[i],input.seq$seq.num[k])
+              temp <- get(input.seq$twopt, pos=1)$analysis[acum(big-2)+small,,]
               
               # check if any assignment meets the criteria
               if (any(temp[,1] <= max.rf & temp[,2] >= LOD)) significant[k] <- "*"
@@ -79,8 +79,8 @@ function(w, LOD=NULL, max.rf=NULL) {
             group_parc <- which(significant=="*")
 
             # check if markers in 'group_parc' are already in the current group
-            if (any(is.na(match(group_parc,grouping)))) {
-              grouping <- c(grouping,group_parc[is.na(match(group_parc,grouping))])
+            if (any(new.mrk <- is.na(match(group_parc,grouping)))) {
+              grouping <- c(grouping,group_parc[new.mrk])
               flag <- 1
             }
           }
@@ -97,8 +97,9 @@ function(w, LOD=NULL, max.rf=NULL) {
   ifelse(all(is.na(groups)), n.groups <- 0, n.groups <- max(groups,na.rm=TRUE))
   
   # results
-  structure(list(data.name=get(w$twopt)$data.name, twopt=w$twopt, marnames=get(w$twopt)$marnames,
-                 n.mar=n.mar, LOD=LOD, max.rf=max.rf,
+  structure(list(data.name=get(input.seq$twopt, pos=1)$data.name, input.name=deparse(substitute(input.seq)),
+                 twopt=input.seq$twopt, marnames=get(input.seq$twopt, pos=1)$marnames,
+                 n.mar=n.mar, seq.num=input.seq$seq.num, LOD=LOD, max.rf=max.rf,
                  n.groups=n.groups, groups=groups), class = "group")
 }
 
@@ -111,7 +112,7 @@ function(x, detailed=TRUE,...) {
   if(!any(class(x)=="group")) stop(deparse(substitute(x))," is not an object of class 'group'")
   
   cat("  This is an object of class 'group'\n")
-  cat(paste("  It was generated from the object \"", x$data.name,
+  cat(paste("  It was generated from the object \"", x$input.name,
             "\"\n\n",sep=""))
   
   # criteria
@@ -129,14 +130,14 @@ function(x, detailed=TRUE,...) {
     # printing detailed results (markers in each linkage group)
     cat("\n  Printing groups:")
     for (i in 1:x$n.groups) {
-      cat("\n  Group", i, ":\n    ")
-      cat(x$marnames[which(x$groups==i)], "\n")
+      cat("\n  Group", i, ":", length(which(x$groups==i)) , "markers\n    ")
+      cat(x$marnames[x$seq.num[which(x$groups==i)]], "\n")
     }
     if (any(is.na(x$groups))) {
-      cat("\n  Unlinked markers:\n    ")
-      cat(x$marnames[which(is.na(x$groups))], "\n")
+      cat("\n  Unlinked markers:", length(which(is.na(x$groups))) ," markers\n    ")
+      cat(x$marnames[x$seq.num[which(is.na(x$groups))]], "\n")
     }
   }
 }
-
+##end of file
 

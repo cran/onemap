@@ -18,7 +18,7 @@
 # Function to estimate the parameters of a linkage map (recombination
 # frequencies and log-likelihood)
 est.map.c <-
-function(geno,type,phase,rec,verbose,tol=1E-6) {
+function(geno,type,phase,rec,verbose,tol=1E-2) {
   error.prob <- 1E-50
   maxit <- 1000 # maximum number of iterations
   z1 <- .C("est_map_outbred",

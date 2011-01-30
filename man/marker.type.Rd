@@ -1,15 +1,17 @@
 \name{marker.type}
 \alias{marker.type}
-\title{Type of segregation of markers}
+\title{Informs the segregation patterns of markers}
 \description{
   Informs the type of segregation of all markers from an object of class
-  \code{sequence}, according to the notation by \cite{Wu et al., 2002}.
+  \code{sequence}. For outcross populations it uses the notation by
+  \cite{Wu et al., 2002}. For backcrosses, \eqn{F_2}{F_2} and RILs,
+  it uses the traditional notation from MAPMAKER i.e. AA, AB, BB, not AA and not BB.
 }
 \usage{
-marker.type(w)
+marker.type(input.seq)
 }
 \arguments{
-  \item{w}{an object of class \code{sequence}.}
+  \item{input.seq}{an object of class \code{sequence}.}
 }
 \details{
   The segregation types are (\cite{Wu et al., 2002}):
@@ -37,7 +39,7 @@ marker.type(w)
 }
 \value{
   Nothing is returned. Segregation types of all markers in the
-  sequence are displayed on the screen, according the above table.
+  sequence are displayed on the screen.
 }
 \references{
   Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002) Simultaneous
@@ -47,11 +49,18 @@ marker.type(w)
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
 \seealso{\code{\link[onemap]{make.seq}}}
 \examples{
-  data(example_out)
-  twopts <- rf.2pts(example_out)
-
+  data(example.out)
+  twopts <- rf.2pts(example.out)
   markers.ex <- make.seq(twopts,c(3,6,8,12,16,25))
   marker.type(markers.ex) # segregation type for some markers
+
+  data(fake.f2.onemap)
+  twopts <- rf.2pts(fake.f2.onemap)
+  all.mrk<-make.seq(twopts, "all")
+  lgs<-group(all.mrk)
+  lg1<-make.seq(lgs,1)
+  marker.type(lg1) # segregation type for linkage group 1
+
 }
 \keyword{manip}
 \keyword{utilities}

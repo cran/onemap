@@ -2,9 +2,8 @@
 \alias{read.outcross}
 \title{Read data from a segregating full-sib population}
 \description{
-  Imports data from a full-sib family derived from two outbred parents
-  and creates an object of class \code{outcross}. Currently only one
-  format is supported.
+  Imports data from a full-sib family derived from the cross of two
+  outbred parents and creates an object of class \code{outcross}.
 }
 \usage{
 read.outcross(dir, file)
@@ -15,7 +14,7 @@ read.outcross(dir, file)
     read.}
 }
 \details{
-  The only format currently supported is quite similar to that of
+  The file format is quite similar to that used by 
   \code{MAPMAKER/EXP} (\cite{Lincoln et al.}, 1993). The first line
   contains two integers: the number of individuals and the number of
   markers.
@@ -34,8 +33,8 @@ read.outcross(dir, file)
   Finally, after the segregation type comes the genotype data for the
   corresponding marker. Depending on the segregation type, genotypes may
   be denoted by \code{ac}, \code{ad}, \code{bc}, \code{bd}, \code{a},
-  \code{ba}, \code{b}, \code{bc}, \code{ab} and \code{o}, in various
-  combinations. To make things easier, we have followed \strong{exactly}
+  \code{ba}, \code{b}, \code{bc}, \code{ab} and \code{o}, in several
+  possible combinations. To make things easier, we have followed \strong{exactly}
   the notation used by \cite{Wu et al.} (2002). Genotypes \emph{must} be
   separated by commas. Missing values are denoted by \code{"-"}
 
@@ -54,8 +53,13 @@ read.outcross(dir, file)
   \item{n.mar}{number of markers.}
   \item{segr.type}{a vector with the segregation type of each marker, as
     \code{strings}.}
-  \item{segr.type.num}{a vector with the segregation type of each marker,
-    represented in a simplified manner as integers.}
+  \item{segr.type.num}{a vector with the segregation type of each
+  marker, represented in a simplified manner as integers, i.e. 1
+  corresponds to markers of type \code{"A"}; 2 corresponds to markers
+  of type \code{"B1.5"}; 3 corresponds to markers of type \code{"B2.6"};
+  4 corresponds to markers of type \code{"B3.7"}; 5 corresponds to
+  markers of type \code{"C.8"}; 6 corresponds to markers of type
+  \code{"D1"} and 7 corresponds to markers of type \code{"D2"}}
   \item{input}{the name of the input file.}
 }
 \references{

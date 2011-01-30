@@ -2,9 +2,10 @@
 \alias{def.rf.3pts}
 \title{Three-point analysis of genetic markers}
 \description{
-  This function is defunct and kept only for historical reasons.
-  Performs the three-point analysis proposed by \cite{Wu et al. (2002)}
-  for a triplet of markers in a given order.
+  Due to the limitations of the method, this function is defunct and
+  kept only for historical reasons. Performs the three-point analysis
+  for outcrosses in the way proposed by \cite{Wu et al. (2002)} for a
+  triplet of markers in a given order.
 }
 \usage{
 def.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
@@ -70,12 +71,12 @@ def.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
 \author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
 \examples{
 \dontrun{
-  data(example_out)
+  data(example.out)
 
-  threepts <- def.rf.3pts(example_out,"M1","M2","M14") # correct order
+  threepts <- def.rf.3pts(example.out,"M1","M2","M14") # correct order
   threepts
 
-  threepts <- def.rf.3pts(example_out,"M1","M14","M2") # wrong order
+  threepts <- def.rf.3pts(example.out,"M1","M14","M2") # wrong order
   threepts
 }
 }
