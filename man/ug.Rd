@@ -6,7 +6,7 @@
   (\cite{Tan & Fu, 2006}).
 }
 \usage{
-ug(input.seq, LOD=0, max.rf=0.5)
+ug(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
 }
 \arguments{
   \item{input.seq}{an object of class \code{sequence}.}
@@ -14,6 +14,8 @@ ug(input.seq, LOD=0, max.rf=0.5)
     pairwise recombination fraction matrix.}
   \item{max.rf}{maximum recombination fraction threshold used as the LOD
     value above.}
+   \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
+    convergence.}
 }
 \details{
   \emph{Unidirectional Growth} (\emph{UG}) is an algorithm for marker

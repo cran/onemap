@@ -14,7 +14,7 @@
 #                                                                     #
 #######################################################################
 
-rcd <-function(input.seq,LOD=0,max.rf=0.5) {
+rcd <-function(input.seq, LOD=0,max.rf=0.5,tol=10E-5) {
   # checking for correct object
   if(!any(class(input.seq)=="sequence")) stop(deparse(substitute(input.seq))," is
     not an object of class 'sequence'")
@@ -82,10 +82,9 @@ rcd <-function(input.seq,LOD=0,max.rf=0.5) {
     }
   }
   # end of chain
-  cat("\norder obtained using RCD algorithm:\n\n", input.seq$seq.num[avoid.reverse(order)], "\n\ncalculating multipoint map using tol = 10E-5.\n\n")
-  map(make.seq(get(input.seq$twopt),input.seq$seq.num[avoid.reverse(order)],twopt=input.seq$twopt), tol=10E-5)
+  cat("\norder obtained using RCD algorithm:\n\n", input.seq$seq.num[avoid.reverse(order)], "\n\ncalculating multipoint map using tol = ", tol, ".\n\n")
+  map(make.seq(get(input.seq$twopt),input.seq$seq.num[avoid.reverse(order)],twopt=input.seq$twopt), tol=tol)
 }
-
 # end of file
 
 

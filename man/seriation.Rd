@@ -6,7 +6,7 @@
   (\cite{Buetow & Chakravarti, 1987}).
 }
 \usage{
-seriation(input.seq, LOD = 0, max.rf = 0.5)
+seriation(input.seq, LOD = 0, max.rf = 0.5, tol=10E-5)
 }
 \arguments{
   \item{input.seq}{an object of class \code{sequence}.}
@@ -14,6 +14,8 @@ seriation(input.seq, LOD = 0, max.rf = 0.5)
     pairwise recombination fraction matrix.}
   \item{max.rf}{maximum recombination fraction threshold used as the LOD
     value above.}
+  \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
+    convergence.}
 }
 \details{
   \emph{Seriation} is an algorithm for marker ordering in linkage
@@ -49,7 +51,7 @@ seriation(input.seq, LOD = 0, max.rf = 0.5)
   NOTE: When there are to many pairs of markers with the same value in the
   recombination fraction matrix, it can result in ties during
   the ordination process and the \emph{Seriation} algorithm may not work
-  properly. This if particularly relevant for outcrossing populations with mixture of
+  properly. This is particularly relevant for outcrossing populations with mixture of
   markers of type \code{D1} and \code{D2}. When this occurs, the
   function shows the following error message: \code{There are too many
   ties in the ordination process - please, consider using another ordering algorithm}.

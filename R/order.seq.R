@@ -54,19 +54,19 @@ order.seq <- function(input.seq, n.init=5, subset.search=c("twopt", "sample"),
         twopt.alg <- match.arg(twopt.alg)
         tpt.type <- switch(EXPR=twopt.alg,
                            'rec'={
-                             seq.rec<-record(input.seq=input.seq)$seq.num ##ordering using RECORD algorithm
+                             seq.rec<-record(input.seq=input.seq,tol=0.1)$seq.num ##ordering using RECORD algorithm
                              seq.init<-seq.rec[unique(round(seq(from=1, to=length(seq.rec), length.out=n.init)))] ##taking equally spaced markers
                            },
                            'rcd'={
-                             seq.rcd<-rcd(input.seq=input.seq)$seq.num ##ordering using RCD algorithm
+                             seq.rcd<-rcd(input.seq=input.seq,tol=0.1)$seq.num ##ordering using RCD algorithm
                              seq.init<-seq.rcd[unique(round(seq(from=1, to=length(seq.rcd), length.out=n.init)))] ##taking equally spaced markers
                            },
                            'ser'={
-                             seq.ser<-seriation(input.seq=input.seq)$seq.num ##ordering using SERIATION algorithm
+                             seq.ser<-seriation(input.seq=input.seq,tol=0.1)$seq.num ##ordering using SERIATION algorithm
                              seq.init<-seq.ser[unique(round(seq(from=1, to=length(seq.ser), length.out=n.init)))] ##taking equally spaced markers
                            },
                            'ug'={
-                             seq.ug<-ug(input.seq=input.seq)$seq.num ##ordering using UG algorithm
+                             seq.ug<-ug(input.seq=input.seq,tol=0.1)$seq.num ##ordering using UG algorithm
                              seq.init<-seq.ug[unique(round(seq(from=1, to=length(seq.ug), length.out=n.init)))] ##taking equally spaced markers
                            })
         ##if(is.null(tpt.type)) stop("Invalid two point method")

@@ -25,4 +25,5 @@ avoid.reverse<-function(input) {
     rand <- sample(2,1)
     if (rand == 1) output<-input else output<-rev(input)
   }
+  output
 }

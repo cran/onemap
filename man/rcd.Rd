@@ -6,7 +6,7 @@
     Delineation} (\cite{Doerge, 1996}).
 }
 \usage{
-rcd(input.seq,LOD=0,max.rf=0.5)
+rcd(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
 }
 \arguments{
   \item{input.seq}{an object of class \code{sequence}.}
@@ -14,6 +14,8 @@ rcd(input.seq,LOD=0,max.rf=0.5)
     pairwise recombination fraction matrix.}
   \item{max.rf}{maximum recombination fraction threshold used as the LOD
     value above.}
+  \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
+    convergence.}
 }
 \details{
   \emph{Rapid Chain Delineation} (\emph{RCD}) is an algorithm for marker

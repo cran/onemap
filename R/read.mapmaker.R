@@ -11,8 +11,8 @@
 # copyright (c) 2000-6, Karl W Broman                                 #
 #                                                                     #
 # First version: 09/27/2009                                           #
-# Last update:   11/24/2010                                           #
-# License: GNU General Public License version 2 (June, 1991) or later #
+# Last update:   03/05/2011                                           #
+# License: GNU General Public License version 3 (June, 2007) or later #
 #                                                                     #
 #######################################################################
 
@@ -184,7 +184,8 @@ read.mapmaker<-function (dir, file)
   
   ## data coding in onemap style
   segr.type<-character(n.mar)
-  segr.type.num<-ph<-numeric(n.mar)
+  segr.type.num<-numeric(n.mar)
+  ph<-rep(1,n.mar)
   ## maintains the data in MAPMAKER style (maybe it will be removed in a near future)
   geno.mmk<-list(geno=geno, type=type)
   geno.mmk[is.na(geno.mmk)]<-0
@@ -194,15 +195,37 @@ read.mapmaker<-function (dir, file)
     ##Verifying if there are up to three classes in f2 data, ignoring NAs
     if(any(unlist(lapply(apply(geno, 2, table),length)) > 3))
       stop("check data: there are more than 3 classes for f2")
+
+    ##checking for markers with one class (e.g A A A - - - A - A - - - A)
+    ##they are not necessarily monomorphic because we don't know the missing data
+    mkt.mono<-NULL
+    mkt.mono<-which(apply(geno, 2, function(x) sum(!is.na(unique(x))))<=1)
+    if(length(mkt.mono)!=0){
+      segr.type[mkt.mono]<-"B3.7"
+   #   mkt.mono.names <- paste(sQuote(colnames(geno)[mkt.mono]), collapse = ", ")
+   #   msg <- sprintf(ngettext(length(mkt.mono),
+   #                           "There is one marker with one class on dataset: %s",
+   #                           "There are markers with one class on dataset: %s"), mkt.mono.names)
+   #    warning(msg, domain=NA)
+    }
+
     ##more data coding in onemap style (f2 is equivalent to B3.7 and C.8)
-     mkt<-apply(geno, 2, function(x) prod(unique(x), na.rm=TRUE))
+    mkt<-apply(geno, 2, function(x) prod(unique(x), na.rm=TRUE))
     segr.type[mkt==2 | mkt==3 | mkt==6]<-"B3.7"
     segr.type[mkt==5 | mkt==12]<-"C.8"
-    if(any(segr.type=="")) stop("check data: invalid codification")
+    mkt.wrg<-NULL
+    mkt.wrg<-which(segr.type=="")
+    if(length(mkt.wrg)!=0){
+      mkt.wrg.names <- paste(sQuote(colnames(geno)[mkt.wrg]), collapse = ", ")
+      msg <- sprintf(ngettext(length(mkt.wrg),
+                              "marker %s has invalid codification",
+                              "markers %s have invalid codification"), mkt.wrg.names)
+       stop(msg)
+    }
     segr.type.num[segr.type=="B3.7"]<-4
     segr.type.num[segr.type=="C.8"]<-5
     ##coding phases: A B H -> 1; C A -> -1; B D -> 1
-    ph[mkt==2]<-ph[mkt==3]<-ph[mkt==6]<-ph[mkt==12]<-1
+    ##ph[mkt==2]<-ph[mkt==3]<-ph[mkt==6]<-ph[mkt==12]<-1
     ph[mkt==5]<--1
     ##data codind for markers that segregates in 3:1 fashion (type C.8)
     geno[is.na(geno)]<-0    
@@ -254,13 +277,13 @@ print.f2.onemap<-function (x, ...){
   cat("    No. individuals:    ", x$n.ind, "\n")
   cat("    No. markers:        ", x$n.mar, "\n")
   cat("    Percent genotyped:  ", round(mis), "\n\n")
-  cat("    Number of markers per segregation type:\n")
+  cat("    Number of markers per type:\n")
   ##counting the number of markers with each segregation type
   quant <- table(x$segr.type.num-x$phase)
-  names(quant)[which(names(quant)=="3") ] <-"AA : AB : BB (1:2:1): "
-  names(quant)[which(names(quant)=="5") ] <-"AA : AB : BB (1:2:1): "
-  names(quant)[which(names(quant)=="4")]  <-" Not BB : BB   (3:1): "
-  names(quant)[which(names(quant)=="6")]  <-" Not AA : AA   (3:1): " 
+  names(quant)[which(names(quant)=="3") ] <-"AA : AB : BB -->"
+  names(quant)[which(names(quant)=="5") ] <-"AA : AB : BB -->"
+  names(quant)[which(names(quant)=="4")]  <-" Not BB : BB -->"
+  names(quant)[which(names(quant)=="6")]  <-" Not AA : AA -->" 
   for (i in 1:length(quant)) {
     cat(paste("       ", names(quant)[i],"  ", quant[i], 
               "\n", sep = ""))
@@ -283,8 +306,8 @@ print.bc.onemap<-function (x, ...) {
   cat("    No. individuals:    ", x$n.ind, "\n")
   cat("    No. markers:        ", x$n.mar, "\n")
   cat("    Percent genotyped:  ", round(mis), "\n\n")
-  cat("    Number of markers per segregation type:\n")
-  cat(paste("       AA : AB (1:1):  ", ncol(x$geno), " marker(s)\n", sep = ""))
+  cat("    Number of markers per type:\n")
+  cat(paste("       AA : AB --> ", ncol(x$geno), " marker(s)\n", sep = ""))
   ##checking for phenotipic data
   if(x$n.phe==0) cat("\nThis data contains no phenotypic information\n\n")
   else cat("\nThis data contains phenotypic information\n\n")
@@ -303,8 +326,8 @@ print.riself.onemap<-function (x, ...) {
   cat("    No. individuals:    ", x$n.ind, "\n")
   cat("    No. markers:        ", x$n.mar, "\n")
   cat("    Percent genotyped:  ", round(mis), "\n\n")
-  cat("    Number of markers per segregation type:\n")
-  cat(paste("       AA : BB (1:1):  ", ncol(x$geno), " marker(s)\n", sep = ""))
+  cat("    Number of markers per type:\n")
+  cat(paste("       AA : BB --> ", ncol(x$geno), " marker(s)\n", sep = ""))
   ##checking for phenotipic data
   if(x$n.phe==0) cat("\nThis data contains no phenotypic information\n\n")
   else cat("\nThis data contains phenotypic information\n\n")
@@ -323,8 +346,8 @@ print.risib.onemap<-function (x, ...) {
   cat("    No. individuals:    ", x$n.ind, "\n")
   cat("    No. markers:        ", x$n.mar, "\n")
   cat("    Percent genotyped:  ", round(mis), "\n\n")
-  cat("    Number of markers per segregation type:\n")
-  cat(paste("       AA : BB (1:1):  ", ncol(x$geno), " marker(s)\n", sep = ""))
+  cat("    Number of markers per type:\n")
+  cat(paste("       AA : BB --> ", ncol(x$geno), " marker(s)\n", sep = ""))
   ##checking for phenotipic data
   if(x$n.phe==0) cat("\nThis data contains no phenotypic information\n\n")
   else cat("\nThis data contains phenotypic information\n\n")
