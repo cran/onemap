@@ -24,7 +24,7 @@ data(example.out)
 twopts <- rf.2pts(example.out)
 twopts
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \seealso{
   \code{\link[onemap]{read.outcross}} for details about objects of class
   \code{outcross}.

@@ -66,7 +66,7 @@ make.seq(input.obj, arg=NULL, phase=NULL, twopt=NULL)
   constructing primary genetic linkage maps of experimental and natural
   populations. \emph{Genomics} 1: 174-181.
 }
-\author{Gabriel Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel Margarido, \email{gramarga@gmail.com}}
 \seealso{
   \code{\link[onemap]{compare}}, \code{\link[onemap]{try.seq}},
   \code{\link[onemap]{order.seq}} and \code{\link[onemap]{map}}.

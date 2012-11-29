@@ -68,7 +68,7 @@ def.rf.3pts(w, mrk1name = NULL, mrk2name = NULL, mrk3name = NULL, LOD =
   outcrossing species. \emph{Theoretical Population Biology} 61:
   349-363.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \examples{
 \dontrun{
   data(example.out)

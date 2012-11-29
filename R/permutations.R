@@ -5,8 +5,7 @@
 # File: permutations.R                                                #
 # Contains: permt.tot, perm.pars                                      #
 #                                                                     #
-# Written by Rodrigo Drummond Couto Duarte                            #
-# copyright (c) 2009, Rodrigo Drummond Couto Duarte                   #
+# Written Marcelo Mollinari                                           #
 #                                                                     #
 # First version: 02/27/2009                                           #
 # Last update: 02/27/2009                                             #

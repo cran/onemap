@@ -3,10 +3,10 @@
 # Package: onemap                                                     #
 #                                                                     #
 # File: adjust.rils.R                                                 #
-# Contains: adjust.rf.ril                                            #
+# Contains: adjust.rf.ril                                             #
 #                                                                     #
-# Written by Karl W Broman                                            #
-# Adapted by Marcelo Mollinari from adjust.rf.ri (package: R/qtl)     #
+# Written by Marcelo Mollinari                                        #
+# Adapted from read.cross.mm (found in the R package qtl)             #
 # copyright (c) 2001-10, Karl W Broman                                #
 #                                                                     #
 # First version: Feb 2001                                             #

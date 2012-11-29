@@ -35,7 +35,7 @@ drop.marker(input.seq, mrks)
     analyses.}
 }
 
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 %\seealso{ }
 \examples{
 

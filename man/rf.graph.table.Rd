@@ -35,7 +35,7 @@ rf.graph.table(input.seq, scale=1, axis.cex=1, main, inter=TRUE)
   are printed, as well as the percentage of missing data for that marker.
 }
 
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \examples{
 ##outcross example
   data(example.out)

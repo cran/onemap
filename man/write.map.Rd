@@ -29,7 +29,7 @@ write.map(map.list, file.out)
   Department of Statistics, North Carolina State University, Raleigh,
   NC.
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 %\seealso{ }
 \examples{
 \dontrun{

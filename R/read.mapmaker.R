@@ -7,7 +7,7 @@
 #           print.riself.onemap, print.risib.onemap                   #
 #                                                                     #
 # Written by Marcelo Mollinari                                        #
-# Adapted from read.cross.mm (package: R/qtl)                         #
+# Adapted from read.cross.mm (found in the R package qtl)             #
 # copyright (c) 2000-6, Karl W Broman                                 #
 #                                                                     #
 # First version: 09/27/2009                                           #

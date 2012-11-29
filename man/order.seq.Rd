@@ -122,8 +122,8 @@ order.seq(input.seq, n.init=5, subset.search=c("twopt", "sample"),
   mapping of sex-specific differences. \emph{Genetical Research}
   79: 85-96
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br} and
-  Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com} and
+  Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}}, \code{\link[onemap]{compare}} and
   \code{\link[onemap]{try.seq}}.

@@ -13,9 +13,6 @@
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
-
-.map.fun<-"kosambi"
-
 haldane <-
 function(rcmb) {
   # rcmb must be a number between 0 and 0.5
@@ -44,8 +41,8 @@ function(rcmb) {
 set.map.fun<-
   function(type=c("kosambi", "haldane")){
     type<-match.arg(type,c("kosambi", "haldane"))
-    if(type=="haldane") .map.fun<<-"haldane"
-    else .map.fun<<-"kosambi"
+    if(type=="haldane") assign(".map.fun",  "haldane", envir = .onemapEnv)
+    else assign(".map.fun",  "kosambi", envir = .onemapEnv)
   }
 
 # end of file

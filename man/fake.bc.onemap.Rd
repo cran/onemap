@@ -21,7 +21,7 @@ data(fake.bc.onemap)
 twopts <- rf.2pts(fake.bc.onemap)
 twopts
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{read.mapmaker}} for details about objects of class
   \code{bc.onemap}.

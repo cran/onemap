@@ -80,15 +80,15 @@ record(input.seq, times=10, LOD=0, max.rf=0.5, tol=10E-5)
   a novel method for ordering loci on a genetic linkage
   map. \emph{Theoretical and Applied Genetics} 112: 30-40.
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}} and  \code{\link[onemap]{map}}
 }
 \examples{
+\dontrun{
   ##outcross example
   data(example.out)
   twopt <- rf.2pts(example.out)
-
   all.mark <- make.seq(twopt,"all")
   groups <- group(all.mark)
   LG1 <- make.seq(groups,1)
@@ -102,5 +102,6 @@ record(input.seq, times=10, LOD=0, max.rf=0.5, tol=10E-5)
   LG1 <- make.seq(groups,1)
   LG1.rec <- record(LG1)
   LG1.rec
+}
 }
 \keyword{utilities}

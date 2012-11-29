@@ -15,7 +15,7 @@
   for constructing multipoint maximum likelihood linkage maps (Wu et
   al. 2002b). It was then applied in several studies, such as Garcia et
   al. (2006), Oliveira et al. (2007) and Oliveira et
-  al. (2008). Nowadays, the latest versions (2.0-0) was  fully modified
+  al. (2008). Nowadays, the latest versions (2.0-3) was  fully modified
   to also handle with backcrosses, F_2 and recombinant inbred lines
   (RIL) populations, allowing fully integration with software for QTL
   mapping, such as R/qtl and QTL Cartographer. OneMap can read and
@@ -27,8 +27,8 @@
   \tabular{ll}{
     Package: \tab onemap\cr
     Type: \tab Package\cr
-    Version: \tab 2.0-0\cr
-    Date: \tab 2011-01-04\cr
+    Version: \tab 2.0-3\cr
+    Date: \tab 2012-12-06\cr
     License: \tab GNU GENERAL PUBLIC LICENSE (Version 3)\cr
   }
   
@@ -76,9 +76,9 @@
   complete examples (located in directory /doc of the package
   distribution).
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br},
-  Marcelo Mollinari, \email{mmollina@esalq.usp.br} and
-  Antonio Augusto F Garcia, \email{aafgarci@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com},
+  Marcelo Mollinari, \email{mmollina@usp.br} and
+  Antonio Augusto F Garcia, \email{augusto.garcia@usp.br}}
 \references{
   Basten, C. J., Weir, B. S. and Zeng, Z.-B. (2005) \emph{QTL
   Cartographer Version 1.17: A Reference Manual and Tutorial for QTL

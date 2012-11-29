@@ -20,7 +20,7 @@ draw.map(map.list, horizontal=FALSE, names=FALSE, grid=FALSE, cex.mrk=1, cex.grp
   \item{cex.grp}{the magnification to be used for group axis annotation.}
 }
 
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 %\seealso{ }
 \examples{
 \dontrun{

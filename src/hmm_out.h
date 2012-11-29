@@ -24,11 +24,14 @@
   Description: Header file for HMM functions written in C code
                Implements the methodology of Hidden Markov Models (HMM)
 	       to construct multipoint linkage maps in outcrossing species
-  Author: Karl W Broman, adapted by Marcelo Mollinari
-  Copyright (C) 2000-6, Karl W Broman
+
+  Written by Marcelo Mollinari
+  Adapted from hmm_main.h, hmm_f2.h and util.h (found in the R package qtl)
+  copyright (c) 2001-10, Karl W Broman                                
+
   Escola Superior de Agricultura "Luiz de Queiroz"
   Departamento de Genética - São Paulo, Brazil
-  Contact: mmollina@esalq.usp.br
+  Contact: mmollina@usp.br
   First version: 03/02/2009
   Last update: 03/02/2009
 */

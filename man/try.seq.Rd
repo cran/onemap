@@ -92,7 +92,7 @@ try.seq(input.seq, mrk, tol=10E-2, draw.try=FALSE, pos=NULL, verbose=FALSE)
   mapping of sex-specific differences. \emph{Genetical Research}
   79: 85-96
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}} and \code{\link[onemap]{compare}}.
 }

@@ -83,11 +83,12 @@ ug(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
   Tan, Y. and Fu, Y. (2006) A novel method for estimating linkage
   maps. \emph{Genetics} 173: 2383-2390.
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}}, \code{\link[onemap]{map}}
 }
 \examples{
+\dontrun{
   #outcross example
   data(example.out)
   twopt <- rf.2pts(example.out)
@@ -104,5 +105,6 @@ ug(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
   LG1 <- make.seq(groups,1)
   LG1.ug <- ug(LG1)
   LG1.ug
+}
 }
 \keyword{utilities}

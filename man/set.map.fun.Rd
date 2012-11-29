@@ -21,7 +21,7 @@ set.map.fun(type=c("kosambi", "haldane"))
   Kosambi, D. D. (1944) The estimation of map distance from
   recombination values. \emph{Annuaire of Eugenetics} 12: 172-175.
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{\code{\link[onemap]{kosambi}} and \code{\link[onemap]{haldane}}}
 
 \keyword{arith}

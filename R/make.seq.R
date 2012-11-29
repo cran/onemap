@@ -119,8 +119,8 @@ print.sequence <- function(x,...) {
     longest.name <- max(nchar(marnames))
     marnames <- formatC(marnames,flag="-")
     longest.number <- max(nchar(x$seq.num))
-    marnumbers <- formatC(x$seq.num, format="d", width=longest.number)
-    distances <- formatC(c(0,cumsum(get(.map.fun)(x$seq.rf))),format="f",digits=2,width=7)
+    marnumbers <- formatC(x$seq.num, format="d", width=longest.number)   
+    distances <- formatC(c(0,cumsum(get(get(".map.fun", envir=.onemapEnv))(x$seq.rf))),format="f",digits=2,width=7)
     ## whith diplotypes for class 'outcross'
     if(class(get(x$data.name, pos=1))=="outcross"){
       ## create diplotypes from segregation types and linkage phases

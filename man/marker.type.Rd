@@ -46,7 +46,7 @@ marker.type(input.seq)
   maximum likelihood estimation of linkage and linkage phases in
   outcrossing species. \emph{Theoretical Population Biology} 61: 349-363.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \seealso{\code{\link[onemap]{make.seq}}}
 \examples{
   data(example.out)

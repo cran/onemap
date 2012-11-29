@@ -57,7 +57,7 @@ read.mapmaker(dir, file)
     Technical Report}.
 }
 \author{Adapted from Karl Broman (package \pkg{qtl}) by Marcelo
-  Mollinari, \email{mmollina@esalq.usp.br}
+  Mollinari, \email{mmollina@usp.br}
 }
 \seealso{
   \code{fake.bc.onemap} and \code{fake.f2.onemap} directory in the package source.

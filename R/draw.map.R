@@ -29,7 +29,7 @@ draw.map<-function(map.list, horizontal=FALSE, names=FALSE, grid=FALSE, cex.mrk=
   for(i in length(map.list):1){
     if(!any(class(map.list[[i]])=="sequence")) stop("Object ", i , " in map.list is not an object of class 'sequnece'")
     if(is.null(map.list[[i]]$seq.like))  stop("Parameters are not estimated for object ", i, " in map.list")
-    map<-cumsum(c(0,get(.map.fun)(map.list[[i]]$seq.rf)))
+    map<-cumsum(c(0,get(get(".map.fun", envir=.onemapEnv))(map.list[[i]]$seq.rf)))
     marnames<-colnames(get(map.list[[i]]$data.name, pos=1)$geno)[map.list[[i]]$seq.num]
     out<-rbind(out, data.frame(dist=map, pos=j,marker=marnames))
     j<-j+1

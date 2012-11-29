@@ -64,8 +64,8 @@ map(input.seq, tol)
 }
 
 \author{Adapted from Karl Broman (package 'qtl') by Gabriel R A
-  Margarido, \email{gramarga@esalq.usp.br} and Marcelo Mollinari,
-  \email{mmollina@esalq.usp.br}}
+  Margarido, \email{gramarga@gmail.com} and Marcelo Mollinari,
+  \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{make.seq}}
 }

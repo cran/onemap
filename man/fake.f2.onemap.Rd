@@ -23,7 +23,7 @@ data(fake.f2.onemap)
 twopts <- rf.2pts(fake.f2.onemap)
 twopts
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{read.mapmaker}} for details about objects of class
   \code{f2.onemap}.

@@ -51,7 +51,7 @@ group(input.seq, LOD=NULL, max.rf=NULL)
   reference manual. \emph{A Whitehead Institute for Biomedical Research
     Technical Report}.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \seealso{
   \code{\link[onemap]{rf.2pts}} and \code{\link[onemap]{make.seq}}
 }

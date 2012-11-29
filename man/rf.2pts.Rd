@@ -56,7 +56,7 @@ rf.2pts(input.obj, LOD = 3, max.rf = 0.50, verbose = TRUE)
   The thresholds used for \code{LOD} and \code{max.rf} will be used in
   subsequent analyses, but can be overriden.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 %\seealso{}
 \examples{
   data(example.out)

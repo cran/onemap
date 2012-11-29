@@ -26,10 +26,10 @@
                maximum likelihood estimation of linkage and linkage phases in
                outcrossing species"
                Theoretical Population Biology 61, 349-363
-  Author: Gabriel Rodrigues Alves Margarido
+  Written by Gabriel Rodrigues Alves Margarido
   Escola Superior de Agricultura "Luiz de Queiroz"
   Departamento de Genética - São Paulo, Brazil
-  Contact: gramarga@esalq.usp.br
+  Contact: gramarga@gmail.com
   First version: 02/13/2007
   Last update: 03/02/2009
 */

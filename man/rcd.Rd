@@ -69,11 +69,12 @@ rcd(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
   A. A. F. (2009) Evaluation of algorithms used to order markers on
   genetics maps. \emph{Heredity} 103: 494-502.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \seealso{
   \code{\link[onemap]{make.seq}}, \code{\link[onemap]{map}}
 }
 \examples{
+\dontrun{
   #outcross example
   data(example.out)
   twopt <- rf.2pts(example.out)
@@ -90,5 +91,6 @@ rcd(input.seq, LOD=0, max.rf=0.5, tol=10E-5)
   LG1 <- make.seq(groups,1)
   LG1.rcd <- rcd(LG1)
   LG1.rcd
+}
 }
 \keyword{utilities}

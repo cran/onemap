@@ -34,7 +34,7 @@ kosambi(rcmb)
   Kosambi, D. D. (1944) The estimation of map distance from
   recombination values. \emph{Annuaire of Eugenetics} 12: 172-175.
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 %\seealso{ }
 \examples{
   # little difference for small recombination fractions

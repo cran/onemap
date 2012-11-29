@@ -73,7 +73,7 @@ compare(input.seq,n.best=50,tol=10E-4,verbose=FALSE)
   mapping of sex-specific differences. \emph{Genetical Research}
   79: 85-96
 }
-\author{Marcelo Mollinari, \email{mmollina@esalq.usp.br}}
+\author{Marcelo Mollinari, \email{mmollina@usp.br}}
 \seealso{
   \code{\link[onemap]{marker.type}} for details about segregation types and
   \code{\link[onemap]{make.seq}}.

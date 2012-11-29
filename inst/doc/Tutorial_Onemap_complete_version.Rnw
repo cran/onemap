@@ -11,7 +11,7 @@
 
 
 %\VignetteIndexEntry{OneMap Tutorial}
-\SweaveOpts{eval=FALSE, echo=TRUE, results=verbatim, fig=FALSE, keep.source=TRUE}
+\SweaveOpts{eval=TRUE, echo=TRUE, results=verbatim, fig=FALSE, keep.source=TRUE}
 
 \begin{document}
 
@@ -31,7 +31,7 @@
   \vspace{.3in}
   
   \centering
-  \includegraphics[width=.8\textwidth]{figures/tutorial}
+  \includegraphics[width=.8\textwidth]{tutorial}
   
  
   
@@ -81,7 +81,7 @@ After installing R, you can launch it by double-clicking the R icon created on y
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=.7\textwidth]{figures/rconsole.png}
+  \includegraphics[width=.7\textwidth]{rconsole.png}
   \caption{The R Console.}
    \label{rconsole}
 \end{figure}

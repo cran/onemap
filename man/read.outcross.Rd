@@ -77,7 +77,7 @@ read.outcross(dir, file)
   349-363.
 }
 \author{Adapted from Karl Broman (package \pkg{qtl}) by Gabriel R A
-        Margarido, \email{gramarga@esalq.usp.br}
+        Margarido, \email{gramarga@gmail.com}
 }
 \seealso{
   \code{example} directory in the package source.

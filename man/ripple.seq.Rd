@@ -53,7 +53,7 @@ ripple.seq(input.seq,ws=4,LOD=3,tol=10E-2)
   mapping of sex-specific differences. \emph{Genetical Research}
   79: 85-96
 }
-\author{Gabriel R A Margarido, \email{gramarga@esalq.usp.br}}
+\author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
 \seealso{
   \code{\link[onemap]{make.seq}}, \code{\link[onemap]{compare}},
   \code{\link[onemap]{try.seq}} and \code{\link[onemap]{order.seq}}.
