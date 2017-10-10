@@ -1,33 +1,44 @@
 \name{onemap-internal}
 \alias{acum}
-\alias{adjust.rf.ril}
-\alias{avoid.reverse}
-\alias{codif.data}
+\alias{adjust_rf_ril}
+\alias{avoid_reverse}
+\alias{check_linkage}
+\alias{codif_data}
 \alias{comb}
-\alias{comb.ger}
-\alias{cr2pts}
-\alias{cr3pts}
+\alias{comb_ger}
+\alias{compare_inbred}
+\alias{compare_outcross}
 \alias{Cindex}
 \alias{diplo}
-\alias{draw.order}
-\alias{draw.rf.inter}
+\alias{draw_order}
+\alias{draw_rf_inter}
 \alias{draw.try}
-\alias{est.map.c}
-\alias{perm.pars}
-\alias{perm.tot}
+\alias{est_map_hmm_f2}
+\alias{est_map_hmm_bc}
+\alias{est_rf_bc}
+\alias{est_rf_f2}
+\alias{est_rf_out}
+\alias{get_bins}
+\alias{get_mat_rf_in}
+\alias{get_vec_rf_in}
+\alias{get_mat_rf_out}
+\alias{get_twopt_info}
+\alias{get_vec_rf_out}
+\alias{perm_pars}
+\alias{perm_tot}
 \alias{phases}
-\alias{plotFunction.out}
-\alias{rem.amb.ph}
-\alias{return.geno}
-\alias{ser.ord}
-\alias{print.bc.onemap}
+\alias{plot_function_out}
+\alias{rem_amb_ph}
+\alias{return_geno}
+\alias{ripple_seq_inbred}
+\alias{ripple_seq_outcross}
+\alias{ser_ord}
+\alias{try_seq_inbred}
+\alias{try_seq_outcross}
 \alias{print.compare}
-\alias{print.f2.onemap}
+\alias{print.onemap}
+\alias{print.onemap_bin}
 \alias{print.order}
-\alias{print.outcross}
-\alias{print.rf.3pts}
-\alias{print.riself.onemap}
-\alias{print.risib.onemap}
 \alias{print.sequence}
 \title{Internal onemap functions}
 \description{
@@ -35,35 +46,45 @@
 }
 \usage{
 acum(w)
-avoid.reverse(input)
-adjust.rf.ril(r,type,expand)
-codif.data(geno.in,segr.type.in)
+avoid_reverse(input)
+adjust_rf_ril(r,type,expand)
+check_linkage(i, s, cl, geno, st, max.rf, LOD)
+codif_data(geno.in,segr.type.in,cross = c("outcross", "f2", "backcross",
+"riself", "risib"))
 comb(x,y)
-comb.ger(f)
-cr2pts(mrk1, mrk2, segr.type1, segr.type2)
-cr3pts(mrk1, mrk2, mrk3, segr.type1, segr.type2, segr.type3)
+comb_ger(f)
+compare_inbred(input.seq, n.best, tol, verbose = FALSE)
+compare_outcross(input.seq, n.best, tol, verbose)
 Cindex(order,r)
 diplo(w, seq.num, seq.phases)
-draw.order(map.input)
-draw.rf.inter(info.graph, scale, cex)
-draw.try(base.input, try.input, pos=NULL)
-est.map.c(geno,type,phase,rec,verbose,tol=1e-2)
-perm.pars(v)
-perm.tot(v)
+est_rf_out(geno, mrk, seg_type, nind, verbose)
+est_rf_f2(geno, mrk, seg_type, nind, verbose)
+est_rf_bc(geno, mrk,  nind, type, verbose)
+est_map_hmm_f2(geno, rf.vec, verbose, tol)
+est_map_hmm_bc(geno, rf.vec, verbose, tol)
+get_bins(geno, exact)
+get_mat_rf_in(input.seq, LOD, max.rf, min.LOD)
+get_twopt_info(twopt, small, big)
+get_vec_rf_in(input.seq, LOD, acum)
+get_mat_rf_out(input.seq, LOD, max.rf, min.LOD)
+get_vec_rf_out(input.seq, LOD, max.rf, min.LOD, acum)
+perm_pars(v)
+perm_tot(v)
 phases(input.seq, LOD=0, max.rf=0.50)
-plotFunction.out(info.graph, cex, main)
-rem.amb.ph(M,w,seq.num)
-return.geno(segr.type, link.phases)
-ser.ord(r,i)
-\method{print}{bc.onemap}(x, \dots)
+plot_function_out(info.graph, cex, main)
+rem_amb_ph(M,w,seq.num)
+return_geno(segr.type, link.phases)
+ripple_seq_inbred(input.seq, ws, ext.w, LOD, tol)
+ripple_seq_outcross(input.seq, ws, LOD, tol)
+ser_ord(r,i)
+try_seq_inbred(input.seq, mrk, tol, pos, verbose)
+try_seq_outcross(input.seq, mrk, tol, pos, verbose)
 \method{print}{compare}(x, \dots)
-\method{print}{f2.onemap}(x, \dots)
+\method{print}{onemap}(x, \dots)
+\method{print}{onemap_bin}(x, \dots)
 \method{print}{order}(x, \dots)
-\method{print}{outcross}(x, \dots)
-\method{print}{rf.3pts}(x, \dots)
+\method{print}{order}(x, \dots)
 \method{print}{sequence}(x, \dots)
-\method{print}{riself.onemap} (x, \dots)
-\method{print}{risib.onemap} (x, \dots)
 }
 \author{Gabriel Rodrigues Alves Margarido and Marcelo Mollinari}
 \keyword{internal}

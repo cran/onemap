@@ -3,7 +3,7 @@
 # Package: onemap                                                     #
 #                                                                     #
 # File: map_func.R                                                    #
-# Contains: haldane, kosambi, set.map.fun                             #
+# Contains: haldane, kosambi, set_map_fun                             #
 #                                                                     #
 # Written by Gabriel Rodrigues Alves Margarido and Marcelo Mollinari  #
 # copyright (c) 2007-9, Gabriel R A Margarido                         #
@@ -25,7 +25,6 @@ function(rcmb) {
             dQuote("numeric"))
 }
 
-
 kosambi <-
 function(rcmb) {
   # rcmb must be a number between 0 and 0.5
@@ -38,7 +37,26 @@ function(rcmb) {
             dQuote("numeric"))
 }
 
-set.map.fun<-
+
+
+##' Defines the default mapping function
+##'
+##' Defines the function that should be used to display the genetic map through
+##' the analysis.
+##'
+##'
+##' @param type Indicates the function that should be used, which can be
+##' \code{"kosambi"} or \code{"haldane"}
+##' @author Marcelo Mollinari, \email{mmollina@@usp.br}
+##' @seealso \code{\link[onemap]{kosambi}} and \code{\link[onemap]{haldane}}
+##' @references Haldane, J. B. S. (1919) The combination of linkage values and
+##' the calculation of distance between the loci of linked factors.
+##' \emph{Journal of Genetics} 8: 299-309.
+##'
+##' Kosambi, D. D. (1944) The estimation of map distance from recombination
+##' values. \emph{Annuaire of Eugenetics} 12: 172-175.
+##' @keywords arith
+set_map_fun<-
   function(type=c("kosambi", "haldane")){
     type<-match.arg(type,c("kosambi", "haldane"))
     if(type=="haldane") assign(".map.fun",  "haldane", envir = .onemapEnv)
