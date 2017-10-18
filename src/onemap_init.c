@@ -8,7 +8,7 @@
 */
 
 /* .C calls */
-extern void vcf2raw(void *, void *, void *, void *, void *, void *, void *, void *);
+/*extern void vcf2raw(void *, void *, void *, void *, void *, void *, void *, void *); */
 
 /* .Call calls */
 extern SEXP est_hmm_bc(SEXP, SEXP, SEXP, SEXP);
@@ -19,10 +19,10 @@ extern SEXP est_rf_f2_wrap(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP est_rf_out_wrap(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP get_bins(SEXP, SEXP, SEXP);
 
-static const R_CMethodDef CEntries[] = {
+/* static const R_CMethodDef CEntries[] = {
     {"vcf2raw", (DL_FUNC) &vcf2raw, 8},
     {NULL, NULL, 0}
-};
+};*/
 
 static const R_CallMethodDef CallEntries[] = {
     {"est_hmm_bc",      (DL_FUNC) &est_hmm_bc,      4},
@@ -37,6 +37,6 @@ static const R_CallMethodDef CallEntries[] = {
 
 void R_init_onemap(DllInfo *dll)
 {
-    R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

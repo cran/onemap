@@ -87,34 +87,36 @@
 vcf2raw <- function(input = NULL, output = NULL,
                     cross = c("outcross", "f2 intercross", "f2 backcross", "ri self", "ri sib"),
                     parent1 = NULL, parent2 = NULL, min_class = 1.0) {
-  if (is.null(input)) {
-    stop("You must specify the input file path.")
-  }
-  if (!file.exists(input)) {
-    stop("Input file not found.")
-  }
-  if (is.null(output)) {
-    stop("You must specify the output file path.")
-  }
-  
-  ## Get absolute file paths to pass on to C
-  input <- normalizePath(input)
-  output <- normalizePath(output, mustWork = FALSE)
-  
-  cross <- match.arg(cross)
-  
-  if (is.null(parent1) || is.null(parent2)) {
-    stop("You must specify at least one sample each as parents 1 and 2.")
-  }
-
-  convert <- .C("vcf2raw",
-                as.character(input),
-                as.character(output),
-                as.character(cross),
-                as.integer(length(parent1)),
-                as.character(parent1),
-                as.integer(length(parent2)),
-                as.character(parent2),
-                as.numeric(min_class),
-                PACKAGE = "onemap")
+  cat(
+"This function is currently available in the onemap github version. To install it, please follow the instructions at www.github.com/augusto-garcia/onemap. It does not work under Mac and Solaris platform. We are working on it to make it available across-platform and at CRAN.")
+  # if (is.null(input)) {
+  #   stop("You must specify the input file path.")
+  # }
+  # if (!file.exists(input)) {
+  #   stop("Input file not found.")
+  # }
+  # if (is.null(output)) {
+  #   stop("You must specify the output file path.")
+  # }
+  # 
+  # ## Get absolute file paths to pass on to C
+  # input <- normalizePath(input)
+  # output <- normalizePath(output, mustWork = FALSE)
+  # 
+  # cross <- match.arg(cross)
+  # 
+  # if (is.null(parent1) || is.null(parent2)) {
+  #   stop("You must specify at least one sample each as parents 1 and 2.")
+  # }
+  # 
+  # convert <- .C("vcf2raw",
+  #               as.character(input),
+  #               as.character(output),
+  #               as.character(cross),
+  #               as.integer(length(parent1)),
+  #               as.character(parent1),
+  #               as.integer(length(parent2)),
+  #               as.character(parent2),
+  #               as.numeric(min_class),
+  #               PACKAGE = "onemap")
 }
