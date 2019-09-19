@@ -18,10 +18,6 @@ library(onemap)
 ## ---- eval=FALSE---------------------------------------------------------
 #  save.image("C:/.../yourfile.RData")
 
-## ---- eval=FALSE, message='hide'-----------------------------------------
-#  vcf2raw(input = system.file("extdata/vcf_example_f2.vcf.gz", package = "onemap"),
-#          output = "vcf_example_f21.raw", parent1 = "P1", parent2 = "P2", cross = "f2 intercross")
-
 ## ---- eval=FALSE---------------------------------------------------------
 #  mapmaker_example_f2 <- read_mapmaker(dir="C:/workingdirectory",
 #                                  file="your_data_file.raw")
@@ -51,14 +47,21 @@ data("onemap_example_f2")
 onemap_example_f2
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  vcf_example_f2 <- read_onemap(inputfile= system.file("extdata/vcf_example_f2.raw",
-#                                                         package = "onemap"))
+#  library(vcfR)
+#  vcfR.object <- read.vcfR(system.file("extdata/vcf_example_f2.vcf", package = "onemap"))
 
-## ------------------------------------------------------------------------
-data("vcf_example_f2")
+## ---- eval=FALSE---------------------------------------------------------
+#  vcf_example_f2 <- onemap_read_vcfR(vcfR.object = vcfR.object,
+#                                     parent1 = "P1",
+#                                     parent2 = "P2",
+#                                     cross = "f2 intercross")
 
-## ------------------------------------------------------------------------
-vcf_example_f2
+## ---- eval=FALSE---------------------------------------------------------
+#  save(vcfR.object, file = "vcfR.object.RData")
+#  rm(vcfR.object)
+
+## ---- echo=FALSE---------------------------------------------------------
+data(vcf_example_f2)
 
 ## ---- class_of_object----------------------------------------------------
 class(onemap_example_f2)
@@ -81,6 +84,9 @@ comb_example
 
 ## ------------------------------------------------------------------------
 plot(comb_example)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  write_onemap_raw(comb_example, file.name = "new_dataset.raw", cross="f2 intercross")
 
 ## ---- chi_square---------------------------------------------------------
 f2_test <- test_segregation(comb_example)
@@ -246,10 +252,13 @@ temp_seq <- drop_marker(LG3_f2_final, 38)
 (LG3_f2_wrong <- map(temp_seq))
 
 ## ---- rec_matrix---------------------------------------------------------
-rf_graph_table(LG3_f2_wrong, inter = FALSE)
+rf_graph_table(LG3_f2_wrong)
 
 ## ---- rec_matrix_inter, eval=FALSE---------------------------------------
-#  rf_graph_table(LG3_f2_wrong)
+#  rf_graph_table(LG3_f2_wrong, inter = TRUE, html.file = "LG3_f2_wrong.html")
+
+## ------------------------------------------------------------------------
+rf_graph_table(LG3_f2_wrong, n.colors = 7, main="LG3", lab.xy = c("markers", "markers"), mrk.axis = "numbers")
 
 ## ---- width=9, height=9--------------------------------------------------
 temp_seq <- drop_marker(LG3_f2_wrong, 38)
@@ -259,17 +268,10 @@ temp_map <- map(temp_seq)
 ## ------------------------------------------------------------------------
 (LG3_f2_final <- make_seq(temp_try, 4))
 
-## ---- eval=FALSE---------------------------------------------------------
-#  rf_graph_table(LG1_f2_final)
+## ------------------------------------------------------------------------
+rf_graph_table(LG1_f2_final)
 
-## ---- echo=FALSE---------------------------------------------------------
-rf_graph_table(LG1_f2_final, inter = FALSE)
-
-## ---- eval=FALSE---------------------------------------------------------
-#  rf_graph_table(LG2_f2_final)
-
-## ---- echo=FALSE---------------------------------------------------------
-rf_graph_table(LG2_f2_final, inter = FALSE)
+rf_graph_table(LG2_f2_final)
 
 ## ------------------------------------------------------------------------
 CHR1 <- make_seq(twopts_f2, "1")
@@ -280,11 +282,11 @@ CHR3 <- make_seq(twopts_f2, "3")
 
 ## ------------------------------------------------------------------------
 CHR_mks <- group_seq(input.2pts = twopts_f2, seqs = "CHROM", unlink.mks = mark_all_f2,
-                      rm.repeated = TRUE)
+                      repeated = FALSE)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  CHR_mks <- group_seq(input.2pts = twopts_f2, seqs = list(CHR1=CHR1, CHR2=CHR2, CHR3=CHR3),
-#                        unlink.mks = mark_all_f2, rm.repeated = TRUE)
+#                        unlink.mks = mark_all_f2, repeated = FALSE)
 
 ## ------------------------------------------------------------------------
 CHR_mks
@@ -347,11 +349,8 @@ CHR2_add20 <- make_seq(CHR2_add20_seq, 20) # marker 20 was placed at the same po
 ## ------------------------------------------------------------------------
 CHR2_test_map
 
-## ---- eval=FALSE---------------------------------------------------------
-#  rf_graph_table(CHR1_test_map)
-
-## ---- echo=FALSE---------------------------------------------------------
-rf_graph_table(CHR2_test_map, inter = FALSE)
+## ------------------------------------------------------------------------
+rf_graph_table(CHR1_test_map)
 
 ## ------------------------------------------------------------------------
 CHR2_add20
@@ -413,6 +412,32 @@ draw_map(LG1_f2_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 ## ------------------------------------------------------------------------
 map_list_all <- list(LG1_f2_final, CHR1_final, LG2_f2_final, CHR3_final, CHR2_final, LG3_f2_final)
 draw_map(map_list_all, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+
+## ---- eval=FALSE, results='hide', eval=FALSE-----------------------------
+#  draw_map2(LG1_f2_final, LG2_f2_final, LG3_f2_final, main = "Only linkage information",
+#            group.names = c("LG1", "LG2", "LG3"))
+
+## ---- echo=FALSE, results='hide', echo=FALSE-----------------------------
+draw_map2(LG1_f2_final, LG2_f2_final, LG3_f2_final, main = "Only linkage information", 
+          group.names = c("LG1", "LG2", "LG3"), output = "map.png")
+
+## ---- results='hide', eval=FALSE-----------------------------------------
+#  draw_map2(LG1_f2_final, col.group = "#58A4B0", col.mark = "#335C81", output = "map_LG1.pdf")
+
+## ---- results='hide', echo=FALSE-----------------------------------------
+draw_map2(LG1_f2_final, col.group = "#58A4B0", col.mark = "#335C81", output = "map_LG1.png")
+
+## ---- results='hide', eval=FALSE-----------------------------------------
+#  draw_map2(LG1_f2_final, CHR1_final, LG2_f2_final, CHR3_final, CHR2_final, LG3_f2_final,
+#            tag = c("M18", "M59", "M38", "M47", "M1"),
+#            output = "map_all.pdf")
+#  
+
+## ---- results='hide', echo=FALSE-----------------------------------------
+draw_map2(LG1_f2_final, CHR1_final, LG2_f2_final, CHR3_final, CHR2_final, LG3_f2_final,
+          tag = c("M18", "M59", "M38", "M47", "M1"),
+          output = "map_all.png")
 
 
 ## ------------------------------------------------------------------------

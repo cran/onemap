@@ -15,11 +15,9 @@
 #                                                                     #
 #######################################################################
 
-#' @useDynLib onemap, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-NULL
-
 # This function calls C++ routine to find markers with redundant information
+##' @useDynLib onemap
+##' @import Rcpp
 get_bins <- function(geno, exact=TRUE)
 {
   bins<-.Call("get_bins",
@@ -31,6 +29,8 @@ get_bins <- function(geno, exact=TRUE)
 }
 
 # This function calls C++ routine for two-point analysis (outcross)
+##' @useDynLib onemap
+##' @import Rcpp
 est_rf_out<-function(geno, mrk=0, seg_type=NULL, nind, verbose=TRUE)
 {
   r<-.Call("est_rf_out_wrap",
@@ -58,12 +58,14 @@ est_rf_out<-function(geno, mrk=0, seg_type=NULL, nind, verbose=TRUE)
 }
 
 # This function calls C++ routine for two-point analysis (F2)
+##' @useDynLib onemap
+##' @import Rcpp
 est_rf_f2<-function(geno, mrk=0, seg_type=NULL, nind, verbose=TRUE)
 {
     r<-.Call("est_rf_f2_wrap",
              geno,
              mrk-1,
-             as.numeric(seg_type),
+             as.integer(seg_type),
              as.numeric(nind),
              as.numeric(verbose),
              PACKAGE = "onemap" )
@@ -75,6 +77,8 @@ est_rf_f2<-function(geno, mrk=0, seg_type=NULL, nind, verbose=TRUE)
 }
 
 # This function calls C++ routine for two-point analysis (bc)
+##' @useDynLib onemap
+##' @import Rcpp
 est_rf_bc<-function(geno, mrk=0,  nind, type=0, verbose=TRUE)
 {
     r<-.Call("est_rf_bc_wrap",
@@ -92,6 +96,8 @@ est_rf_bc<-function(geno, mrk=0,  nind, type=0, verbose=TRUE)
 }
 
 # This function calls C++ routine for multipoint analysis (f2)
+##' @useDynLib onemap
+##' @import Rcpp
 est_map_hmm_f2<-function(geno, rf.vec=NULL, verbose=TRUE, tol=1e-6)
 {
     if(length(rf.vec) != (nrow(geno)-1))
@@ -107,6 +113,8 @@ est_map_hmm_f2<-function(geno, rf.vec=NULL, verbose=TRUE, tol=1e-6)
 }
 
 # This function calls C++ routine for multipoint analysis (bc)
+##' @useDynLib onemap
+##' @import Rcpp
 est_map_hmm_bc<-function(geno, rf.vec=NULL, verbose=TRUE, tol=1e-6)
 {
     if(length(rf.vec) != (nrow(geno)-1))
@@ -153,7 +161,9 @@ est_map_hmm_bc<-function(geno, rf.vec=NULL, verbose=TRUE, tol=1e-6)
 ##'
 ##' @keywords internal
 ##'
-##' @export
+##' @useDynLib onemap
+##' @import Rcpp
+##' 
 est_map_hmm_out<-function(geno, type,  phase, rf.vec=NULL, verbose=TRUE, tol=1e-6)
 {
   if(is.null(rf.vec))

@@ -27,6 +27,8 @@
 ##' markers to be analyzed. Therefore, completion of the two-point analyses can
 ##' take a long time.
 ##'
+##'@importFrom methods is
+##'
 ##' @aliases rf_2pts
 ##' @param input.obj an object of class \code{onemap}.
 ##' @param LOD minimum LOD Score to declare linkage (defaults to \code{3}).
@@ -48,13 +50,13 @@
 ##' @keywords utilities
 ##' @examples
 ##'
-##'   data(example_out)
+##'   data(onemap_example_out)
 ##'
-##'   twopts <- rf_2pts(example_out,LOD=3,max.rf=0.5) # perform two-point analyses
+##'   twopts <- rf_2pts(onemap_example_out,LOD=3,max.rf=0.5) # perform two-point analyses
 ##'   twopts
 ##'
 ##'   print(twopts,c("M1","M2")) # detailed results for markers 1 and 2
-##'
+##'@export
 rf_2pts <- function(input.obj, LOD=3, max.rf=0.50, verbose = TRUE) {
     ## checking for correct object
     if(!any(c("onemap", "outcross", "f2", "backcross", "riself", "risib") %in% class(input.obj)))
@@ -71,6 +73,7 @@ rf_2pts <- function(input.obj, LOD=3, max.rf=0.50, verbose = TRUE) {
         r<-est_rf_bc(geno = input.obj$geno, nind = input.obj$n.ind, type=1, verbose = verbose)
     else if(("risib" %in% class(input.obj)))
         r<-est_rf_bc(geno = input.obj$geno, nind = input.obj$n.ind, type=2, verbose = verbose)
+        
     structure(list(data.name=as.character(sys.call())[2], n.mar=input.obj$n.mar, LOD=LOD, max.rf=max.rf,
                    input=input.obj$input, CHROM = input.obj$CHROM, POS= input.obj$POS, analysis=r),
               class = c("rf_2pts", class(input.obj)[2]))

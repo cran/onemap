@@ -6,8 +6,8 @@
 functions}
 \usage{
 order_seq(input.seq, n.init = 5, subset.search = c("twopt", "sample"),
-  subset.n.try = 30, subset.THRES = 3, twopt.alg = c("rec", "rcd", "ser",
-  "ug"), THRES = 3, touchdown = FALSE, tol = 0.1)
+  subset.n.try = 30, subset.THRES = 3, twopt.alg = c("rec", "rcd",
+  "ser", "ug"), THRES = 3, touchdown = FALSE, tol = 0.1)
 }
 \arguments{
 \item{input.seq}{an object of class \code{sequence}.}
@@ -96,8 +96,8 @@ resulting in a map with all markers positioned.
 
 \dontrun{
   #outcross example
-  data(example_out)
-  twopt <- rf_2pts(example_out)
+  data(onemap_example_out)
+  twopt <- rf_2pts(onemap_example_out)
   all_mark <- make_seq(twopt,"all")
   groups <- group(all_mark)
   LG2 <- make_seq(groups,2)
@@ -125,7 +125,6 @@ resulting in a map with all markers positioned.
   rbind(ord.1$seq.num, ord.2$seq.num) # probably, the same order for
   this dataset
 }
-
 }
 \references{
 Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B.

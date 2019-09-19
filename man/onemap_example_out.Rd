@@ -1,12 +1,12 @@
-\name{example_out}
+\name{onemap_example_out}
 \docType{data}
-\alias{example_out}
+\alias{onemap_example_out}
 \title{Data from a full-sib family derived from two outbred parents}
 \description{
   Simulated data set for an outcross, i.e., an F1 population obtained by
   crossing two non-homozygous parents.
 }
-\usage{data(example_out)}
+\usage{data(onemap_example_out)}
 \format{
   An object of class \code{onemap}.
 }
@@ -18,10 +18,10 @@
   that comes with OneMap.
 }
 \examples{
-data(example_out)
+data(onemap_example_out)
 
 # perform two-point analyses
-twopts <- rf_2pts(example_out)
+twopts <- rf_2pts(onemap_example_out)
 twopts
 }
 \author{Gabriel R A Margarido, \email{gramarga@gmail.com}}
