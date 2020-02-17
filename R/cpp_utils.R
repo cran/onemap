@@ -65,7 +65,7 @@ est_rf_f2<-function(geno, mrk=0, seg_type=NULL, nind, verbose=TRUE)
     r<-.Call("est_rf_f2_wrap",
              geno,
              mrk-1,
-             as.integer(seg_type),
+             as.numeric(seg_type),
              as.numeric(nind),
              as.numeric(verbose),
              PACKAGE = "onemap" )
