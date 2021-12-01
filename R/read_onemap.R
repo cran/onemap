@@ -76,6 +76,9 @@
 ##'
 ##' @param dir directory where the input file is located.
 ##' @param inputfile the name of the input file which contains the data to be read.
+##' @param verbose A logical, if TRUE it output progress status
+##' information.
+##' 
 ##' @return An object of class \code{onemap}, i.e., a list with the following
 ##' components: \item{geno}{a matrix with integers indicating the genotypes
 ##' read for each marker. Each column contains data for a marker and each row
@@ -92,7 +95,8 @@
 ##' are left as \code{NA}.} \item{input}{the name of the input file.}
 ##' \item{n.phe}{number of phenotypes.} \item{pheno}{a matrix with phenotypic
 ##' values. Each column contains data for a trait and each row represents an
-##' individual.}
+##' individual.} \item{error}{matrix containing HMM emission probabilities}
+##' 
 ##' @author Gabriel R A Margarido, \email{gramarga@@gmail.com}
 ##' @seealso \code{\link[onemap]{combine_onemap}} and the \code{example}
 ##' directory in the package source.
@@ -106,16 +110,18 @@
 ##' \emph{Theoretical Population Biology} 61: 349-363.
 ##' @keywords IO
 ##' @examples
-##'
-##'   \dontrun{
-##'     outcr_data <- read_onemap(dir="work_directory", inputfile="data_file.txt")
-##'   }
+##' \donttest{
+##'  outcr_data <- read_onemap(inputfile= 
+##'  system.file("extdata/onemap_example_out.raw", package= "onemap"))
+##' }
 ##'@export
-read_onemap <- function (dir, inputfile) {
-  if (missing(inputfile))
-    stop("missing file")
-  if (!missing(dir) && dir != "")
-    inputfile <- file.path(dir, inputfile)
+read_onemap <- function (inputfile=NULL, dir=NULL, verbose=TRUE) {
+  if (is.null(inputfile)){
+     stop("missing file")
+  }
+  if (!is.null(inputfile) && !is.null(dir)) {
+     inputfile <- file.path(dir, inputfile)
+  }
 
   f <- file(inputfile, open = "r")
   on.exit(close(f))
@@ -174,7 +180,7 @@ read_onemap <- function (dir, inputfile) {
   sample_IDs <- l
 
   ## Read marker genotype information
-  cat(" Working...\n\n")
+  if(verbose) cat(" Working...\n\n")
   l <- matrix(scan(f, what = character(), nlines = n.mar,
                    blank.lines.skip = TRUE, quiet = TRUE),
               n.ind + 2, n.mar)
@@ -200,6 +206,9 @@ read_onemap <- function (dir, inputfile) {
   geno[!is.na(geno) & geno == "-"] <- NA
   colnames(geno) <- marnames
   rownames(geno) <- sample_IDs
+  colnames(geno) <- marnames
+  rownames(geno) <- sample_IDs
+
   temp.data <- codif_data(geno, segr.type, crosstype)
   geno <- temp.data[[1]]
   segr.type.num <- temp.data[[2]]
@@ -265,32 +274,41 @@ read_onemap <- function (dir, inputfile) {
   else {
     pheno <- NULL
   }
-
+  
   ## Output
-  cat(" --Read the following data:\n")
-  cat("\tType of cross:          ", crosstype, "\n")
-  cat("\tNumber of individuals:  ", n.ind, "\n")
-  cat("\tNumber of markers:      ", n.mar, "\n")
-  cat("\tChromosome information: ", ifelse(is.null(CHROM), "no", "yes"), "\n")
-  cat("\tPosition information:   ", ifelse(is.null(POS), "no", "yes"), "\n")
-  cat("\tNumber of traits:       ", n.phe, "\n")
-  if(n.phe != 0) {
-    miss.value.pheno <- apply((apply(pheno, 2,is.na)),2,sum)
-    cat("\tMissing trait values:      ", "\n")
-    for(i in 1:n.phe) {
-      cat("\t",formatC(paste(colnames(pheno)[i],":",sep=""),width=max(nchar(paste(colnames(pheno),":",sep="")))), miss.value.pheno[i], "\n")
+  if(verbose){
+    cat(" --Read the following data:\n")
+    cat("\tType of cross:          ", crosstype, "\n")
+    cat("\tNumber of individuals:  ", n.ind, "\n")
+    cat("\tNumber of markers:      ", n.mar, "\n")
+    cat("\tChromosome information: ", ifelse(is.null(CHROM), "no", "yes"), "\n")
+    cat("\tPosition information:   ", ifelse(is.null(POS), "no", "yes"), "\n")
+    cat("\tNumber of traits:       ", n.phe, "\n")
+    if(n.phe != 0) {
+      miss.value.pheno <- apply((apply(pheno, 2,is.na)),2,sum)
+      cat("\tMissing trait values:      ", "\n")
+      for(i in 1:n.phe) {
+        cat("\t",formatC(paste(colnames(pheno)[i],":",sep=""),width=max(nchar(paste(colnames(pheno),":",sep="")))), miss.value.pheno[i], "\n")
+      }
     }
   }
 
   ## Return "onemap" object
-  structure(list(geno = geno, n.ind = n.ind, n.mar = n.mar,
+  onemap.obj <- structure(list(geno = geno, n.ind = n.ind, n.mar = n.mar,
                  segr.type = segr.type, segr.type.num = segr.type.num,
                  n.phe = n.phe, pheno = pheno, CHROM = CHROM, POS = POS,
                  input = inputfile),
             class = c("onemap", crosstype))
+  new.onemap.obj <- create_probs(onemap.obj, global_error = 10^-5)
+  return(new.onemap.obj)
 }
 
-## Print method for object class 'onemap'
+##' Print method for object class 'onemap'
+##' 
+##' @param x object of class onemap
+##' @param ... currently ignored
+##' 
+##' @return printed information about onemap object
 ##'@export
 ##' @method print onemap
 print.onemap <- function (x, ...) {

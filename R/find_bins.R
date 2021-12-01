@@ -9,7 +9,6 @@
 # copyright (c) 2015, Marcelo Mollinari                               #
 #                                                                     #
 # First version: 08/27/2015                                           #
-# Last update: 01/14/2016                                             #
 # License: GNU General Public License version 3                       #
 #                                                                     #
 #######################################################################
@@ -26,9 +25,6 @@
 ##' \code{FALSE}, missing data are not considered when allocating markers.
 ##' In the latter case, the marker with the lowest amount of missing data is
 ##' taken as the representative marker on that bin.
-##' @param ch not used in this OneMap version. Chromosome for which the
-##' analysis should be performed. If \code{NULL} the analisys is performed
-##' for all chromosomes.
 ##' @return An object of class \code{onemap_bin}, which is a list containing the
 ##' following components: \item{bins}{a list containing the bins. Each element of
 ##' the list is a table whose lines indicate the name of the marker, the bin in
@@ -41,12 +37,12 @@
 ##' @seealso \code{\link[onemap]{create_data_bins}}
 ##' @keywords bins dimension reduction
 ##' @examples
-##'  \dontrun{
-##'   load(url("https://github.com/mmollina/data/raw/master/fake_big_data_f2.RData"))
-##'   fake.big.data.f2
-##'   (bins<-find_bins(fake.big.data.f2, exact=FALSE))}
+##' \donttest{
+##'   data("onemap_example_f2")
+##'   (bins<-find_bins(onemap_example_f2, exact=FALSE))
+##' }
 ##'@export
-find_bins <- function(input.obj, exact=TRUE, ch=NULL)
+find_bins <- function(input.obj, exact=TRUE)
 {
     ## checking for correct object
     if(!is(input.obj,"onemap"))
@@ -62,7 +58,13 @@ find_bins <- function(input.obj, exact=TRUE, ch=NULL)
     structure(list(bins=w,info=list(n.ind=input.obj$n.ind, n.mar=input.obj$n.mar, exact.search=exact)), class="onemap_bin")
 }
 
-##print method for object class 'onemap_bin'
+##' print method for object class 'onemap_bin'
+##' 
+##' @param x object of class \code{onemap_bin}
+##' @param ... currently ignored
+##' 
+##' @return No return value, called for side effects
+##' 
 ##' @export
 ##' @method print onemap_bin
 print.onemap_bin<-function (x, ...) {

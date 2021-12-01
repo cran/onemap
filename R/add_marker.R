@@ -9,7 +9,6 @@
 ## copyright (c) 2009, Marcelo Mollinari                               #
 ##                                                                     #
 ## First version: 02/27/2009                                           #
-## Last update: 01/02/2016                                             #
 ## License: GNU General Public License version 2 (June, 1991) or later #
 ##                                                                     #
 #######################################################################
@@ -63,5 +62,5 @@ add_marker<-function(input.seq, mrks)
     if (!is(input.seq,"sequence"))
       stop(sQuote(deparse(substitute(input.seq))), " is not an object of class 'sequence'")
     seq.num<-c(input.seq$seq.num,mrks)
-    return(make_seq(get(input.seq$twopt),seq.num, twopt=input.seq$twopt))
+    return(make_seq(input.seq$twopt,seq.num, twopt=input.seq$twopt))
   }

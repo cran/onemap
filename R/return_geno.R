@@ -9,14 +9,12 @@
 # copyright (c) 2009, Gabriel R A Margarido                           #
 #                                                                     #
 # First version: 02/27/2009                                           #
-# Last update: 02/27/2009                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
 # Function to create diplotypes based on segregation type and linkage phase
-return_geno <-
-function(segr.type, link.phases) {
+return_geno <- function(segr.type, link.phases) {
   switch(EXPR=segr.type,
          'A.1' = {
            switch(EXPR=link.phases,
@@ -161,6 +159,30 @@ function(segr.type, link.phases) {
                   '-1.1'  = return(c("o","o","a","o")),
                   '-1.-1' = return(c("o","o","o","a"))
                   )
+         },
+         'C.A' = {
+           switch(EXPR=link.phases,
+                  '1.1'   = return(c("a","o","o","o")),
+                  '1.-1'  = return(c("a","o","o","o")),
+                  '-1.1'  = return(c("o","a","o","o")),
+                  '-1.-1' = return(c("o","a","o","o"))
+           )
+         },
+         'D.B' = {
+           switch(EXPR=link.phases,
+                  '1.1'   = return(c("o","o","a","o")),
+                  '1.-1'  = return(c("o","o","o","a")),
+                  '-1.1'  = return(c("o","o","a","o")),
+                  '-1.-1' = return(c("o","o","o","a"))
+           )
+         },
+         'A.H.B' = {
+           switch(EXPR=link.phases,
+                  '1.1'   = return(c("a","b","a","b")),
+                  '1.-1'  = return(c("a","b","b","a")),
+                  '-1.1'  = return(c("b","a","a","b")),
+                  '-1.-1' = return(c("b","a","b","a"))
+           )
          }
          )
 }

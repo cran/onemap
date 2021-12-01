@@ -9,7 +9,6 @@
 # copyright (c) 2007-9, Gabriel R A Margarido                         #
 #                                                                     #
 # First version: 11/07/2007                                           #
-# Last update: 04/04/2016                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
@@ -35,52 +34,58 @@
 ##' \tab oo x ao \tab 1:1 }
 ##'
 ##' @param input.seq an object of class \code{sequence}.
-##' @return Nothing is returned. Segregation types of all markers in the
+##' @return data.frame with segregation types of all markers in the
 ##' sequence are displayed on the screen.
 ##' @author Gabriel R A Margarido, \email{gramarga@@gmail.com}
 ##' @seealso \code{\link[onemap]{make_seq}}
 ##' @references Wu, R., Ma, C.-X., Painter, I. and Zeng, Z.-B. (2002)
 ##' Simultaneous maximum likelihood estimation of linkage and linkage phases in
 ##' outcrossing species. \emph{Theoretical Population Biology} 61: 349-363.
-##' @keywords manip utilities
+##' @keywords utilities
 ##' @examples
+##' \donttest{
+##'  data(onemap_example_out)
+##'  twopts <- rf_2pts(onemap_example_out)
+##'  markers.ex <- make_seq(twopts,c(3,6,8,12,16,25))
+##'  marker_type(input.seq = markers.ex) # segregation type for some markers
 ##'
-##'   data(onemap_example_out)
-##'   twopts <- rf_2pts(onemap_example_out)
-##'   markers.ex <- make_seq(twopts,c(3,6,8,12,16,25))
-##'   marker_type(markers.ex) # segregation type for some markers
-##'
-##'   data(onemap_example_f2)
-##'   twopts <- rf_2pts(onemap_example_f2)
-##'   all_mrk<-make_seq(twopts, "all")
-##'   lgs<-group(all_mrk)
-##'   lg1<-make_seq(lgs,1)
-##'   marker_type(lg1) # segregation type for linkage group 1
-##'
+##'  data(onemap_example_f2)
+##'  twopts <- rf_2pts(onemap_example_f2)
+##'  all_mrk<-make_seq(twopts, "all")
+##'  lgs<-group(all_mrk)
+##'  lg1<-make_seq(lgs,1)
+##'  marker_type(lg1) # segregation type for linkage group 1
+##' }
 ##'@export
-marker_type <-
-function(input.seq) {
+marker_type <- function(input.seq) {
   ## checking for correct objects
   if(!is(input.seq,"sequence")) stop(deparse(substitute(input.seq))," is not an object of class 'sequence'")
-
+  
   ## printing marker type
-  if(is(get(input.seq$data.name, pos=1),"outcross")) {
-    for(i in 1:length(input.seq$seq.num))
-      cat("  Marker", input.seq$seq.num[i], "(", colnames(get(input.seq$twopt)$analysis[[1]])[input.seq$seq.num[i]], ") is of type", get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num[i]], "\n")
-  }
-  else{
+  
+  tot <- data.frame()
+  if(is(input.seq$data.name,"outcross") | is(input.seq$data.name,"f2")) {
+    for(i in 1:length(input.seq$seq.num)){
+      temp <- data.frame(Marker = input.seq$seq.num[i], 
+                         Marker.name = colnames(input.seq$twopt$analysis[[1]])[input.seq$seq.num[i]], 
+                         Type = input.seq$data.name$segr.type[input.seq$seq.num[i]])
+      tot <- rbind(tot, temp)
+    }
+  } else{
     for(i in 1:length(input.seq$seq.num)){
       mrk.type<-rep("NA",length(input.seq$seq.num))
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="C.A"]<-"Not  AA : AA (3:1) "
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="D.B"]<-"Not  BB : BB (3:1) "
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="A.H.B"]<-"AA : AB : BB (1:2:1) "
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="M.X"]<-"Mixed: Dominant & Co-dominant"
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="A.H"]<-"AA : AB (1:1)"
-      mrk.type[get(input.seq$data.name, pos=1)$segr.type[input.seq$seq.num]=="A.B"]<-"AA : BB (1:1)"
-
-      cat("  Marker", input.seq$seq.num[i], "(", colnames(get(input.seq$twopt)$analysis)[input.seq$seq.num[i]], ") -->", mrk.type[i], "\n")
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="C.A"]<-"Not  AA : AA (3:1) "
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="D.B"]<-"Not  BB : BB (3:1) "
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="A.H.B"]<-"AA : AB : BB (1:2:1) "
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="M.X"]<-"Mixed: Dominant & Co-dominant"
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="A.H"]<-"AA : AB (1:1)"
+      mrk.type[input.seq$data.name$segr.type[input.seq$seq.num]=="A.B"]<-"AA : BB (1:1)"
+      
+      temp <- data.frame(Marker = input.seq$seq.num[i], Marker.name =  colnames(input.seq$twopt$analysis)[input.seq$seq.num[i]], Type = mrk.type[i])
+      tot <- rbind(tot, temp)
     }
   }
+  return(tot)
 }
 
 ## end of file

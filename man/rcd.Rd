@@ -4,7 +4,19 @@
 \alias{rcd}
 \title{Rapid Chain Delineation}
 \usage{
-rcd(input.seq, LOD = 0, max.rf = 0.5, tol = 1e-04)
+rcd(
+  input.seq,
+  LOD = 0,
+  max.rf = 0.5,
+  tol = 1e-04,
+  rm_unlinked = TRUE,
+  size = NULL,
+  overlap = NULL,
+  phase_cores = 1,
+  hmm = TRUE,
+  parallelization.type = "PSOCK",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input.seq}{an object of class \code{sequence}.}
@@ -17,6 +29,25 @@ value above.}
 
 \item{tol}{tolerance for the C routine, i.e., the value used to evaluate
 convergence.}
+
+\item{rm_unlinked}{When some pair of markers do not follow the linkage criteria, 
+if \code{TRUE} one of the markers is removed and rcd is performed again.}
+
+\item{size}{The center size around which an optimum is to be searched}
+
+\item{overlap}{The desired overlap between batches}
+
+\item{phase_cores}{The number of parallel processes to use when estimating
+the phase of a marker. (Should be no more than 4)}
+
+\item{hmm}{logical defining if the HMM must be applied to estimate multipoint
+genetic distances}
+
+\item{parallelization.type}{one of the supported cluster types. This should 
+be either PSOCK (default) or FORK.}
+
+\item{verbose}{A logical, if TRUE it output progress status
+information.}
 }
 \value{
 An object of class \code{sequence}, which is a list containing the
@@ -60,14 +91,14 @@ using the multipoint approach (function \code{\link[onemap]{map}}).
 }
 \examples{
 
-\dontrun{
+\donttest{
   #outcross example
   data(onemap_example_out)
   twopt <- rf_2pts(onemap_example_out)
   all_mark <- make_seq(twopt,"all")
   groups <- group(all_mark)
   LG1 <- make_seq(groups,1)
-  LG1.rcd <- rcd(LG1)
+  LG1.rcd <- rcd(LG1, hmm = FALSE)
 
   #F2 example
   data(onemap_example_f2)
@@ -75,9 +106,10 @@ using the multipoint approach (function \code{\link[onemap]{map}}).
   all_mark <- make_seq(twopt,"all")
   groups <- group(all_mark)
   LG1 <- make_seq(groups,1)
-  LG1.rcd <- rcd(LG1)
+  LG1.rcd <- rcd(LG1, hmm = FALSE)
   LG1.rcd
 }
+
 }
 \references{
 Basten, C. J., Weir, B. S. and Zeng, Z.-B. (2005) \emph{QTL

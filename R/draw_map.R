@@ -9,12 +9,9 @@
 # copyright (c) 2010, Marcelo Mollinari                               #
 #                                                                     #
 # First version: 11/30/2010                                           #
-# Last update: 02/19/2011                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
-
-
 
 ##' Draw a genetic map
 ##'
@@ -33,11 +30,14 @@
 ##' \code{FALSE}
 ##' @param cex.mrk the magnification to be used for markers.
 ##' @param cex.grp the magnification to be used for group axis annotation.
+##' 
+##' @return figure with genetic map draw
+##' 
 ##' @author Marcelo Mollinari, \email{mmollina@@usp.br}
 ##' @keywords rqtl
 ##' @examples
 ##'
-##' \dontrun{
+##' \donttest{
 ##'  #outcross example
 ##'   data(onemap_example_out)
 ##'   twopt <- rf_2pts(onemap_example_out)
@@ -48,19 +48,8 @@
 ##'    "rcd"), "force")
 ##'   draw_map(maps, grid=TRUE)
 ##'   draw_map(maps, grid=TRUE, horizontal=TRUE)
-##'
-##'   #F2 example
-##'   data(onemap_example_f2)
-##'   twopt<-rf_2pts(onemap_example_f2)
-##'   lg<-group(make_seq(twopt, "all"))
-##'   maps<-vector("list", lg$n.groups)
-##'   for(i in 1:lg$n.groups)
-##'      maps[[i]]<- make_seq(order_seq(input.seq= make_seq(lg,i),twopt.alg =
-##'    "rcd"), "force")
-##'   draw_map(maps, grid=TRUE)
-##'   draw_map(maps, grid=TRUE, horizontal=TRUE)
-##'
 ##' }
+##' 
 ##'@export
 draw_map<-function(map.list, horizontal=FALSE, names=FALSE, grid=FALSE, cex.mrk=1, cex.grp=.75){
   ## checking for correct object
@@ -78,7 +67,7 @@ draw_map<-function(map.list, horizontal=FALSE, names=FALSE, grid=FALSE, cex.mrk=
     if(!is(map.list[[i]],"sequence")) stop("Object ", i , " in map.list is not an object of class 'sequnece'")
     if(is.null(map.list[[i]]$seq.like))  stop("Parameters are not estimated for object ", i, " in map.list")
     map<-cumsum(c(0,get(get(".map.fun", envir=.onemapEnv))(map.list[[i]]$seq.rf)))
-    marnames<-colnames(get(map.list[[i]]$data.name, pos=1)$geno)[map.list[[i]]$seq.num]
+    marnames<-colnames(map.list[[i]]$data.name$geno)[map.list[[i]]$seq.num]
     out<-rbind(out, data.frame(dist=map, pos=j,marker=marnames))
     j<-j+1
   }

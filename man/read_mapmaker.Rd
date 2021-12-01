@@ -4,12 +4,15 @@
 \alias{read_mapmaker}
 \title{Read data from a Mapmaker raw file}
 \usage{
-read_mapmaker(dir, file)
+read_mapmaker(file = NULL, dir = NULL, verbose = TRUE)
 }
 \arguments{
+\item{file}{the name of the input file which contains the data to be read.}
+
 \item{dir}{directory where the input file is located.}
 
-\item{file}{the name of the input file which contains the data to be read.}
+\item{verbose}{A logical, if TRUE it output progress status
+information.}
 }
 \value{
 An object of class \code{onemap}, i.e., a list with the following
@@ -17,11 +20,9 @@ components: \item{geno}{a matrix with integers indicating the genotypes
 read for each marker in \code{onemap} fashion. Each column contains data
 for a marker and each row represents an individual.}
 
-\item{geno.mmk}{ a matrix with
-integers indicating the genotypes read for each marker in
 \code{MAPMAKER/EXP} fashion, i.e., 1, 2, 3: AA, AB, BB, respectively; 3, 4:
 BB, not BB, respectively; 1, 5: AA, not AA, respectively. Each column
-contains data for a marker and each row represents an individual.}
+contains data for a marker and each row represents an individual.
 
 \item{n.ind}{number of individuals.} \item{n.mar}{number of markers.}
 \item{segr.type}{a vector with the segregation type of each marker, as
@@ -33,7 +34,7 @@ adapted from outcross segregation types. For details see
 \link{read_onemap}.} \item{input}{the name of the input file.}
 \item{n.phe}{number of phenotypes.} \item{pheno}{a matrix with phenotypic
 values.  Each column contains data for a trait and each row represents an
-individual. Currently ignored.}
+individual. Currently ignored.} \item{error}{matrix containing HMM emission probabilities}
 }
 \description{
 Imports data from a Mapmaker raw file.
@@ -44,13 +45,12 @@ current version supports backcross, F2s and RIL populations. The file
 can contain phenotypic data, but it will not be used in the analysis.
 }
 \examples{
-
-  \dontrun{
-    map_data <-read_mapmaker(dir="work_directory",file="data_file.txt")
-    #Checking 'mapmaker_example_f2'
-    data(mapmaker_example_f2)
-    names(mapmaker_example_f2)
-  }
+\donttest{
+ map_data <-read_mapmaker(file=system.file("extdata/mapmaker_example_f2.raw", package = "onemap"))
+ #Checking 'mapmaker_example_f2'
+ data(mapmaker_example_f2)
+ names(mapmaker_example_f2)
+}
 }
 \references{
 Broman, K. W., Wu, H., Churchill, G., Sen, S., Yandell, B.
@@ -63,7 +63,7 @@ manual. \emph{A Whitehead Institute for Biomedical Research Technical
 Report}.
 }
 \seealso{
-\code{mapmaker_example_bc} and \code{mapmaker_example_f2} directory in the
+\code{mapmaker_example_bc} and \code{mapmaker_example_f2} raw files in the
 package source.
 }
 \author{

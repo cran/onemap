@@ -10,15 +10,11 @@
 # copyright (c) 2009, Gabriel R A Margarido                           #
 #                                                                     #
 # First version: 02/27/2009                                           #
-# Last update: 07/06/2017                                             #
 # License: GNU General Public License version 2 (June, 1991) or later #
 #                                                                     #
 #######################################################################
 
-# Function to create sequences based on other OneMap object types
-
-
-##' Create a sequence of markers
+##' Create a sequence of markers based on other OneMap object types
 ##'
 ##' Makes a sequence of markers based on an object of another type.
 ##'
@@ -55,16 +51,17 @@
 ##' of class \code{compare} or \code{try}, this argument indicates which
 ##' combination of linkage phases should be chosen, for the particular order
 ##' given by argument \code{arg}. In both cases, \code{NULL} (default) makes the
-##' best combination to be taken. If \code{input.obj} is of class, \code{group}
-##' or \code{order}, this argument has no effect.
-##' @param data.name a \code{string} indicating the name of the object which
+##' best combination to be taken. If \code{input.obj} is of class, \code{group}, 
+##' \code{group.upgma} or \code{order}, this argument has no effect.
+##' @param data.name the object which
 ##' contains the raw data. This does not have to be defined by the
 ##' user: it is here for compatibility issues when calling \code{make_seq} from
 ##' inside other functions.
-##' @param twopt a \code{string} indicating the name of the object which
+##' @param twopt the object which
 ##' contains the two-point information. This does not have to be defined by the
 ##' user: it is here for compatibility issues when calling \code{make_seq} from
 ##' inside other functions.
+##' 
 ##' @return An object of class \code{sequence}, which is a list containing the
 ##' following components: \item{seq.num}{a \code{vector} containing the
 ##' (ordered) indices of markers in the sequence, according to the input file.}
@@ -74,9 +71,10 @@
 ##' recombination frequencies between markers in the sequence. \code{-1} means
 ##' that there are no estimated recombination frequencies.}
 ##' \item{seq.like}{log-likelihood of the corresponding linkage map.}
-##' \item{data.name}{name of the object of class \code{onemap} with the raw
-##' data.} \item{twopt}{name of the object of class \code{rf_2pts} with the
+##' \item{data.name}{object of class \code{onemap} with the raw
+##' data.} \item{twopt}{object of class \code{rf_2pts} with the
 ##' 2-point analyses.}
+##' 
 ##' @author Gabriel Margarido, \email{gramarga@@gmail.com}
 ##' @seealso \code{\link[onemap]{compare}}, \code{\link[onemap]{try_seq}},
 ##' \code{\link[onemap]{order_seq}} and \code{\link[onemap]{map}}.
@@ -85,9 +83,11 @@
 ##' package for constructing primary genetic linkage maps of experimental and
 ##' natural populations. \emph{Genomics} 1: 174-181.
 ##' @keywords utilities
+##' 
+##' @importFrom utils head
 ##' @examples
 ##'
-##' \dontrun{
+##' \donttest{
 ##'   data(onemap_example_out)
 ##'   twopt <- rf_2pts(onemap_example_out)
 ##'
@@ -110,9 +110,8 @@
 make_seq <-
   function(input.obj, arg = NULL, phase = NULL, data.name = NULL, twopt = NULL) {
     # checking for correct object
-    if(!(is(input.obj, c("onemap", "rf_2pts", "group", "compare", "try", "order"))))
-      stop(deparse(substitute(input.obj))," is not an object of class 'onemap', 'rf_2pts', 'group', 'compare', 'try' or 'order'")
-    
+    if(!(is(input.obj, c("onemap", "rf_2pts", "group", "compare", "try", "order", "group.upgma"))))
+      stop(deparse(substitute(input.obj))," is not an object of class 'onemap', 'rf_2pts', 'group', 'group.upgma','compare', 'try' or 'order'")
     if(is(input.obj, "onemap")){
       if (length(arg) == 1 && is.character(arg)) {
         seq.num <- which(input.obj$CHROM == arg)
@@ -133,7 +132,7 @@ make_seq <-
       else stop("the length of 'phase' must be equal to the length of the sequence minus 1")
       seq.rf <- -1
       seq.like <- NULL
-      if(is.null(data.name)) data.name <- deparse(substitute(input.obj))
+      if(is.null(data.name)) data.name <- input.obj
       twopt <- NULL
     } else if (is(input.obj, "rf_2pts")){
       if (length(arg) == 1 && is.character(arg) && arg != "all") {
@@ -156,16 +155,16 @@ make_seq <-
       else stop("the length of 'phase' must be equal to the length of the sequence minus 1")
       seq.rf <- -1
       seq.like <- NULL
-      if(is.null(twopt)) twopt <- deparse(substitute(input.obj))
-    } else if (is(input.obj, "group")){
+      if(is.null(twopt)) twopt <- input.obj
+    } else if (is(input.obj, "group") | is(input.obj, "group.upgma")){
       if(length(arg) == 1 && is.numeric(arg) && arg <= input.obj$n.groups) seq.num <- input.obj$seq.num[which(input.obj$groups == arg)]
-      else stop("for this object of class 'group', \"arg\" must be an integer less than or equal to ",input.obj$n.groups)
+      else stop("for this object of class 'group' or 'group.upgma', \"arg\" must be an integer less than or equal to ",input.obj$n.groups)
       seq.phases <- -1
       seq.rf <- -1
       seq.like <- NULL
       twopt <- input.obj$twopt
     } else if (is(input.obj, "compare")){
-      n.ord <- max(which(utils::head(input.obj$best.ord.LOD,-1) != -Inf))
+      n.ord <- max(which(head(input.obj$best.ord.LOD,-1) != -Inf))
       unique.orders <- unique(input.obj$best.ord[1:n.ord,])
       if(is.null(arg)) seq.num <- unique.orders[1,] # NULL = 1 is the best order
       else if(length(arg) == 1 && is.numeric(arg) && arg <= nrow(unique.orders)) seq.num <- unique.orders[arg,]
@@ -185,6 +184,7 @@ make_seq <-
       seq.rf <- input.obj$ord[[arg]]$rf[phase,]
       seq.like <- input.obj$ord[[arg]]$like[phase]
       twopt <- input.obj$twopt
+      probs <- input.obj$probs[[arg]][[phase]]
     } else if (is(input.obj, "order")){
       arg <- match.arg(arg,c("safe","force"))
       if (arg == "safe") {
@@ -193,6 +193,7 @@ make_seq <-
         seq.phases <- input.obj$ord$seq.phases
         seq.rf <- input.obj$ord$seq.rf
         seq.like <- input.obj$ord$seq.like
+        probs <- input.obj$probs2
       }
       else {
         ## order with all markers
@@ -200,10 +201,10 @@ make_seq <-
         seq.phases <- input.obj$ord.all$seq.phases
         seq.rf <- input.obj$ord.all$seq.rf
         seq.like <- input.obj$ord.all$seq.like
+        probs <- input.obj$probs3
       }
       twopt <- input.obj$twopt
     }
-    
     
     ## check if any marker appears more than once in the sequence
     if(length(seq.num) != length(unique(seq.num))) stop("there are duplicated markers in the sequence")
@@ -212,16 +213,26 @@ make_seq <-
       data.name <- input.obj$data.name
     }
     
-    structure(list(seq.num=seq.num, seq.phases=seq.phases, seq.rf=seq.rf, seq.like=seq.like,
-                   data.name=data.name, twopt=twopt), class = "sequence")
+    if(is(input.obj, c("order", "try"))){
+      structure(list(seq.num=seq.num, seq.phases=seq.phases, seq.rf=seq.rf, seq.like=seq.like,
+                     data.name=data.name, probs = probs, twopt=twopt), class = "sequence")
+    } else {
+      structure(list(seq.num=seq.num, seq.phases=seq.phases, seq.rf=seq.rf, seq.like=seq.like,
+                     data.name=data.name, twopt=twopt), class = "sequence")
+    }
   }
 
-# print method for object class 'sequence'
+##' Print method for object class 'sequence'
+##' 
+##' @param x object of class sequence
+##' @param ... corrently ignored
+##' 
+##' @return printed information about sequence object
+##' 
 ##'@export
 ##'@method print sequence
-
 print.sequence <- function(x,...) {
-  marnames <- colnames(get(x$data.name, pos=1)$geno)[x$seq.num]
+  marnames <- colnames(x$data.name$geno)[x$seq.num]
   if(length(x$seq.rf) == 1 && x$seq.rf == -1) {
     # no information available for the order
     cat("\nNumber of markers:",length(marnames))
@@ -253,12 +264,12 @@ print.sequence <- function(x,...) {
     marnumbers <- formatC(x$seq.num, format="d", width=longest.number)
     distances <- formatC(c(0,cumsum(get(get(".map.fun", envir=.onemapEnv))(x$seq.rf))),format="f",digits=2,width=7)
     ## whith diplotypes for class 'outcross'
-    if(is(get(x$data.name, pos=1),"outcross")){
+    if(is(x$data.name,c("outcross", "f2"))){
       ## create diplotypes from segregation types and linkage phases
       link.phases <- apply(link.phases,1,function(x) paste(as.character(x),collapse="."))
       parents <- matrix("",length(x$seq.num),4)
       for (i in 1:length(x$seq.num))
-        parents[i,] <- return_geno(get(x$data.name, pos=1)$segr.type[x$seq.num[i]],link.phases[i])
+        parents[i,] <- return_geno(x$data.name$segr.type[x$seq.num[i]],link.phases[i])
       cat("\nPrinting map:\n\n")
       cat("Markers",rep("",max(longest.number+longest.name-7,0)+10),"Position",rep("",10),"Parent 1","     ","Parent 2\n\n")
       for (i in 1:length(x$seq.num)) {
@@ -268,7 +279,7 @@ print.sequence <- function(x,...) {
       cat(length(marnames),"markers            log-likelihood:",ifelse(is.null(x$seq.like),"NULL",x$seq.like),"\n\n")
     }
     ## whithout diplotypes for other classes
-    else if(is(get(x$data.name, pos=1), c("backcross", "f2", "riself", "risib"))){
+    else if(is(x$data.name, c("backcross", "riself", "risib"))){
       cat("\nPrinting map:\n\n")
       cat("Markers",rep("",max(longest.number+longest.name-7,0)+10),"Position",rep("",10),"\n\n")
       for (i in 1:length(x$seq.num)) {
@@ -280,3 +291,6 @@ print.sequence <- function(x,...) {
   }
 }
 ##end of file
+
+
+
