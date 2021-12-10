@@ -1,4 +1,4 @@
-12bd71ceb7445ff2b800485d620854e3 *DESCRIPTION
+6a834e6442c85225fb5a14cd6aaf94d3 *DESCRIPTION
 f1e231be6bc0b816572219efd5e0f084 *NAMESPACE
 ec46d79ec9bf83431daf2926ee599e7c *R/RcppExports.R
 5fb523f7df4f3f42880d97ed8539eba0 *R/add_marker.R
@@ -8,7 +8,7 @@ c02c55df636f746b0ea7d5dc1736d638 *R/codif_data.R
 940e97fb15a422fe445becf9f1595b26 *R/comb_ger.R
 b4aeab4ee4f8bd4a85153b0c8667f36a *R/combine_onemap.R
 6dbd43eafbbe5cd64011fa542b7a0729 *R/compare.R
-15db06adcc41ab9419475c0c75cdc1e8 *R/cpp_utils.R
+f42a21e0a10eeb7554e60eae51facf16 *R/cpp_utils.R
 97c243ffa267bd7866cc85bf33fb81ed *R/create_dataset_bins.R
 36451545cd44eb2b278036c4a3856d3d *R/create_depths_profile.R
 a4c262cc11a623a1242e059b7bafecfa *R/create_probs.R
@@ -45,7 +45,7 @@ ec68cc342951fe764199ae5561f52f48 *R/rf_graph_table.R
 664cc202374dc447e23d3d22f19277d8 *R/seeded_map.R
 f59c122df847d06824e3c3b3b433cb58 *R/seriation.R
 4c7a9f6f35d0269225a7ce6b347ae724 *R/suggest_lod.R
-a9683d2b1e5b53d69cb9946172abd7b2 *R/test_segregation.R
+d795a4088cf5fdaa242df06f285a7a3d *R/test_segregation.R
 f15d616e9bffe454bc613cb03a2c8129 *R/try_seq.R
 8e7d4ac9ca5e2a58448c63535c622aef *R/ug.R
 3d5bc1fc49e4e78548fdd233d14dc88d *R/utils.R
@@ -53,7 +53,7 @@ f15d616e9bffe454bc613cb03a2c8129 *R/try_seq.R
 03cd78d82226250df1773adfefcf3254 *R/write_haplotypes.R
 1fb439c95192e868c7181979151b77f8 *R/write_map.R
 deb968a90c9b979d87bc1c020fa3d287 *R/zzz.R
-8f310e523472a08423630df875f35871 *build/partial.rdb
+a50d352b0f5bc40e4e59a5a50fb68833 *build/partial.rdb
 0be3532191fc6192c420a758d6bd8760 *build/vignette.rds
 1f7cd1542a3acdcb478fd023cb1172b7 *data/LG3_comp.RData
 189e38af344841dfbf72beb67a4c4fd2 *data/mapmaker_example_f2.RData
@@ -67,17 +67,17 @@ a62a66863d62627a24601b23bdfe379f *data/vcf_example_bc.RData
 2ec18a6bc4660b98bca8149504791764 *data/vcf_example_riself.RData
 8934eb657a72f60daaada82d6c66993d *inst/CITATION
 c02d56d926a30610f47124fa9165a509 *inst/doc/Inbred_Based_Populations.R
-915f21716149b1913889e68c1bccc1fe *inst/doc/Inbred_Based_Populations.Rmd
-668a4d8097a840092f22a07820b409a6 *inst/doc/Inbred_Based_Populations.html
+6ea1a95bd96ba76635119d871041b163 *inst/doc/Inbred_Based_Populations.Rmd
+be80d9f16e0321e77790f35776f779ee *inst/doc/Inbred_Based_Populations.html
 3e905f489590f68b1d084bbaeb83fd04 *inst/doc/Introduction_R.R
 888487d70e8ea758b42f6c080c1d187f *inst/doc/Introduction_R.Rmd
-98d50d8a64b5054eca4c02f6207352a5 *inst/doc/Introduction_R.html
+fc6180e9847695c44bd0cef846638bf5 *inst/doc/Introduction_R.html
 111b170503f0f1bf367e5dbc8fa5526f *inst/doc/Outcrossing_Populations.R
-3ac8161c3c7de91186d369a1d9d2dc23 *inst/doc/Outcrossing_Populations.Rmd
-e2e01d879c91fb89363d21a5c46a0972 *inst/doc/Outcrossing_Populations.html
+e450c0fb3704c998db0910bf81c3f59d *inst/doc/Outcrossing_Populations.Rmd
+47ed6e062349ddbd3c3a8f88a606b847 *inst/doc/Outcrossing_Populations.html
 c4dfcaa0af94314291f6bc2f25dee3e8 *inst/doc/Overview.R
 2f510ea184f1a9140d4e452726187e57 *inst/doc/Overview.Rmd
-23bd8488e26c49267b6186a13f1b9bb3 *inst/doc/Overview.html
+bde2d9014cbe975e3a4f3279ce8534e6 *inst/doc/Overview.html
 7cb1a364c3037906cbd8f035cf170eca *inst/extdata/mapmaker_example_bc.raw
 28d28f2c023cecc5a7ef235f975d4087 *inst/extdata/mapmaker_example_f2.raw
 62700d9bfa5b5d1d7669160f85a2b4e0 *inst/extdata/onemap_example_bc.raw
@@ -115,7 +115,7 @@ b8466a58bec53049e77d7f8934a22b74 *man/filter_missing.Rd
 5f46b89b3b88d441c7d6afb5df85913a *man/generate_overlapping_batches.Rd
 1087c8d6fbfc87843c656adca721dc85 *man/group.Rd
 c7f1b05d357c7403fe51edb213500209 *man/group_seq.Rd
-d70cca4234596ef77a8941e58954aac1 *man/group_upgma.Rd
+7686987842a76677d3f3f3a960fcf762 *man/group_upgma.Rd
 345b9986ba4049b194d14820e36b3993 *man/haldane.Rd
 c98bb7772369e9d8e720b0f64ca1fc9f *man/kosambi.Rd
 5f7ea7c44da2465e2e73446d370a0f2c *man/make_seq.Rd
@@ -172,8 +172,8 @@ d6f52d1b9b14f4c39139c6374575aaae *man/set_map_fun.Rd
 a7c71deaaa7c53a012c393e320ee6f79 *man/split_2pts.Rd
 11d5c68cc4c19457ef038662cf3657d4 *man/split_onemap.Rd
 58111aebd19d8af07cbdcff3dea4dc6d *man/suggest_lod.Rd
-e47b92618f7de747c144c7d297ce2701 *man/test_segregation.Rd
-57952138564aca5f09aa98dd24c1f6a1 *man/test_segregation_of_a_marker.Rd
+9bc4bb2f8a4871ea74938bff1028804c *man/test_segregation.Rd
+3eb86e053848503650b3a6c2cfc55780 *man/test_segregation_of_a_marker.Rd
 7f80c5d7213739bd04b69c8ae1c08df4 *man/try_seq.Rd
 b0f11ef2ec9f8eef1de693365387fb7c *man/try_seq_by_seq.Rd
 85a8cf749bf61a0327932ed79318ca60 *man/ug.Rd
@@ -194,7 +194,7 @@ d2daee40c50baf48394cb59714718d88 *src/hmm_f2.cpp
 635f700a35335f9735317434f4738ace *src/hmm_f2.h
 7d9c2f58845c933956ca9b1a04aad61a *src/hmm_out.cpp
 587e3a5a11ec4f538ff535e0b491183f *src/hmm_out.h
-059f9eb8a0e11672a8f2d985ea04c4fb *src/onemap_init.c
+b3b131460315e2c19dcc63c509d92f9b *src/onemap_init.c
 a32de38efaf60000013dd8365daf06a0 *src/out_est.cpp
 8842549e951dd7be4238ab9924e13aba *src/out_est.h
 91a5c535d0688e5453e1eb9e11d3f7db *src/twopts_bc.cpp
@@ -203,9 +203,9 @@ ba180a60f7144c8045b814a6e1a94507 *src/twopts_bc.h
 13a67e5f0fca7ee4ea47640c042f3d13 *src/twopts_out.h
 563f9b9402d106f00da127b0fd644fad *src/utils.cpp
 c03c87974cc7937cbb8161598b124313 *src/utils.h
-915f21716149b1913889e68c1bccc1fe *vignettes/Inbred_Based_Populations.Rmd
+6ea1a95bd96ba76635119d871041b163 *vignettes/Inbred_Based_Populations.Rmd
 888487d70e8ea758b42f6c080c1d187f *vignettes/Introduction_R.Rmd
-3ac8161c3c7de91186d369a1d9d2dc23 *vignettes/Outcrossing_Populations.Rmd
+e450c0fb3704c998db0910bf81c3f59d *vignettes/Outcrossing_Populations.Rmd
 2f510ea184f1a9140d4e452726187e57 *vignettes/Overview.Rmd
 60b85ac45d96f0091a59d3c1716c583d *vignettes/f2_img/map.jpg
 46d72203baa32650904f5800f06cc3a3 *vignettes/f2_img/mds.jpg
