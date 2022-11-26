@@ -129,13 +129,12 @@ onemap_read_vcfR <- function(vcf=NULL,
   if (any(MKS == "." | is.na(MKS))) {
     MKS <- paste0(vcfR.obj@fix[,1],"_", vcfR.obj@fix[,2])
     # Add tag if is duplicated positions (split form of mnps)
+    z <- 1
     for(i in 2:length(MKS)) {
       if(MKS[i] == paste0(strsplit(MKS[i-1], "_")[[1]][1:2], collapse = "_")) {
         z <- z + 1
         MKS[i] <- paste0(MKS[i], "_",z)
-      } else {
-        z <- 0
-      }
+      } 
     }
   }
   
@@ -653,6 +652,7 @@ write_onemap_raw <- function(onemap.obj=NULL,
     ind.names <- paste0("ID", 1:onemap.obj$n.ind)
   
   geno.mat <- onemap.obj$geno
+  if(is.vector(geno.mat)) geno.mat <- matrix(geno.mat)
   
   if(inherits(onemap.obj, "outcross")){
     

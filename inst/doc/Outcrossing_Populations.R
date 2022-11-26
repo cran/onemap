@@ -92,7 +92,7 @@ bins_example
 test_segregation_of_a_marker(bins_example, 4)
 
 ## -----------------------------------------------------------------------------
-segreg_test <- test_segregation(bins_example, simulate.p.value = FALSE)
+segreg_test <- test_segregation(bins_example)
 print(segreg_test)
 
 ## -----------------------------------------------------------------------------
@@ -186,17 +186,17 @@ LG3_mds <- mds_onemap(LG3, hmm = FALSE)
 ## ---- eval=TRUE,  results='hide', eval=FALSE----------------------------------
 #  LG3_comp <- compare(LG3)
 
+## ---- eval=FALSE--------------------------------------------------------------
+#  LG3_comp
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  LG3_final <- make_seq(LG3_comp, 1, 1)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  LG3_final <- make_seq(LG3_comp)
+
 ## ---- echo=FALSE--------------------------------------------------------------
-data(LG3_comp)
-
-## -----------------------------------------------------------------------------
-LG3_comp
-
-## -----------------------------------------------------------------------------
-LG3_final <- make_seq(LG3_comp, 1, 1)
-
-## -----------------------------------------------------------------------------
-LG3_final <- make_seq(LG3_comp)
+LG3_final <- map(make_seq(twopts, c(43,22,7,18,8,13,44)))
 
 ## -----------------------------------------------------------------------------
 LG3_final
@@ -341,62 +341,62 @@ LG2_final <- LG2_test_23
 LG2_final
 rf_graph_table(LG2_final, mrk.axis = "numbers")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1 <- make_seq(LGs, 1)
+## -----------------------------------------------------------------------------
+LG1 <- make_seq(LGs, 1)
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  LG1_ord <- order_seq(LG1, n.init = 6, touchdown = TRUE)
+## ---- results='hide'----------------------------------------------------------
+LG1_ord <- order_seq(LG1, n.init = 6, touchdown = TRUE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1_ord
+## -----------------------------------------------------------------------------
+LG1_ord
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  (LG1_frame <- make_seq(LG1_ord, "force"))
+## -----------------------------------------------------------------------------
+(LG1_frame <- make_seq(LG1_ord, "force"))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG1_frame, mrk.axis = "numbers")
+## -----------------------------------------------------------------------------
+rf_graph_table(LG1_frame, mrk.axis = "numbers")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  ripple_seq(LG1_frame)
+## -----------------------------------------------------------------------------
+ripple_seq(LG1_frame)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1_mds <- mds_onemap(LG1, rm_unlinked = TRUE, hmm = F)
+## -----------------------------------------------------------------------------
+LG1_mds <- mds_onemap(LG1, rm_unlinked = TRUE, hmm = F)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG1_mds)
+## -----------------------------------------------------------------------------
+rf_graph_table(LG1_mds)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1_test_seq <- drop_marker(LG1_frame, c(10,11,28,42))
-#  LG1_test_map <- onemap::map(LG1_test_seq)
+## -----------------------------------------------------------------------------
+LG1_test_seq <- drop_marker(LG1_frame, c(10,11,28,42))
+LG1_test_map <- onemap::map(LG1_test_seq)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG1_test_map, mrk.axis = "numbers")
+## -----------------------------------------------------------------------------
+rf_graph_table(LG1_test_map, mrk.axis = "numbers")
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  LG1_extend <- try_seq(LG1_test_map,10)
-#  LG1_test_map <- make_seq(LG1_extend,15)
-#  LG1_extend <- try_seq(LG1_test_map,11)
-#  LG1_test <- make_seq(LG1_extend,23) # We choose to remove this marker
-#  LG1_extend <- try_seq(LG1_test_map,28)
-#  LG1_test_map <- make_seq(LG1_extend,16)
-#  LG1_extend <- try_seq(LG1_test_map,42)
-#  LG1_final <- make_seq(LG1_extend,17)
+## ---- results='hide'----------------------------------------------------------
+LG1_extend <- try_seq(LG1_test_map,10)
+LG1_test_map <- make_seq(LG1_extend,15) 
+LG1_extend <- try_seq(LG1_test_map,11)
+LG1_test <- make_seq(LG1_extend,23) # We choose to remove this marker
+LG1_extend <- try_seq(LG1_test_map,28)
+LG1_test_map <- make_seq(LG1_extend,16) 
+LG1_extend <- try_seq(LG1_test_map,42)
+LG1_final <- make_seq(LG1_extend,17) 
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1_final
+## -----------------------------------------------------------------------------
+LG1_final
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG1_final)
+## -----------------------------------------------------------------------------
+rf_graph_table(LG1_final)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG1_ser <- seriation(LG1, hmm = F)
-#  rf_graph_table(LG1_ser)
-#  LG1_rcd <- rcd(LG1, hmm = F)
-#  rf_graph_table(LG1_rcd)
-#  LG1_rec <- record(LG1, hmm = F)
-#  rf_graph_table(LG1_rec)
-#  LG1_ug  <- ug(LG1, hmm = F)
-#  rf_graph_table(LG1_ug)
+## -----------------------------------------------------------------------------
+LG1_ser <- seriation(LG1, hmm = F)
+rf_graph_table(LG1_ser)
+LG1_rcd <- rcd(LG1, hmm = F)
+rf_graph_table(LG1_rcd)
+LG1_rec <- record(LG1, hmm = F)
+rf_graph_table(LG1_rec)
+LG1_ug  <- ug(LG1, hmm = F)
+rf_graph_table(LG1_ug)
 
 ## -----------------------------------------------------------------------------
 CHR1 <- make_seq(twopts, "1")
@@ -426,107 +426,107 @@ CHR_mks$sequences$CHR1
 # or
 CHR_mks$sequences[[1]]
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  # CHR1_frame <- mds_onemap(CHR_mks$sequences$CHR1, hmm = F)
-#  # or
-#  CHR1_ord <- order_seq(CHR_mks$sequences$CHR1)
-#  CHR1_frame <- make_seq(CHR1_ord, "force")
+## ---- results='hide'----------------------------------------------------------
+# CHR1_frame <- mds_onemap(CHR_mks$sequences$CHR1, hmm = F)
+# or
+CHR1_ord <- order_seq(CHR_mks$sequences$CHR1)
+CHR1_frame <- make_seq(CHR1_ord, "force")
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  rf_graph_table(CHR1_frame) # graphic not shown
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR1_test_seq <- drop_marker(CHR1_frame, 11)
-#  CHR1_test_map <- onemap::map(CHR1_test_seq)
-#  CHR1_add11_seq <- try_seq(CHR1_test_map, 11)
-#  CHR1_add11 <- make_seq(CHR1_add11_seq, 25) # marker 11 was placed at the same position as before
+## -----------------------------------------------------------------------------
+CHR1_test_seq <- drop_marker(CHR1_frame, 11)
+CHR1_test_map <- onemap::map(CHR1_test_seq)
+CHR1_add11_seq <- try_seq(CHR1_test_map, 11)
+CHR1_add11 <- make_seq(CHR1_add11_seq, 25) # marker 11 was placed at the same position as before
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR1_test_map
+## -----------------------------------------------------------------------------
+CHR1_test_map
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR1_test_map)
+## -----------------------------------------------------------------------------
+rf_graph_table(CHR1_test_map) 
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR1_final <- CHR1_test_map
+## -----------------------------------------------------------------------------
+CHR1_final <- CHR1_test_map
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  ripple_seq(CHR1_final)
+## -----------------------------------------------------------------------------
+ripple_seq(CHR1_final)
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  # CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
-#  # or
-#  CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
-#  CHR2_frame <- make_seq(CHR2_ord, "force")
+## ---- results='hide'----------------------------------------------------------
+# CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
+# or
+CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
+CHR2_frame <- make_seq(CHR2_ord, "force")
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  rf_graph_table(CHR2_frame) # graphic not shown
 
+## -----------------------------------------------------------------------------
+CHR2_final <- CHR2_frame
+
+## ---- results='hide'----------------------------------------------------------
+# CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
+# or
+CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
+CHR2_frame <- make_seq(CHR2_ord, "force")
+
 ## ---- eval=FALSE--------------------------------------------------------------
-#  CHR2_final <- CHR2_frame
-
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  # CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
-#  # or
-#  CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
-#  CHR2_frame <- make_seq(CHR2_ord, "force")
-
-## ---- eval=FALSE, eval=FALSE--------------------------------------------------
 #  rf_graph_table(CHR2_frame) # graphic not shown
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR2_final <- CHR2_frame
+## -----------------------------------------------------------------------------
+CHR2_final <- CHR2_frame
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  # CHR3_frame <- mds_onemap(CHR_mks$sequences$CHR3)
-#  # or
-#  CHR3_ord <- order_seq(CHR_mks$sequences$CHR3)
-#  CHR3_frame <- make_seq(CHR3_ord, "force")
+## ---- results='hide'----------------------------------------------------------
+# CHR3_frame <- mds_onemap(CHR_mks$sequences$CHR3)
+# or
+CHR3_ord <- order_seq(CHR_mks$sequences$CHR3)
+CHR3_frame <- make_seq(CHR3_ord, "force")
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  rf_graph_table(CHR3_frame, mrk.axis = "numbers") # graphic not shown
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  CHR3_test_seq <- drop_marker(CHR3_frame, c(29))
-#  CHR3_test_ord <- order_seq(CHR3_test_seq)
-#  CHR3_test_map <- make_seq(CHR3_test_ord, "force")
+## ---- results='hide'----------------------------------------------------------
+CHR3_test_seq <- drop_marker(CHR3_frame, c(29))
+CHR3_test_ord <- order_seq(CHR3_test_seq)
+CHR3_test_map <- make_seq(CHR3_test_ord, "force")
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  rf_graph_table(CHR3_test_map, mrk.axis = "numbers") #graphic not shown
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  CHR3_add29_seq <- try_seq(CHR3_test_map, 29)
-#  CHR3_add29 <- make_seq(CHR3_add29_seq, 12) # Marker 29 increase the map size disproportionately, it was removed from the map
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR3_final <- CHR3_test_map
-#  rf_graph_table(CHR3_final, inter = FALSE)
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  ripple_seq(CHR3_final)
-
-## ---- echo=TRUE, fig=TRUE-----------------------------------------------------
-map1 <- list(LG2_final, LG3_final)
-draw_map(map1, names = TRUE, grid = TRUE, cex.mrk = 0.7)
-
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  map2 <- list(CHR1_final, CHR2_final, CHR3_final)
-#  draw_map(map2, names = TRUE, grid = TRUE, cex.mrk = 0.7)
-
-## ---- width = 9.5, height = 9.5, eval=FALSE-----------------------------------
-#  CHR1_comp <- list(LG1_final, CHR1_final)
-#  draw_map(CHR1_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
-
-## ---- width = 9.5, height = 9.5, eval=FALSE-----------------------------------
-#  CHR2_comp <- list(LG3_final, CHR2_final)
-#  draw_map(CHR2_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
-
-## ---- width = 9.5, height = 9.5, eval=FALSE-----------------------------------
-#  CHR3_comp <- list(LG2_final, CHR3_final)
-#  draw_map(CHR3_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+## ---- results='hide'----------------------------------------------------------
+CHR3_add29_seq <- try_seq(CHR3_test_map, 29)
+CHR3_add29 <- make_seq(CHR3_add29_seq, 12) # Marker 29 increase the map size disproportionately, it was removed from the map
 
 ## -----------------------------------------------------------------------------
-draw_map(LG2_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+CHR3_final <- CHR3_test_map
+rf_graph_table(CHR3_final, inter = FALSE)
+
+## -----------------------------------------------------------------------------
+ripple_seq(CHR3_final)
+
+## ---- echo=TRUE, fig=TRUE-----------------------------------------------------
+map1 <- list(LG1_final, LG2_final, LG3_final)
+draw_map(map1, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+## ---- echo=TRUE, fig=TRUE-----------------------------------------------------
+map2 <- list(CHR1_final, CHR2_final, CHR3_final)
+draw_map(map2, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+## ---- width = 9.5, height = 9.5-----------------------------------------------
+CHR1_comp <- list(LG1_final, CHR1_final)
+draw_map(CHR1_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+## ---- width = 9.5, height = 9.5-----------------------------------------------
+CHR2_comp <- list(LG3_final, CHR2_final)
+draw_map(CHR2_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+## ---- width = 9.5, height = 9.5-----------------------------------------------
+CHR3_comp <- list(LG2_final, CHR3_final)
+draw_map(CHR3_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+
+## -----------------------------------------------------------------------------
+draw_map(CHR1_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
 ## ---- echo=TRUE, results='hide', eval=FALSE-----------------------------------
 #  draw_map2(LG1_final, LG2_final, LG3_final, main = "Only with linkage information",
@@ -758,19 +758,19 @@ LG2_test_map <- map_avoid_unlinked(any_seq)
 #  ggsave(p, filename = "map.jpg")
 
 ## -----------------------------------------------------------------------------
-LG3_final
+CHR3_final
 
 ## -----------------------------------------------------------------------------
-(parents_haplot <- parents_haplotypes(LG3_final))
+(parents_haplot <- parents_haplotypes(CHR3_final))
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  write.table(parents_haplot, "parents_haplot.txt")
 
 ## -----------------------------------------------------------------------------
-parents_haplotypes(LG2_final,LG3_final, group_names=c("LG2","LG3"))
+parents_haplotypes(CHR2_final,CHR3_final, group_names=c("CHR2","CHR3"))
 
 ## -----------------------------------------------------------------------------
-(progeny_haplot <- progeny_haplotypes(LG2_final, most_likely = TRUE, ind = c(1,2), group_names = "LG2_final"))
+(progeny_haplot <- progeny_haplotypes(CHR2_final, most_likely = TRUE, ind = c(1,2), group_names = "CHR2_final"))
 
 ## -----------------------------------------------------------------------------
 plot(progeny_haplot, position = "stack")

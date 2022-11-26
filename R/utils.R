@@ -15,6 +15,10 @@
 #                                                                     #
 #######################################################################
 
+#' Perform gaussian sum
+#' 
+#' @param w vector of numbers
+#' 
 acum <- function(w) {
   if (w<0) stop("'w' should be equal to or higher than zero")
   
@@ -73,31 +77,34 @@ split_2pts <- function(twopts.obj, mks){
   twopts.obj$CHROM <- twopts.obj$CHROM[mks]
   twopts.obj$POS <- twopts.obj$POS[mks]
   if(inherits(twopts.obj$data.name, c("outcross","f2"))){
-    new.twopts <- rep(list(matrix(0,nrow = length(mks), ncol = length(mks))),4)
-    for(j in 1:(length(mks)-1)) {
-      for(i in (j+1):length(mks)) {
-        k<-sort(c(mks[i], mks[j]))
-        for(w in 1:4){
-          r.temp<-twopts.obj$analysis[[w]][k[2], k[1]]
-          new.twopts[[w]][i,j]<-r.temp
-          LOD.temp<-twopts.obj$analysis[[w]][k[1], k[2]]
-          new.twopts[[w]][j,i]<-LOD.temp
-          colnames(new.twopts[[w]]) <- rownames(new.twopts[[w]]) <- colnames(split.dat$geno)
-        }
-      }
-    }
+    new.twopts <- lapply(twopts.obj$analysis, function(x){
+      temp <- matrix(0,nrow = length(mks), ncol = length(mks))
+      k <- matrix(c(rep(mks[1:(length(mks))], each = length(mks)), 
+                    rep(mks[1:(length(mks))], length(mks))), ncol = 2)
+      k <- k[-which(k[,1] == k[,2]),]
+      k <- t(apply(k, 1, sort))
+      k <- k[-which(duplicated(k)),]
+      LOD.temp<-x[k[,c(1,2)]]
+      temp[lower.tri((temp))]<-LOD.temp
+      temp <- t(temp) 
+      r.temp<-x[k[,c(2,1)]]
+      temp[lower.tri(temp)]<-r.temp
+      colnames(temp) <- rownames(temp) <- colnames(split.dat$geno)
+      return(temp)
+    })
     names(new.twopts) <- c("CC", "CR", "RC", "RR")
   } else {
-    new.twopts <- matrix(0, nrow = length(mks), ncol = length(mks))
-    for(i in 1:(length(mks)-1)) {
-      for(j in (i+1):length(mks)) {
-        k<-sort(c(mks[i], mks[j]))
-        r.temp<-twopts.obj$analysis[k[1], k[2]]
-        new.twopts[i,j]<-r.temp
-        LOD.temp<-twopts.obj$analysis[k[2], k[1]]
-        new.twopts[j,i]<-LOD.temp
-      }
-    }
+    new.twopts <- matrix(0,nrow = length(mks), ncol = length(mks))
+    k <- matrix(c(rep(mks[1:(length(mks))], each = length(mks)), 
+                  rep(mks[1:(length(mks))], length(mks))), ncol = 2)
+    k <- k[-which(k[,1] == k[,2]),]
+    k <- t(apply(k, 1, sort))
+    k <- k[-which(duplicated(k)),]
+    LOD.temp<- twopts.obj$analysis[k[,c(1,2)]]
+    new.twopts[lower.tri((new.twopts))] <- LOD.temp
+    new.twopts <- t(new.twopts) 
+    r.temp<- twopts.obj$analysis[k[,c(2,1)]]
+    new.twopts[lower.tri(new.twopts)] <- r.temp
     colnames(new.twopts) <- rownames(new.twopts) <- colnames(split.dat$geno)
   }
   twopts.obj$analysis <- new.twopts
@@ -108,7 +115,7 @@ split_2pts <- function(twopts.obj, mks){
 #'Remove individuals from the onemap object
 #'
 #'@param onemap.obj object of class onemap
-#'@param rm.ind vector of charaters with individuals names
+#'@param rm.ind vector of characters with individuals names
 #'
 ##' @return An object of class \code{onemap} without the selected individuals, 
 ##' i.e., a list with the following
@@ -488,6 +495,133 @@ filter_2pts_gaps <- function(input.seq, max.gap=10){
     }
   }
   
-  new.seq <- make_seq(input.seq$twopt, input.seq$seq.num[-rm.seq])
+  if(length(rm.seq) > 0) new.seq <- make_seq(input.seq$twopt, input.seq$seq.num[-rm.seq]) else new.seq <- input.seq
+  
   return(new.seq)
 }
+
+
+##' Filter markers according with a two-points recombination fraction and LOD threshold. Adapted from MAPpoly.
+##'
+##' @param input.seq an object of class \code{onemap}.
+#' @param thresh.LOD.rf LOD score threshold for recombination fraction (default = 5)
+#' @param thresh.rf threshold for recombination fractions (default = 0.15)
+#' @param probs indicates the probability corresponding to the filtering quantiles. (default = c(0.05, 1))
+##'
+##' @return An object of class \code{sequence}, which is a list containing the
+##' following components: \item{seq.num}{a \code{vector} containing the
+##' (ordered) indices of markers in the sequence, according to the input file.}
+##' \item{seq.phases}{a \code{vector} with the linkage phases between markers
+##' in the sequence, in corresponding positions. \code{-1} means that there are
+##' no defined linkage phases.} \item{seq.rf}{a \code{vector} with the
+##' recombination frequencies between markers in the sequence. \code{-1} means
+##' that there are no estimated recombination frequencies.}
+##' \item{seq.like}{log-likelihood of the corresponding linkage map.}
+##' \item{data.name}{object of class \code{onemap} with the raw
+##' data.} \item{twopt}{object of class \code{rf_2pts} with the
+##' 2-point analyses.}
+##'
+##' @author Cristiane Taniguti, \email{chtaniguti@@tamu.edu}
+##' @examples
+##'
+##'  data("vcf_example_out")
+##'  twopts <- rf_2pts(vcf_example_out)
+##'  seq1 <- make_seq(twopts, which(vcf_example_out$CHROM == "1"))
+##' filt_seq <- rf_snp_filter_onemap(seq1, 20, 0.5, c(0.5,1))
+##'
+##'@export
+rf_snp_filter_onemap <- function(input.seq, thresh.LOD.rf = 5, thresh.rf = 0.15, probs = c(0.05,1)){
+  if(inherits(input.seq$data.name, "outcross") | inherits(input.seq$data.name, "f2")){
+    rf.mat <- get_mat_rf_out(input.seq, LOD = T)
+  } else {
+    rf.mat <- get_mat_rf_in(input.seq, LOD = T)
+  }
+  rf.mat[lower.tri(rf.mat)][rf.mat[lower.tri(rf.mat)]  <= thresh.LOD.rf] <- NA
+  rf.mat[upper.tri(rf.mat)][rf.mat[upper.tri(rf.mat)]  >= thresh.rf] <- NA
+  x <- apply(rf.mat, 1, function(x) sum(!is.na(x)))
+  th <- quantile(x, probs = probs)
+  rem <- c(which(x < th[1]), which(x > th[2]))
+  ids <- names(which(x >= th[1] & x <= th[2]))
+  new.seq <- make_seq(input.seq$twopt, match(ids, colnames(input.seq$data.name$geno)))
+  return(new.seq)
+}
+
+##'   Creates a new sequence by adding markers.
+##'
+##'   Creates a new sequence by adding markers from a predetermined
+##'   one. The markers are added in the end of the sequence.
+##'
+##' @param input.seq an object of class \code{sequence}.
+##'
+##' @param mrks a vector containing the markers to be added from the
+##'     \code{sequence}.
+##'
+##' @return An object of class \code{sequence}, which is a list
+##'     containing the following components:
+##'
+##' \item{seq.num}{a \code{vector} containing the (ordered) indices of
+##'     markers in the sequence, according to the input file.}
+##'
+##' \item{seq.phases}{a \code{vector} with the linkage phases between
+##'     markers in the sequence, in corresponding positions. \code{-1}
+##'     means that there are no defined linkage phases.}
+##'
+##' \item{seq.rf}{a \code{vector} with the recombination fractions
+##'     between markers in the sequence. \code{-1} means that there
+##'     are no estimated recombination fractions.}
+##'
+##' \item{seq.like}{log-likelihood of the corresponding linkage map.}
+##'     \item{data.name}{name of the object of class \code{onemap}
+##'     with the raw data.}
+##'
+##' \item{twopt}{name of the object of class \code{rf_2pts} with the
+##'     2-point analyses.}
+##'
+##'  @author Marcelo Mollinari, \email{mmollina@@usp.br}
+##'
+##' @seealso \code{\link[onemap]{drop_marker}}
+##'
+##' @examples
+##' data(onemap_example_out)
+##' twopt <- rf_2pts(onemap_example_out)
+##' all_mark <- make_seq(twopt,"all")
+##' groups <- group(all_mark)
+##' (LG1 <- make_seq(groups,1))
+##' (LG.aug<-add_marker(LG1, c(4,7)))
+##'
+##' @export
+add_marker<-function(input.seq, mrks)
+{
+  if (!inherits(input.seq,"sequence"))
+    stop(sQuote(deparse(substitute(input.seq))), " is not an object of class 'sequence'")
+  seq.num<-c(input.seq$seq.num,mrks)
+  return(make_seq(input.seq$twopt,seq.num, twopt=input.seq$twopt))
+}
+
+
+##' Keep in the onemap and twopts object only markers in the sequences
+##' 
+##' @param list.sequences a list of objects 'sequence'
+##' 
+##' @return a list of objects 'sequences' with internal onemap and twopts objects reduced
+##' 
+##' @author Cristiane Taniguti
+##' 
+##' @export
+keep_only_selected_mks <- function(list.sequences= NULL){
+  if(!inherits(list.sequences, "list")) stop("Object is not a list")
+  if(!all(sapply(list.sequences, function(x) inherits(x, "sequence")))) stop("One or more of the list components is/are not of class sequence")
+  mk.numbers <- sapply(list.sequences, function(x) x$seq.num)
+  mk.names <- sapply(list.sequences, function(x) colnames(x$data.name$geno)[x$seq.num])
+  mk.numbers <- unlist(mk.numbers)
+  
+  new_onemap <- split_onemap(list.sequences[[1]]$data.name, unique(mk.numbers))
+  new_twopts <- rf_2pts(new_onemap, verbose = FALSE)
+  
+  new_seqs <- list()
+  for(i in 1:length(mk.names)){
+    new_seqs[[i]] <- make_seq(new_twopts, match(mk.names[[i]], colnames(new_twopts$data.name$geno)))
+  }
+  return(new_seqs)
+}
+

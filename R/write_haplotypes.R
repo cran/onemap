@@ -254,7 +254,7 @@ progeny_haplotypes <- function(...,
 ##' specially if the genetic map have low resolution. 
 ##' 
 ##' @param x object of class onemap_progeny_haplotypes
-##' @param col Color of parentes' homologous.
+##' @param col Color of parents' homologous.
 ##' @param position "split" or "stack"; if "split" (default) the alleles' are plotted separately. if "stack" the parents' alleles are plotted together.
 ##' @param show_markers logical; if  \code{TRUE}, the markers (default) are plotted.
 ##' @param main An overall title for the plot; default is \code{NULL}.
@@ -357,11 +357,14 @@ progeny_haplotypes_counts <- function(x){
   if(!inherits(x, "onemap_progeny_haplotypes")) stop("Input need is not of class onemap_progeny_haplotyes")
   if(!inherits(x, "most.likely")) stop("The most likely genotypes must receive maximum probability (1)")
   cross <- class(x)[2]
-
+  
   # Some genotypes receives prob of 0.5, here we need to make a decision about them
   # Here we keep the genotype of the marker before it
   doubt <- x[which(x$prob == 0.5),]
   if(dim(doubt)[1] > 0){
+    if(any(which(x$prob == 0.5)) == 1){
+      x[1, "prob"] <- x[2, "prob"]
+    }
     repl <- x[which(x$prob == 0.5)-1,"prob"]
     x[which(x$prob == 0.5),"prob"] <- repl
   }
@@ -370,9 +373,12 @@ progeny_haplotypes_counts <- function(x){
   x <- x[order(x$ind, x$grp, x$prob, x$parents,x$pos),]
   
   if(inherits(x, "outcross")){
-    counts <- x %>% group_by(ind, grp, parents.homologs) %>%
-      mutate(seq = sequence(rle(as.character(parents))$length) == 1) %>%
-      summarise(counts = sum(seq) -1) %>% ungroup()
+    counts <- x %>% group_by(ind, grp) %>% 
+      mutate(seq = sequence(rle(as.character(allele))$length) == 1)  %>%
+      group_by(ind, grp, parents) %>%
+      summarise(counts = sum(seq) -1,.groups = "keep") %>% ungroup()
+    counts$parents <- gsub("P", "H", counts$parents)
+    
   } else {
     counts <- x %>% group_by(ind, grp, progeny.homologs) %>%
       mutate(seq = sequence(rle(as.character(parents))$length) == 1) %>%

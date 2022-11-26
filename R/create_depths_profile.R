@@ -24,7 +24,7 @@ globalVariables(c("gt.onemap", "gt.vcf"))
 #' @param parent1 a character specifying the first parent ID
 #' @param parent2 a character specifying the second parent ID
 #' @param vcf.par the vcf parameter that store the allele depth information. 
-#' @param recovering logical. If TRUE, all markers in vcf are considere, if FALSE only those in onemap.obj
+#' @param recovering logical. If TRUE, all markers in vcf are consider, if FALSE only those in onemap.obj
 #' @param mks a vector of characters specifying the markers names to be considered or NULL to consider all markers
 #' @param inds a vector of characters specifying the individual names to be considered or NULL to consider all individuals
 #' @param GTfrom the graphic should contain the genotypes from onemap.obj or from the vcf? Specify using "onemap", "vcf" or "prob".
@@ -122,6 +122,8 @@ create_depths_profile <- function(onemap.obj = NULL,
   
   colnames(p.gt) <- c("mks", id.parents)
   p.gt <- gather(p.gt, "ind", "gt.onemap", -"mks")
+  if(all(is.na(match(parents$mks, p.gt$mks))))
+    parents$mks <- paste0(vcfR.object@fix[,1], "_", vcfR.object@fix[,2])[match(parents$mks, vcfR.object@fix[,3])]
   parents <- merge(parents, p.gt)
   
   # parents vcf genotypes
@@ -134,6 +136,8 @@ create_depths_profile <- function(onemap.obj = NULL,
   p.gt <- data.frame(mks = MKS, gts[,idx.parents], stringsAsFactors = F)
   colnames(p.gt) <- c("mks", colnames(gts)[idx.parents])
   p.gt <- gather(p.gt, "ind", "gt.vcf", -"mks")
+  if(all(is.na(match(parents$mks, p.gt$mks))))
+    parents$mks <- vcfR.object@fix[,3][match(parents$mks, paste0(vcfR.object@fix[,1], "_", vcfR.object@fix[,2]))]
   parents <- merge(parents, p.gt)
   
   if(inherits(onemap.obj, c("outcross", "f2"))){
@@ -233,11 +237,11 @@ create_depths_profile <- function(onemap.obj = NULL,
   if(length(rm.mks) > 0)
     data <- data[-rm.mks,]
   
-  if(class(mks) == "character"){
+  if(inherits(mks,"character")){
     data <- data[which(data$mks %in% mks),]
   }
   
-  if(class(inds) == "character"){
+  if(inherits(inds, "character")){
     data <- data[which(data$ind %in% inds),]
   }
   

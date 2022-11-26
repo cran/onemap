@@ -103,7 +103,7 @@ bins_example
 #  write_onemap_raw(bins_example, file.name = "new_dataset.raw", cross="f2 intercross")
 
 ## ---- chi_square--------------------------------------------------------------
-f2_test <- test_segregation(bins_example, simulate.p.value = FALSE)
+f2_test <- test_segregation(bins_example)
 
 ## ---- class_of_chisquare_test-------------------------------------------------
 class(f2_test)
@@ -204,11 +204,9 @@ LG1_mds_f2 <- mds_onemap(input.seq = LG1_f2, hmm = F)
 
 ## -----------------------------------------------------------------------------
 rf_graph_table(LG1_rcd_f2)
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG1_rec_f2)
-#  rf_graph_table(LG1_ug_f2)
-#  rf_graph_table(LG1_mds_f2)
+rf_graph_table(LG1_rec_f2)
+rf_graph_table(LG1_ug_f2)
+rf_graph_table(LG1_mds_f2)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  rf_graph_table(LG1_ug_f2, inter = TRUE, html.file = "test.html")
@@ -274,100 +272,100 @@ rf_graph_table(LG1_f2_final)
 ## ---- ripple_lg2_final, results="hide"----------------------------------------
 ripple_seq(LG1_f2_final, ws = 5, LOD = 3)
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  LG2_f2_ord <- order_seq(input.seq = LG2_ug_f2, n.init = 5,
-#                          subset.search = "twopt",
-#                          twopt.alg = "rcd", THRES = 3,
-#                          touchdown = TRUE, rm_unlinked = TRUE)
+## ---- results='hide'----------------------------------------------------------
+LG2_f2_ord <- order_seq(input.seq = LG2_ug_f2, n.init = 5,
+                        subset.search = "twopt",
+                        twopt.alg = "rcd", THRES = 3,
+                        touchdown = TRUE, rm_unlinked = TRUE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  (LG2_f2_final <- make_seq(LG2_f2_ord, "force"))
-#  
-#  rf_graph_table(LG2_f2_final)
+## -----------------------------------------------------------------------------
+(LG2_f2_final <- make_seq(LG2_f2_ord, "force"))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG2_edit <- drop_marker(LG2_f2_final, 23) # removing marker 23
+rf_graph_table(LG2_f2_final)
+
+## -----------------------------------------------------------------------------
+LG2_edit <- drop_marker(LG2_f2_final, 23) # removing marker 23
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  LG2_edit_map <- map(LG2_edit)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  library(stringr)
-#  LG2_edit_map <- onemap::map(LG2_edit)
+## -----------------------------------------------------------------------------
+library(stringr)
+LG2_edit_map <- onemap::map(LG2_edit) 
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG2_edit_map)
+## -----------------------------------------------------------------------------
+rf_graph_table(LG2_edit_map)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  (LG2_temp <- try_seq(input.seq = LG2_edit_map, mrk = 23))
+## -----------------------------------------------------------------------------
+(LG2_temp <- try_seq(input.seq = LG2_edit_map, mrk = 23))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG2_f2_final <- make_seq(LG2_temp, 1)
-#  
-#  rf_graph_table(LG2_f2_final)
+## -----------------------------------------------------------------------------
+LG2_f2_final <- make_seq(LG2_temp, 1)
 
-## ---- results="hide", eval=FALSE----------------------------------------------
-#  ripple_seq(LG2_f2_final, ws = 5)
+rf_graph_table(LG2_f2_final)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG2_f2_final
+## ---- results="hide"----------------------------------------------------------
+ripple_seq(LG2_f2_final, ws = 5)
 
-## ---- order_LG3, results='hide', eval=FALSE-----------------------------------
-#  LG3_f2_ord <- order_seq(input.seq = LG3_ug_f2, n.init = 5,
-#                          subset.search = "twopt",
-#                          twopt.alg = "rcd", THRES = 3,
-#                          touchdown = TRUE)
+## -----------------------------------------------------------------------------
+LG2_f2_final
 
-## ---- LG3_force, eval=FALSE---------------------------------------------------
-#  (LG3_f2_final <- make_seq(LG3_f2_ord, "force"))
+## ---- order_LG3, results='hide'-----------------------------------------------
+LG3_f2_ord <- order_seq(input.seq = LG3_ug_f2, n.init = 5,
+                        subset.search = "twopt",
+                        twopt.alg = "rcd", THRES = 3,
+                        touchdown = TRUE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG3_f2_final)
+## ---- LG3_force---------------------------------------------------------------
+(LG3_f2_final <- make_seq(LG3_f2_ord, "force"))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_edit <- drop_marker(LG3_f2_final, c(34,39,50,56, 20,24, 64))
-#  LG3_edit_map <- order_seq(LG3_edit) # We remove several markers maybe it's better to order again
-#  LG3_edit_map <- make_seq(LG3_edit_map, "force")
-#  
-#  rf_graph_table(LG3_edit_map)
+## -----------------------------------------------------------------------------
+rf_graph_table(LG3_f2_final)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_edit <- try_seq(LG3_edit_map, 34)
-#  LG3_edit_temp <- make_seq(LG3_edit, 1) # Not included
-#  LG3_edit <- try_seq(LG3_edit_map, 39)
-#  LG3_edit_temp <- make_seq(LG3_edit, 3)
-#  LG3_edit_map <- LG3_edit_temp # include
-#  LG3_edit <- try_seq(LG3_edit_map, 50)
-#  LG3_edit_temp <- make_seq(LG3_edit, 22) # Not included
-#  LG3_edit <- try_seq(LG3_edit_map, 56)
-#  LG3_edit_temp <- make_seq(LG3_edit, 22) # Not included
-#  LG3_edit <- try_seq(LG3_edit_map, 20)
-#  LG3_edit_temp <- make_seq(LG3_edit, 22)
-#  LG3_edit_map <- LG3_edit_temp # include
-#  LG3_edit <- try_seq(LG3_edit_map, 24)
-#  LG3_edit_temp <- make_seq(LG3_edit, 22)
-#  LG3_edit_map <- LG3_edit_temp # include
-#  LG3_edit <- try_seq(LG3_edit_map, 64)
-#  LG3_edit_temp <- make_seq(LG3_edit, 23) # Not included
-#  
-#  LG3_f2_final <- LG3_edit_map
+## -----------------------------------------------------------------------------
+LG3_edit <- drop_marker(LG3_f2_final, c(34,39,50,56, 20,24, 64))
+LG3_edit_map <- order_seq(LG3_edit) # We remove several markers maybe it's better to order again
+LG3_edit_map <- make_seq(LG3_edit_map, "force")
 
-## ---- ripple_LG3, results="hide", eval=FALSE----------------------------------
-#  ripple_seq(LG3_f2_final, ws = 5)
+rf_graph_table(LG3_edit_map)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  idx <- which(LG3_f2_final$seq.num == 59)
-#  new_seq <- LG3_f2_final$seq.num
-#  new_seq[idx:(idx+4)] <- c(59, 49, 76, 80, 28)
-#  LG3_edit_seq <- make_seq(twopts_f2, new_seq)
+## -----------------------------------------------------------------------------
+LG3_edit <- try_seq(LG3_edit_map, 34)
+LG3_edit_temp <- make_seq(LG3_edit, 1) # Not included
+LG3_edit <- try_seq(LG3_edit_map, 39)
+LG3_edit_temp <- make_seq(LG3_edit, 3) 
+LG3_edit_map <- LG3_edit_temp # include
+LG3_edit <- try_seq(LG3_edit_map, 50)
+LG3_edit_temp <- make_seq(LG3_edit, 22) # Not included
+LG3_edit <- try_seq(LG3_edit_map, 56)
+LG3_edit_temp <- make_seq(LG3_edit, 22) # Not included 
+LG3_edit <- try_seq(LG3_edit_map, 20)
+LG3_edit_temp <- make_seq(LG3_edit, 22) 
+LG3_edit_map <- LG3_edit_temp # include
+LG3_edit <- try_seq(LG3_edit_map, 24)
+LG3_edit_temp <- make_seq(LG3_edit, 22) 
+LG3_edit_map <- LG3_edit_temp # include
+LG3_edit <- try_seq(LG3_edit_map, 64)
+LG3_edit_temp <- make_seq(LG3_edit, 23) # Not included
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_edit_map <- onemap::map(LG3_edit_seq)
+LG3_f2_final <- LG3_edit_map
 
-## ---- LG3_final, eval=FALSE---------------------------------------------------
-#  LG3_f2_final <- LG3_edit_map
-#  
-#  rf_graph_table(LG3_f2_final)
+## ---- ripple_LG3, results="hide"----------------------------------------------
+ripple_seq(LG3_f2_final, ws = 5)
+
+## -----------------------------------------------------------------------------
+idx <- which(LG3_f2_final$seq.num == 59) 
+new_seq <- LG3_f2_final$seq.num
+new_seq[idx:(idx+4)] <- c(59, 49, 76, 80, 28)
+LG3_edit_seq <- make_seq(twopts_f2, new_seq)
+
+## -----------------------------------------------------------------------------
+LG3_edit_map <- onemap::map(LG3_edit_seq)
+
+## ---- LG3_final---------------------------------------------------------------
+LG3_f2_final <- LG3_edit_map
+
+rf_graph_table(LG3_f2_final)
 
 ## -----------------------------------------------------------------------------
 CHR1 <- make_seq(twopts_f2, "1")
@@ -414,17 +412,17 @@ marker_type(LG3seq_f2_map)
 ## ---- drop_marker-------------------------------------------------------------
 (LG3seq_f2_map <- drop_marker(LG3seq_f2_map, c(59, 21)))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  maps_list <- list(LG1_f2_final, LG2_f2_final, LG3_f2_final)
+## -----------------------------------------------------------------------------
+maps_list <- list(LG1_f2_final, LG2_f2_final, LG3_f2_final)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  draw_map(maps_list, names = TRUE, grid = TRUE, cex.mrk = 0.7)
+## -----------------------------------------------------------------------------
+draw_map(maps_list, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
 ## -----------------------------------------------------------------------------
 draw_map(LG1_f2_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
 ## ---- eval=FALSE, results='hide', eval=FALSE----------------------------------
-#  draw_map2(LG1_f2_final, LG2_f2_final, LG3_f2_final main = "Only linkage information",
+#  draw_map2(LG1_f2_final, LG2_f2_final, main = "Only linkage information",
 #            group.names = c("LG1", "LG2", "LG3"), output = "map.eps")
 #  
 
@@ -459,7 +457,6 @@ draw_map(LG1_f2_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  simParallel <- read_onemap(system.file("extdata/simParall_f2.raw", package = "onemap")) # dataset available only in onemap github version
-#  plot(simParallel)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  # Calculates two-points recombination fractions
@@ -672,7 +669,7 @@ draw_map(LG1_f2_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 #  ggsave(p, filename = "map.jpg")
 
 ## -----------------------------------------------------------------------------
-(progeny_haplot <- progeny_haplotypes(LG1_f2_final, most_likely = TRUE, ind = 2, group_names = "LG1_final"))
+(progeny_haplot <- progeny_haplotypes(LG2_f2_final, most_likely = TRUE, ind = 2, group_names = "LG2_final"))
 
 ## -----------------------------------------------------------------------------
 plot(progeny_haplot, position = "stack")
