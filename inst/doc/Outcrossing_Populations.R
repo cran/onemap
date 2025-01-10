@@ -8,28 +8,28 @@ knitr::opts_chunk$set(collapse = TRUE,
                       dpi = 36,
                       cache = TRUE)
 
-## ---- echo=FALSE, results='hide', message=FALSE, cache.comments=FALSE, warning=FALSE----
+## ----echo=FALSE, results='hide', message=FALSE, cache.comments=FALSE, warning=FALSE----
 library(onemap)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  system.file(package = "onemap")
+## ----eval=FALSE---------------------------------------------------------------
+# system.file(package = "onemap")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  onemap_example_out <- read_onemap(dir = "C:/workingdirectory", inputfile = "onemap_example_out.raw")
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_example_out <- read_onemap(dir = "C:/workingdirectory", inputfile = "onemap_example_out.raw")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  onemap_example_out <- read_onemap(inputfile = "onemap_example_out.raw")
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_example_out <- read_onemap(inputfile = "onemap_example_out.raw")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 onemap_example_out <- read_onemap(inputfile = system.file("extdata/onemap_example_out.raw", package = "onemap"))
 
 ## -----------------------------------------------------------------------------
 data("onemap_example_out")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  onemap_example_out
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_example_out
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 onemap_example_out
 
 ## -----------------------------------------------------------------------------
@@ -38,13 +38,13 @@ plot(onemap_example_out)
 ## -----------------------------------------------------------------------------
 plot(onemap_example_out, all = FALSE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  vcf_example_out <- onemap_read_vcfR(vcf = system.file("extdata/vcf_example_out.vcf.gz", package = "onemap"),
-#                                      parent1 = "P1",
-#                                      parent2 = "P2",
-#                                      cross = "outcross")
+## ----eval=FALSE---------------------------------------------------------------
+# vcf_example_out <- onemap_read_vcfR(vcf = system.file("extdata/vcf_example_out.vcf.gz", package = "onemap"),
+#                                     parent1 = "P1",
+#                                     parent2 = "P2",
+#                                     cross = "outcross")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 data(vcf_example_out)
 
 ## -----------------------------------------------------------------------------
@@ -56,19 +56,72 @@ vcf_example_out
 ## -----------------------------------------------------------------------------
 vcf_filtered <- filter_missing(vcf_example_out, threshold = 0.25)
 
-## ---- message=F,warning=F, eval=FALSE-----------------------------------------
-#  # For outcrossing population
-#  create_depths_profile(onemap.obj = vcf_example_out,
-#                        vcf = system.file("extdata/vcf_example_out.vcf.gz", package = "onemap"),
-#                        parent1 = "P1",
-#                        parent2 = "P2",
-#                        vcf.par = "AD",
-#                        recovering = FALSE,
-#                        mks = NULL,
-#                        inds = NULL,
-#                        GTfrom = "vcf",
-#                        alpha = 0.1,
-#                        rds.file = "depths_out.rds")
+## ----message=F,warning=F, eval=FALSE------------------------------------------
+# # For outcrossing population
+# create_depths_profile(onemap.obj = vcf_example_out,
+#                       vcf = system.file("extdata/vcf_example_out.vcf.gz", package = "onemap"),
+#                       parent1 = "P1",
+#                       parent2 = "P2",
+#                       vcf.par = "AD",
+#                       recovering = FALSE,
+#                       mks = NULL,
+#                       inds = NULL,
+#                       GTfrom = "vcf",
+#                       alpha = 0.1,
+#                       rds.file = "depths_out.rds")
+
+## -----------------------------------------------------------------------------
+head(vcf_example_out$error)
+
+## ----eval=FALSE---------------------------------------------------------------
+# ?create_probs
+
+## -----------------------------------------------------------------------------
+library(vcfR)
+vcfR_object <- read.vcfR(system.file("extdata/vcf_example_out.vcf.gz", package = "onemap"))
+
+genotypes_errors <- extract_depth(vcfR.object = vcfR_object,
+                                  onemap.object=vcf_example_out,
+                                  vcf.par= "GQ",
+                                  parent1="P1",
+                                  parent2="P2",
+                                  recovering=FALSE)
+
+genotypes_errors[10:50, 1:5]
+
+## -----------------------------------------------------------------------------
+onemap_obj_errors <- create_probs(vcf_example_out, genotypes_errors = genotypes_errors)
+head(onemap_obj_errors$error)
+
+## -----------------------------------------------------------------------------
+genotypes_probs <- extract_depth(vcfR_object, 
+                                 vcf_example_out, 
+                                 vcf.par = "PL", 
+                                 parent1 = "P1", 
+                                 parent2 = "P2")
+
+genotypes_probs[1:5, ]
+
+## -----------------------------------------------------------------------------
+onemap_obj_probs <- create_probs(vcf_example_out, genotypes_probs = genotypes_probs)
+head(onemap_obj_probs$error)
+
+## -----------------------------------------------------------------------------
+hist(genotypes_errors) # Check distribution to define threshold - it will change according to the software used for genotype calling
+summary(as.vector(genotypes_errors))
+
+onemap_obj_prob_filt <- filter_prob(onemap_obj_probs, threshold = 0.9)
+
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_obj_global_err <- create_probs(onemap_obj_prob_filt, global_error = 0.075)
+
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_obj_multi <- onemap_read_vcfR("roses_populations.haps.new.names.vcf", parent1 = "PH", parent2 = "J14-3", cross = "outcross", only_biallelic = FALSE) # Example data not available
+# 
+# onemap_obj_multi
+
+## ----eval=FALSE---------------------------------------------------------------
+# onemap_obj_multi <- create_probs(onemap_obj_multi, global_error = 0.1)
 
 ## -----------------------------------------------------------------------------
 comb_example <- combine_onemap(onemap_example_out, vcf_example_out)
@@ -85,8 +138,8 @@ bins
 bins_example <- create_data_bins(comb_example, bins)
 bins_example
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  write_onemap_raw(bins_example, file.name = "new_dataset.raw")
+## ----eval=FALSE---------------------------------------------------------------
+# write_onemap_raw(bins_example, file.name = "new_dataset.raw")
 
 ## -----------------------------------------------------------------------------
 test_segregation_of_a_marker(bins_example, 4)
@@ -108,13 +161,13 @@ no_dist
 ## -----------------------------------------------------------------------------
 plot(segreg_test)
 
-## ---- twopoint, results='hide'------------------------------------------------
+## ----twopoint, results='hide'-------------------------------------------------
 twopts <- rf_2pts(bins_example)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  twopts
+## ----eval=FALSE---------------------------------------------------------------
+# twopts
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 twopts
 
 ## -----------------------------------------------------------------------------
@@ -136,10 +189,10 @@ LOD_sug
 ## -----------------------------------------------------------------------------
 LGs <- group(mark_no_dist, LOD=LOD_sug)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LGs
+## ----eval=FALSE---------------------------------------------------------------
+# LGs
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 LGs
 
 ## -----------------------------------------------------------------------------
@@ -157,24 +210,24 @@ LGs
 LGs_upgma <- group_upgma(mark_no_dist, expected.groups = 5, inter = F)
 plot(LGs_upgma)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  set_map_fun(type = "haldane")
+## ----eval=FALSE---------------------------------------------------------------
+# set_map_fun(type = "haldane")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  set_map_fun(type = "kosambi")
+## ----eval=FALSE---------------------------------------------------------------
+# set_map_fun(type = "kosambi")
 
 ## -----------------------------------------------------------------------------
 LG3 <- make_seq(LGs, 3)
 # or
 # LG3 <- make_seq(LGs_upgma,3)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3
+## ----eval=FALSE---------------------------------------------------------------
+# LG3
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 LG3
 
-## ----  results='hide'---------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 (LG3_ser <- seriation(LG3, hmm = FALSE))
 (LG3_rcd <- rcd(LG3, hmm = FALSE))
 (LG3_rec <- record(LG3, hmm = FALSE))
@@ -183,20 +236,20 @@ LG3
 ## -----------------------------------------------------------------------------
 LG3_mds <- mds_onemap(LG3, hmm = FALSE)
 
-## ---- eval=TRUE,  results='hide', eval=FALSE----------------------------------
-#  LG3_comp <- compare(LG3)
+## ----eval=TRUE,  results='hide', eval=FALSE-----------------------------------
+# LG3_comp <- compare(LG3)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_comp
+## ----eval=FALSE---------------------------------------------------------------
+# LG3_comp
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_final <- make_seq(LG3_comp, 1, 1)
+## ----eval=FALSE---------------------------------------------------------------
+# LG3_final <- make_seq(LG3_comp, 1, 1)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  LG3_final <- make_seq(LG3_comp)
-
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 LG3_final <- map(make_seq(twopts, c(43,22,7,18,8,13,44)))
+
+## ----eval=FALSE---------------------------------------------------------------
+# LG3_final <- make_seq(LG3_comp)
 
 ## -----------------------------------------------------------------------------
 LG3_final
@@ -207,8 +260,8 @@ rf_graph_table(LG3_final)
 ## -----------------------------------------------------------------------------
 rf_graph_table(LG3_final, graph.LOD = TRUE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(LG3_final, inter = TRUE, mrk.axis= "names", html.file = "LG3.html")
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(LG3_final, inter = TRUE, mrk.axis= "names", html.file = "LG3.html")
 
 ## -----------------------------------------------------------------------------
 rf_graph_table(LG3_final, inter = FALSE, mrk.axis = "numbers")
@@ -225,10 +278,10 @@ LG2_rcd <- rcd(LG2, hmm = F)
 LG2_rcd
 rf_graph_table(LG2_rcd)
 
-## ---- , echo=TRUE-------------------------------------------------------------
+## ----, echo=TRUE--------------------------------------------------------------
 marker_type(LG2)
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG2_init <- make_seq(twopts, c(4, 20, 24, 49,50,51, 52))
 
 ## -----------------------------------------------------------------------------
@@ -239,7 +292,7 @@ marker_type(LG2_init)
 LG2_init <- drop_marker(LG2_init, 52)
 marker_type(LG2_init)
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG2_comp <- compare(LG2_init)
 
 ## -----------------------------------------------------------------------------
@@ -248,7 +301,7 @@ LG2_frame <- make_seq(LG2_comp)
 ## -----------------------------------------------------------------------------
 rf_graph_table(LG2_frame, mrk.axis = "numbers")
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG2_extend <- try_seq(LG2_frame, 52)
 
 ## -----------------------------------------------------------------------------
@@ -257,7 +310,7 @@ LG2_extend
 ## -----------------------------------------------------------------------------
 print(LG2_extend, 7)
 
-## ---- echo=TRUE---------------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 LG2_test <- make_seq(LG2_extend, 7, 1)
 
 ## -----------------------------------------------------------------------------
@@ -266,7 +319,7 @@ rf_graph_table(LG2_test, mrk.axis = "numbers")
 ## -----------------------------------------------------------------------------
 LG2_frame <- LG2_test
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG2_extend <- try_seq(LG2_frame, 9)
 LG2_frame <- make_seq(LG2_extend, 3)
 LG2_extend <- try_seq(LG2_frame, 16)
@@ -304,7 +357,7 @@ LG2_safe <- make_seq(LG2_ord, "safe")
 LG2_all <- make_seq(LG2_ord, "force")
 LG2_all
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG2_ord <- order_seq(LG2, n.init = 5, THRES = 3, touchdown = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -319,8 +372,8 @@ ripple_seq(LG2_all, ws = 4, LOD = LOD_sug)
 ## -----------------------------------------------------------------------------
 LG2_test_seq <- drop_marker(LG2_all, c(23,29))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  (LG2_test_map <- map(LG2_test_seq))
+## ----eval=FALSE---------------------------------------------------------------
+# (LG2_test_map <- map(LG2_test_seq))
 
 ## -----------------------------------------------------------------------------
 library(stringr)
@@ -344,7 +397,7 @@ rf_graph_table(LG2_final, mrk.axis = "numbers")
 ## -----------------------------------------------------------------------------
 LG1 <- make_seq(LGs, 1)
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG1_ord <- order_seq(LG1, n.init = 6, touchdown = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -372,7 +425,7 @@ LG1_test_map <- onemap::map(LG1_test_seq)
 ## -----------------------------------------------------------------------------
 rf_graph_table(LG1_test_map, mrk.axis = "numbers")
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 LG1_extend <- try_seq(LG1_test_map,10)
 LG1_test_map <- make_seq(LG1_extend,15) 
 LG1_extend <- try_seq(LG1_test_map,11)
@@ -411,9 +464,9 @@ unique(bins_example$CHROM)
 CHR_mks <- group_seq(input.2pts = twopts, seqs = "CHROM", unlink.mks = mark_no_dist,
                      repeated = FALSE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  CHR_mks <- group_seq(input.2pts = twopts, seqs = list(CHR1=CHR1, CHR2=CHR2, CHR3=CHR3),
-#                       unlink.mks = mark_no_dist, repeated = FALSE)
+## ----eval=FALSE---------------------------------------------------------------
+# CHR_mks <- group_seq(input.2pts = twopts, seqs = list(CHR1=CHR1, CHR2=CHR2, CHR3=CHR3),
+#                      unlink.mks = mark_no_dist, repeated = FALSE)
 
 ## -----------------------------------------------------------------------------
 CHR_mks
@@ -426,14 +479,14 @@ CHR_mks$sequences$CHR1
 # or
 CHR_mks$sequences[[1]]
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 # CHR1_frame <- mds_onemap(CHR_mks$sequences$CHR1, hmm = F)
 # or
 CHR1_ord <- order_seq(CHR_mks$sequences$CHR1)
 CHR1_frame <- make_seq(CHR1_ord, "force")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR1_frame) # graphic not shown
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(CHR1_frame) # graphic not shown
 
 ## -----------------------------------------------------------------------------
 CHR1_test_seq <- drop_marker(CHR1_frame, 11)
@@ -453,48 +506,48 @@ CHR1_final <- CHR1_test_map
 ## -----------------------------------------------------------------------------
 ripple_seq(CHR1_final)
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 # CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
 # or
 CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
 CHR2_frame <- make_seq(CHR2_ord, "force")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR2_frame) # graphic not shown
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(CHR2_frame) # graphic not shown
 
 ## -----------------------------------------------------------------------------
 CHR2_final <- CHR2_frame
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 # CHR2_frame <- mds_onemap(CHR_mks$sequences$CHR2)
 # or
 CHR2_ord <- order_seq(CHR_mks$sequences$CHR2)
 CHR2_frame <- make_seq(CHR2_ord, "force")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR2_frame) # graphic not shown
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(CHR2_frame) # graphic not shown
 
 ## -----------------------------------------------------------------------------
 CHR2_final <- CHR2_frame
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 # CHR3_frame <- mds_onemap(CHR_mks$sequences$CHR3)
 # or
 CHR3_ord <- order_seq(CHR_mks$sequences$CHR3)
 CHR3_frame <- make_seq(CHR3_ord, "force")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR3_frame, mrk.axis = "numbers") # graphic not shown
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(CHR3_frame, mrk.axis = "numbers") # graphic not shown
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 CHR3_test_seq <- drop_marker(CHR3_frame, c(29))
 CHR3_test_ord <- order_seq(CHR3_test_seq)
 CHR3_test_map <- make_seq(CHR3_test_ord, "force")
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  rf_graph_table(CHR3_test_map, mrk.axis = "numbers") #graphic not shown
+## ----eval=FALSE---------------------------------------------------------------
+# rf_graph_table(CHR3_test_map, mrk.axis = "numbers") #graphic not shown
 
-## ---- results='hide'----------------------------------------------------------
+## ----results='hide'-----------------------------------------------------------
 CHR3_add29_seq <- try_seq(CHR3_test_map, 29)
 CHR3_add29 <- make_seq(CHR3_add29_seq, 12) # Marker 29 increase the map size disproportionately, it was removed from the map
 
@@ -505,59 +558,59 @@ rf_graph_table(CHR3_final, inter = FALSE)
 ## -----------------------------------------------------------------------------
 ripple_seq(CHR3_final)
 
-## ---- echo=TRUE, fig=TRUE-----------------------------------------------------
+## ----echo=TRUE, fig=TRUE------------------------------------------------------
 map1 <- list(LG1_final, LG2_final, LG3_final)
 draw_map(map1, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
-## ---- echo=TRUE, fig=TRUE-----------------------------------------------------
+## ----echo=TRUE, fig=TRUE------------------------------------------------------
 map2 <- list(CHR1_final, CHR2_final, CHR3_final)
 draw_map(map2, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
-## ---- width = 9.5, height = 9.5-----------------------------------------------
+## ----width = 9.5, height = 9.5------------------------------------------------
 CHR1_comp <- list(LG1_final, CHR1_final)
 draw_map(CHR1_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
-## ---- width = 9.5, height = 9.5-----------------------------------------------
+## ----width = 9.5, height = 9.5------------------------------------------------
 CHR2_comp <- list(LG3_final, CHR2_final)
 draw_map(CHR2_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
-## ---- width = 9.5, height = 9.5-----------------------------------------------
+## ----width = 9.5, height = 9.5------------------------------------------------
 CHR3_comp <- list(LG2_final, CHR3_final)
 draw_map(CHR3_comp, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
 ## -----------------------------------------------------------------------------
 draw_map(CHR1_final, names = TRUE, grid = TRUE, cex.mrk = 0.7)
 
-## ---- echo=TRUE, results='hide', eval=FALSE-----------------------------------
-#  draw_map2(LG1_final, LG2_final, LG3_final, main = "Only with linkage information",
-#            group.names = c("LG1", "LG2", "LG3"), output = "map.png")
+## ----echo=TRUE, results='hide', eval=FALSE------------------------------------
+# draw_map2(LG1_final, LG2_final, LG3_final, main = "Only with linkage information",
+#           group.names = c("LG1", "LG2", "LG3"), output = "map.png")
 
-## ---- echo=TRUE, results='hide', eval=FALSE-----------------------------------
-#  draw_map2(CHR1_final, CHR2_final, CHR3_final, output= "map_ref.pdf",
-#            col.group = "#58A4B0",
-#            col.mark= "#335C81")
+## ----echo=TRUE, results='hide', eval=FALSE------------------------------------
+# draw_map2(CHR1_final, CHR2_final, CHR3_final, output= "map_ref.pdf",
+#           col.group = "#58A4B0",
+#           col.mark= "#335C81")
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  draw_map2(LG1_final, CHR1_final, output = "map_comp.pdf", tag = c("M1","SNP2"))
+## ----results='hide', eval=FALSE-----------------------------------------------
+# draw_map2(LG1_final, CHR1_final, output = "map_comp.pdf", tag = c("M1","SNP2"))
 
-## ---- results='hide', eval=FALSE----------------------------------------------
-#  draw_map2(LG2_final, CHR3_final, tag= c("SNP17", "SNP18", "M29"), main = "Chromosome 3",
-#            group.names = c("Only linkage", "With genome"), centered = TRUE, output = "map_comp2.pdf")
+## ----results='hide', eval=FALSE-----------------------------------------------
+# draw_map2(LG2_final, CHR3_final, tag= c("SNP17", "SNP18", "M29"), main = "Chromosome 3",
+#           group.names = c("Only linkage", "With genome"), centered = TRUE, output = "map_comp2.pdf")
 
 ## -----------------------------------------------------------------------------
 any_seq <- make_seq(twopts, c(30, 12, 3, 14, 2))
 (any_seq_map <- map(any_seq))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  library(stringr)
-#  (any_seq_map <- onemap::map(any_seq))
+## ----eval=FALSE---------------------------------------------------------------
+# library(stringr)
+# (any_seq_map <- onemap::map(any_seq))
 
 ## -----------------------------------------------------------------------------
 LG2_test_map <- map_avoid_unlinked(any_seq)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  any_seq <- make_seq(twopts, c(30, 12, 3, 14, 2), phase = c(4, 1, 4, 3))
-#  (any_seq_map <- map(any_seq))
+## ----eval=FALSE---------------------------------------------------------------
+# any_seq <- make_seq(twopts, c(30, 12, 3, 14, 2), phase = c(4, 1, 4, 3))
+# (any_seq_map <- map(any_seq))
 
 ## -----------------------------------------------------------------------------
 (any_seq <- add_marker(any_seq, 4:8))
@@ -565,197 +618,213 @@ LG2_test_map <- map_avoid_unlinked(any_seq)
 ## -----------------------------------------------------------------------------
 (any_seq <- drop_marker(any_seq, c(3, 4, 5, 12, 30)))
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Need to run all code below with eval=FALSE and echo=FALSE
-#  time_spent <-time_spent/(60*60)
-#  colnames(time_spent) <- c("Without parallelization (h)", "With parallelization (h)" )
-#  knitr::kable(time_spent)
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Need to run all code below with eval=FALSE and echo=FALSE
+# time_spent <-time_spent/(60*60)
+# colnames(time_spent) <- c("Without parallelization (h)", "With parallelization (h)" )
+# knitr::kable(time_spent)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  simParallel <- read_onemap(system.file(package = "onemap", "extdata/simParall_out.raw")) # dataset available only in onemap github version
-#  plot(simParallel, all=FALSE)
+## ----eval=FALSE---------------------------------------------------------------
+# simParallel <- read_onemap(system.file(package = "onemap", "extdata/simParall_out.raw")) # dataset available only in onemap github version
+# plot(simParallel, all=FALSE)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  # Calculates two-points recombination fractions
-#  twopts <- rf_2pts(simParallel)
-#  seq_all <- make_seq(twopts, "all")
-#  # There are no redundant markers
-#  find_bins(simParallel)
-#  # There are no distorted markers
-#  p <- plot(test_segregation(simParallel))
+## ----eval=FALSE---------------------------------------------------------------
+# # Calculates two-points recombination fractions
+# twopts <- rf_2pts(simParallel)
+# seq_all <- make_seq(twopts, "all")
+# # There are no redundant markers
+# find_bins(simParallel)
+# # There are no distorted markers
+# p <- plot(test_segregation(simParallel))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  batch_size <- pick_batch_sizes(input.seq = seq_all,
-#                                 size = 80,
-#                                 overlap = 30,
-#                                 around = 10)
-#  batch_size
+## ----eval=FALSE---------------------------------------------------------------
+# batch_size <- pick_batch_sizes(input.seq = seq_all,
+#                                size = 80,
+#                                overlap = 30,
+#                                around = 10)
+# batch_size
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  time_spent <- data.frame("without-parallelization"= rep(0,5), "with-parallelization" =rep(0,5))
-#  rownames(time_spent) <- c("rcd", "record_map", "ug_map", "mds_onemap", "map")
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# time_spent <- data.frame("without-parallelization"= rep(0,5), "with-parallelization" =rep(0,5))
+# rownames(time_spent) <- c("rcd", "record_map", "ug_map", "mds_onemap", "map")
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Without parallelization
-#  time <- system.time(rcd_map <- rcd(input.seq = seq_all))
-#  time_spent$without.parallelization[1] <- time[3]
-#  # With parallelization
-#  time <- system.time(rcd_map_par <- rcd(input.seq = seq_all,
-#                                         phase_cores = 4,
-#                                         size = batch_size,
-#                                         overlap = 30))
-#  time_spent$with.parallelization[1] <- time[3]
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Without parallelization
+# time <- system.time(rcd_map <- rcd(input.seq = seq_all))
+# time_spent$without.parallelization[1] <- time[3]
+# # With parallelization
+# time <- system.time(rcd_map_par <- rcd(input.seq = seq_all,
+#                                        phase_cores = 4,
+#                                        size = batch_size,
+#                                        overlap = 30))
+# time_spent$with.parallelization[1] <- time[3]
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  # Without parallelization
-#  rcd_map <- rcd(input.seq = seq_all)
-#  # With parallelization
-#  rcd_map_par <- rcd(input.seq = seq_all,
-#                     phase_cores = 4,
-#                     size = batch_size,
-#                     overlap = 30)
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# # Without parallelization
+# rcd_map <- rcd(input.seq = seq_all)
+# # With parallelization
+# rcd_map_par <- rcd(input.seq = seq_all,
+#                    phase_cores = 4,
+#                    size = batch_size,
+#                    overlap = 30)
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  a <- rf_graph_table(rcd_map, mrk.axis = "none")
-#  b <- rf_graph_table(rcd_map_par, mrk.axis = "none")
-#  p <- ggarrange(a,b , common.legend = TRUE,
-#                 labels = c("rcd", "rcd + parallel"),
-#                 vjust = 0.2,
-#                 hjust= -1.4,
-#                 font.label = list(size = 10),
-#                 ncol=2, nrow=1)
-#  ggsave(p, filename = "rcd.jpg")
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# a <- rf_graph_table(rcd_map, mrk.axis = "none")
+# b <- rf_graph_table(rcd_map_par, mrk.axis = "none")
+# p <- ggarrange(a,b , common.legend = TRUE,
+#                labels = c("rcd", "rcd + parallel"),
+#                vjust = 0.2,
+#                hjust= -1.4,
+#                font.label = list(size = 10),
+#                ncol=2, nrow=1)
+# ggsave(p, filename = "rcd.jpg")
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Without parallelization
-#  time <- system.time(record_map <- record(input.seq = seq_all))
-#  time_spent$without.parallelization[2] <- time[3]
-#  # With parallelization
-#  time <- system.time(record_map_par <- record(input.seq = seq_all,
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Without parallelization
+# time <- system.time(record_map <- record(input.seq = seq_all))
+# time_spent$without.parallelization[2] <- time[3]
+# # With parallelization
+# time <- system.time(record_map_par <- record(input.seq = seq_all,
+#                                              phase_cores = 4,
+#                                              size = batch_size,
+#                                              overlap = 30))
+# time_spent$with.parallelization[2] <- time[3]
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# # Without parallelization
+# record_map <- record(input.seq = seq_all)
+# # With parallelization
+# record_map_par <- record(input.seq = seq_all,
+#                          phase_cores = 4,
+#                          size = batch_size,
+#                          overlap = 30)
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# a <- rf_graph_table(record_map, mrk.axis = "none")
+# b <- rf_graph_table(record_map_par, mrk.axis = "none")
+# p <- ggarrange(a,b , common.legend = TRUE,
+#                labels = c("record", "record + parallel"),
+#                vjust = 0.2,
+#                hjust= -0.8,
+#                font.label = list(size = 10),
+#                ncol=2, nrow=1)
+# ggsave(p, filename = "record.jpg")
+
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Without parallelization
+# time <- system.time(ug_map <- ug(input.seq = seq_all))
+# time_spent$without.parallelization[3] <- time[3]
+# # With parallelization
+# time <- system.time(ug_map_par <- ug(input.seq = seq_all,
+#                                      phase_cores = 4,
+#                                      size = batch_size,
+#                                      overlap = 30))
+# time_spent$with.parallelization[3] <- time[3]
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# # Without parallelization
+# ug_map <- ug(input.seq = seq_all)
+# # With parallelization
+# ug_map_par <- ug(input.seq = seq_all,
+#                  phase_cores = 4,
+#                  size = batch_size,
+#                  overlap = 30)
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# a <- rf_graph_table(ug_map, mrk.axis = "none")
+# b <- rf_graph_table(ug_map_par, mrk.axis = "none")
+# p <- ggarrange(a,b , common.legend = TRUE,
+#                labels = c("ug", "ug + parallel"),
+#                vjust = 0.2,
+#                hjust= -1.6,
+#                font.label = list(size = 10),
+#                ncol=2, nrow=1)
+# ggsave(p, filename = "ug.jpg")
+
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Without parallelization ok
+# time <- system.time(map_mds <- mds_onemap(input.seq = seq_all))
+# time_spent$without.parallelization[4] <- time[3]
+# # With parallelization
+# time <- system.time(map_mds_par <- mds_onemap(input.seq = seq_all,
 #                                               phase_cores = 4,
 #                                               size = batch_size,
 #                                               overlap = 30))
-#  time_spent$with.parallelization[2] <- time[3]
+# time_spent$with.parallelization[4] <- time[3]
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  # Without parallelization
-#  record_map <- record(input.seq = seq_all)
-#  # With parallelization
-#  record_map_par <- record(input.seq = seq_all,
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# # Without parallelization ok
+# map_mds <- mds_onemap(input.seq = seq_all)
+# # With parallelization
+# map_mds_par <- mds_onemap(input.seq = seq_all,
 #                           phase_cores = 4,
 #                           size = batch_size,
 #                           overlap = 30)
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  a <- rf_graph_table(record_map, mrk.axis = "none")
-#  b <- rf_graph_table(record_map_par, mrk.axis = "none")
-#  p <- ggarrange(a,b , common.legend = TRUE,
-#                 labels = c("record", "record + parallel"),
-#                 vjust = 0.2,
-#                 hjust= -0.8,
-#                 font.label = list(size = 10),
-#                 ncol=2, nrow=1)
-#  ggsave(p, filename = "record.jpg")
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# a <- rf_graph_table(map_mds, mrk.axis = "none")
+# b <- rf_graph_table(map_mds_par, mrk.axis = "none")
+# p <- ggarrange(a,b , common.legend = TRUE,
+#                labels = c("mds", "mds + parallel"),
+#                vjust = 0.2,
+#                hjust= -1,
+#                font.label = list(size = 10),
+#                ncol=2, nrow=1)
+# ggsave(p, filename = "mds.jpg")
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Without parallelization
-#  time <- system.time(ug_map <- ug(input.seq = seq_all))
-#  time_spent$without.parallelization[3] <- time[3]
-#  # With parallelization
-#  time <- system.time(ug_map_par <- ug(input.seq = seq_all,
-#                                       phase_cores = 4,
-#                                       size = batch_size,
-#                                       overlap = 30))
-#  time_spent$with.parallelization[3] <- time[3]
-
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  # Without parallelization
-#  ug_map <- ug(input.seq = seq_all)
-#  # With parallelization
-#  ug_map_par <- ug(input.seq = seq_all,
-#                   phase_cores = 4,
-#                   size = batch_size,
-#                   overlap = 30)
-
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  a <- rf_graph_table(ug_map, mrk.axis = "none")
-#  b <- rf_graph_table(ug_map_par, mrk.axis = "none")
-#  p <- ggarrange(a,b , common.legend = TRUE,
-#                 labels = c("ug", "ug + parallel"),
-#                 vjust = 0.2,
-#                 hjust= -1.6,
-#                 font.label = list(size = 10),
-#                 ncol=2, nrow=1)
-#  ggsave(p, filename = "ug.jpg")
-
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Without parallelization ok
-#  time <- system.time(map_mds <- mds_onemap(input.seq = seq_all))
-#  time_spent$without.parallelization[4] <- time[3]
-#  # With parallelization
-#  time <- system.time(map_mds_par <- mds_onemap(input.seq = seq_all,
-#                                                phase_cores = 4,
-#                                                size = batch_size,
-#                                                overlap = 30))
-#  time_spent$with.parallelization[4] <- time[3]
-
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  # Without parallelization ok
-#  map_mds <- mds_onemap(input.seq = seq_all)
-#  # With parallelization
-#  map_mds_par <- mds_onemap(input.seq = seq_all,
-#                            phase_cores = 4,
-#                            size = batch_size,
-#                            overlap = 30)
-
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  a <- rf_graph_table(map_mds, mrk.axis = "none")
-#  b <- rf_graph_table(map_mds_par, mrk.axis = "none")
-#  p <- ggarrange(a,b , common.legend = TRUE,
-#                 labels = c("mds", "mds + parallel"),
-#                 vjust = 0.2,
-#                 hjust= -1,
-#                 font.label = list(size = 10),
-#                 ncol=2, nrow=1)
-#  ggsave(p, filename = "mds.jpg")
-
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  batch_map <- map_overlapping_batches(input.seq = seq_all,
-#                                       size = batch_size,
-#                                       phase_cores = 4,
-#                                       overlap = 30,
-#                                       rm_unlinked = TRUE)
-
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  # Without parallelization
-#  time <- system.time(batch_map <- map_avoid_unlinked(input.seq = seq_all))
-#  time_spent$without.parallelization[5] <- time[3]
-#  # With parallelization
-#  time <- system.time(batch_map_par <- map_avoid_unlinked(input.seq = seq_all,
-#                                                          size = batch_size,
-#                                                          phase_cores = 4,
-#                                                          overlap = 30))
-#  time_spent$with.parallelization[5] <- time[3]
-
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
-#  # Without parallelization
-#  batch_map <- map_avoid_unlinked(input.seq = seq_all)
-#  # With parallelization
-#  batch_map_par <- map_avoid_unlinked(input.seq = seq_all,
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# batch_map <- map_overlapping_batches(input.seq = seq_all,
 #                                      size = batch_size,
 #                                      phase_cores = 4,
-#                                      overlap = 30)
+#                                      overlap = 30,
+#                                      rm_unlinked = TRUE)
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
-#  a <- rf_graph_table(batch_map, mrk.axis = "none")
-#  b <- rf_graph_table(batch_map_par, mrk.axis = "none")
-#  p <- ggarrange(a,b , common.legend = TRUE,
-#                 labels = c("map", "map + parallel"),
-#                 vjust = 0.2,
-#                 hjust= -1,
-#                 font.label = list(size = 10),
-#                 ncol=2, nrow=1)
-#  ggsave(p, filename = "map.jpg")
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
+# # Without parallelization
+# time <- system.time(batch_map <- map_avoid_unlinked(input.seq = seq_all))
+# time_spent$without.parallelization[5] <- time[3]
+# # With parallelization
+# time <- system.time(batch_map_par <- map_avoid_unlinked(input.seq = seq_all,
+#                                                         size = batch_size,
+#                                                         phase_cores = 4,
+#                                                         overlap = 30))
+# time_spent$with.parallelization[5] <- time[3]
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# # Without parallelization
+# batch_map <- map_avoid_unlinked(input.seq = seq_all)
+# # With parallelization
+# batch_map_par <- map_avoid_unlinked(input.seq = seq_all,
+#                                     size = batch_size,
+#                                     phase_cores = 4,
+#                                     overlap = 30)
+
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
+# a <- rf_graph_table(batch_map, mrk.axis = "none")
+# b <- rf_graph_table(batch_map_par, mrk.axis = "none")
+# p <- ggarrange(a,b , common.legend = TRUE,
+#                labels = c("map", "map + parallel"),
+#                vjust = 0.2,
+#                hjust= -1,
+#                font.label = list(size = 10),
+#                ncol=2, nrow=1)
+# ggsave(p, filename = "map.jpg")
+
+## ----eval=FALSE---------------------------------------------------------------
+# my_sequences <- list(CHR1_final, CHR2_final, CHR3_final)
+# 
+# save_onemap_sequences(my_sequences, filename = "out_final_sequences.RData")
+# 
+# my_sequences <- load_onemap_sequences("out_final_sequences.RData")
+# 
+# # access the sequences
+# my_sequences[[1]]
+# 
+# # access the onemap object
+# onemap.obj <- my_sequences[[1]]$data.name
+# 
+# # access the twopoints object
+# onemap.obj <- my_sequences[[1]]$twopt
 
 ## -----------------------------------------------------------------------------
 CHR3_final
@@ -763,8 +832,8 @@ CHR3_final
 ## -----------------------------------------------------------------------------
 (parents_haplot <- parents_haplotypes(CHR3_final))
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  write.table(parents_haplot, "parents_haplot.txt")
+## ----eval=FALSE---------------------------------------------------------------
+# write.table(parents_haplot, "parents_haplot.txt")
 
 ## -----------------------------------------------------------------------------
 parents_haplotypes(CHR2_final,CHR3_final, group_names=c("CHR2","CHR3"))
@@ -775,6 +844,36 @@ parents_haplotypes(CHR2_final,CHR3_final, group_names=c("CHR2","CHR3"))
 ## -----------------------------------------------------------------------------
 plot(progeny_haplot, position = "stack")
 plot(progeny_haplot, position = "split")
+
+## ----eval=FALSE---------------------------------------------------------------
+# viewpoly.obj <- export_viewpoly(seqs.list = list(CHR1_final,CHR2_final, CHR3_final))
+# save(viewpoly.obj, file = "onemap_viewpoly_map.RData")
+
+## ----eval=FALSE---------------------------------------------------------------
+# # Only one group
+# genoprob <- export_mappoly_genoprob(CHR1_final)
+# str(genoprob)
+# 
+# # All groups
+# groups_list <- list(CHR1_final,CHR2_final, CHR3_final)
+# genoprobAll <- lapply(groups_list, export_mappoly_genoprob)
+# 
+# 
+# # Read in QTLpoly (check its tutorial for further information about pheno4x object format)
+# library(qtlpoly)
+# data = read_data(ploidy = 2, geno.prob = genoprobAll, pheno = pheno4x, step = 1)
+# 
+
+## ----eval=FALSE---------------------------------------------------------------
+# 
+# all_progeny_haplot <- progeny_haplotypes(list(CHR1_final,
+#                                               CHR2_final,
+#                                               CHR3_final),
+#                                          most_likely = FALSE,
+#                                          ind = "all")
+# 
+# library(diaQTL)
+# convert_onemap(data = all_progeny_haplot, outstem = "example_") # It will generate the diaQTL input files example_diaQTL_geno.csv and example_diaQTL_ped.csv
 
 ## -----------------------------------------------------------------------------
 sessionInfo()

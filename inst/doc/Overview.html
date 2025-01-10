@@ -12,7 +12,7 @@
 
 <meta name="author" content="Statistical Genetics Lab   Department of Genetics   Luiz de Queiroz College of Agriculture   University of São Paulo" />
 
-<meta name="date" content="2022-11-25" />
+<meta name="date" content="2025-01-10" />
 
 <title>Overview</title>
 
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
@@ -241,7 +241,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h4 class="author"><a href="http://statgen.esalq.usp.br">Statistical
 Genetics Lab</a> <br /> Department of Genetics <br /> Luiz de Queiroz
 College of Agriculture <br /> University of São Paulo</h4>
-<h4 class="date">2022-11-25</h4>
+<h4 class="date">2025-01-10</h4>
 
 
 
@@ -310,15 +310,62 @@ may just skip this part.</p>
 installation, as well as sections showing the usage of <em>OneMap</em>
 to build linkage maps for outcrossing (non-inbred) populations, as well
 as F<span class="math inline">\(_2\)</span> populations (which can also
-be applied to backcrosses and RILs).</p>
-<p>All sections may be read independently. So, you can just move to the
-part you are interested in. Good luck, and let us know if you have
-suggestions to improve the package!</p>
+be applied to backcrosses and RILs). All sections may be read
+independently. So, you can just move to the part you are interested
+in.</p>
+<p>The software has been available on CRAN since 2007 (<a href="https://cran.r-project.org/package=onemap">OneMap on CRAN</a>) and
+has undergone several updates, adding new features and optimization up
+to version 3.2.0 in 2024. Future updates will focus solely on
+maintaining accessibility and functionality. <strong>New feature
+development and optimization efforts are now being directed toward the
+<a href="https://github.com/mmollina/MAPpoly">MAPpoly</a> and <a href="https://github.com/mmollina/mappoly2">MAPpoly2</a>
+packages</strong>.</p>
+<p><strong>MAPpoly</strong> is a more robust package designed for
+constructing linkage maps in polyploid species. Its optimized algorithms
+also provide improved efficiency for diploid species compared to OneMap.
+Therefore, we recommend using MAPpoly instead of OneMap in the following
+scenarios for diploid species:</p>
+<ul>
+<li>When working with only biallelic markers (e.g., SNPs).<br />
+</li>
+<li>For outcrossing full-sib (F1), F2, or backcross populations.<br />
+</li>
+<li>For datasets with a large number of markers (&gt;5,000).<br />
+</li>
+<li>For multi-population datasets (e.g., progeny from multiple parents;
+see MAPpoly2).</li>
+</ul>
+<p>However, <strong>OneMap</strong> remains the best choice if you
+have:</p>
+<ul>
+<li>Populations derived from recombinant inbred lines (RILs).<br />
+</li>
+<li>Datasets with multiallelic or dominant markers.</li>
+</ul>
+<p>For guidance on best practices in building linkage maps while
+accounting for genotyping errors, please refer to Taniguti et. al
+2023.</p>
 <div id="how-to-cite" class="section level1">
 <h1>How to Cite</h1>
-<p>Margarido G. R. A., Souza A. P., Garcia A. A. F., 2007. OneMap:
-software for genetic mapping in outcrossing species. <em>Hereditas</em>
-<strong>144</strong>: 78–79.</p>
+<p>Margarido, G. R. A., Souza, A. P., &amp;38; Garcia, A. A. F. (2007).
+OneMap: software for genetic mapping in outcrossing species. Hereditas,
+144(3), 78–79. <a href="https://doi.org/10.1111/j.2007.0018-0661.02000.x" class="uri">https://doi.org/10.1111/j.2007.0018-0661.02000.x</a></p>
+<ul>
+<li>If you are using OneMap versions &gt; 2.0, please cite also:</li>
+</ul>
+<p>Taniguti, C. H.; Taniguti, L. M.; Amadeu, R. R.; Lau, J.; de Siqueira
+Gesteira, G.; Oliveira, T. de P.; Ferreira, G. C.; Pereira, G. da S.;
+Byrne, D.; Mollinari, M.; Riera-Lizarazu, O.; Garcia, A. A. F.
+Developing best practices for genotyping-by-sequencing analysis in the
+construction of linkage maps. 2023. GigaScience, 12, giad092. <a href="https://doi.org/10.1093/gigascience/giad092" class="uri">https://doi.org/10.1093/gigascience/giad092</a></p>
+<ul>
+<li>If you used the HMM parallelization, please cite <a href="https://github.com/bschiffthaler/BatchMap">BatchMap</a> paper
+too:</li>
+</ul>
+<p>Schiffthaler, B., Bernhardsson, C., Ingvarsson, P. K., &amp;; Street,
+N. R. (2017). BatchMap: A parallel implementation of the OneMap R
+package for fast computation of F1 linkage maps in outcrossing species.
+PLoS ONE, 12(12), 1–12. <a href="https://doi.org/10.1371/journal.pone.0189256" class="uri">https://doi.org/10.1371/journal.pone.0189256</a></p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
